@@ -754,9 +754,10 @@ async function callAI(rawDataUrl) {
     return JSON.parse(txt.replace(/```json|```/g, '').trim());
   }
 
-  // Gemini — try x-goog-api-key header (works for AQ and AIza keys)
-  // then fall back to ?key= query param
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+  // Gemini — AQ keys and AIza keys both work with ?key= URL param (Google's official method)
+  // Try ?key= first (works for ALL key formats including new AQ keys)
+  // then try x-goog-api-key header as fallback
+  const baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
   const body = JSON.stringify({
     contents: [{ parts: [
       { inline_data: { mime_type: safeMime, data: base64 } },
@@ -765,17 +766,18 @@ async function callAI(rawDataUrl) {
     generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
   });
 
-  let resp = await fetch(url, {
+  // Method 1: ?key= param — official Google method, works for AQ and AIza keys
+  let resp = await fetch(baseUrl + '?key=' + encodeURIComponent(S.gemKey), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': S.gemKey },
+    headers: { 'Content-Type': 'application/json' },
     body
   });
 
-  // Fallback to query param for older key formats
-  if (resp.status === 401 || resp.status === 403) {
-    resp = await fetch(url + '?key=' + encodeURIComponent(S.gemKey), {
+  // Method 2: x-goog-api-key header fallback
+  if (!resp.ok && (resp.status === 400 || resp.status === 401 || resp.status === 403)) {
+    resp = await fetch(baseUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': S.gemKey },
       body
     });
   }
@@ -783,7 +785,9 @@ async function callAI(rawDataUrl) {
   if (!resp.ok) {
     const e = await resp.json().catch(() => ({}));
     const msg = e.error?.message || 'Gemini error ' + resp.status;
-    if (resp.status === 401 || resp.status === 403) throw new Error('Key rejected \u2014 re-paste it in Setup tab');
+    if (resp.status === 400 || resp.status === 401 || resp.status === 403) {
+      throw new Error('Key not working (' + resp.status + '). Go to Setup, clear the key, and paste it again fresh.');
+    }
     if (resp.status === 429) throw new Error('Rate limit hit \u2014 wait 1 minute and retry');
     throw new Error(msg.slice(0, 140));
   }
