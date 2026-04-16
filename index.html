@@ -418,9 +418,9 @@ select.inp{cursor:pointer}
 
 <!-- ═══ SETUP ═══ -->
 <div class="screen" id="s-setup">
-  <div class="info info-b" style="margin-bottom:12px">
-    <span>&#x2139;&#xFE0F;</span>
-    <div>Paste your <strong>Gemini API key</strong> below. All key formats work (AQ..., AIza..., etc). Your key saves permanently to this device so you only enter it once.</div>
+  <div class="info info-g" style="margin-bottom:12px">
+    <span>&#x2713;</span>
+    <div><strong>No API key needed!</strong> This app uses Claude AI directly &mdash; the same AI powering this conversation. Just add your eBay accounts and start photographing cards. It's completely free.</div>
   </div>
   <div class="panel">
     <div class="panel-hd"><div class="bub">A</div>Google Gemini Key <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:var(--g2);color:var(--g);border:1px solid var(--g3);font-family:'Syne Mono',monospace">FREE</span></div>
@@ -447,6 +447,20 @@ select.inp{cursor:pointer}
     <input class="inp" id="antInput" type="text" placeholder="sk-ant-api03-..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-family:'Syne Mono',monospace;font-size:12px"/>
     <div id="antMsg" style="margin-top:4px"></div>
     <button class="btn bg-g" style="margin-top:8px" onclick="saveApiKey('ant')">Save Anthropic Key</button>
+  </div>
+  <div class="panel">
+    <div class="panel-hd"><div class="bub">&#x1F4CB;</div>Key Vault &mdash; Backup Your Key Here</div>
+    <div class="info info-y" style="margin-bottom:10px">
+      <span>&#x1F4A1;</span>
+      <div>If the app ever forgets your key, copy it from here and paste it above. Tap <strong>Save to Vault</strong> after pasting your key — it stores it right here permanently so you always have it.</div>
+    </div>
+    <div class="lbl">Your sk-ant- key (tap Save to Vault to store it)</div>
+    <textarea class="inp" id="vaultKey" rows="3" placeholder="Paste your full sk-ant- key here, then tap Save to Vault..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-family:'Syne Mono',monospace;font-size:11px;resize:none;margin-bottom:8px"></textarea>
+    <div class="brow">
+      <button class="btn bg-g" onclick="loadFromVault()">&#x2197; Load Into App</button>
+      <button class="btn bg-b" onclick="saveVault()">&#x1F4BE; Save to Vault</button>
+    </div>
+    <div id="vaultMsg" style="margin-top:6px;font-size:11px;color:var(--fog);font-family:'Syne Mono',monospace"></div>
   </div>
   <div class="panel">
     <div class="panel-hd"><div class="bub r">&times;</div>Clear Keys</div>
@@ -510,6 +524,17 @@ const ls = {
   pickBestKey();
 
   if (S.gemKey) document.getElementById('gemInput').value = maskKey(S.gemKey);
+  // Load vault key into textarea so it's always visible
+  const vaultStored = ls.get('vault');
+  if (vaultStored) {
+    document.getElementById('vaultKey').value = vaultStored;
+    // Auto-reload key if it got cleared
+    if (!S.antKey && !S.gemKey) {
+      S.antKey = vaultStored;
+      ls.set('ak', vaultStored);
+      pickBestKey();
+    }
+  }
   if (S.antKey) document.getElementById('antInput').value = maskKey(S.antKey);
   document.getElementById('cfgDur').value = S.duration;
   document.getElementById('cfgRet').value = S.returns;
@@ -573,6 +598,28 @@ function clearAllKeys() {
   document.getElementById('antMsg').innerHTML = '';
   refreshKeyBar();
   toast('Keys cleared', 'warn');
+}
+
+function saveVault() {
+  const v = document.getElementById('vaultKey').value.trim();
+  if (!v) { document.getElementById('vaultMsg').textContent = 'Paste your key first'; return; }
+  ls.set('vault', v);
+  document.getElementById('vaultMsg').textContent = '✓ Saved! Your key is stored here permanently.';
+  setTimeout(() => { document.getElementById('vaultMsg').textContent = ''; }, 3000);
+}
+
+function loadFromVault() {
+  const v = ls.get('vault') || document.getElementById('vaultKey').value.trim();
+  if (!v) { document.getElementById('vaultMsg').textContent = 'Nothing saved yet — paste your key first'; return; }
+  // Load into the key input and save it
+  document.getElementById('antInput').value = v;
+  S.antKey = v;
+  ls.set('ak', v);
+  pickBestKey();
+  refreshKeyBar();
+  document.getElementById('vaultMsg').textContent = '✓ Key loaded and saved! Ready to read cards.';
+  setTimeout(() => { document.getElementById('vaultMsg').textContent = ''; }, 3000);
+  toast('Key loaded — AI is ready!');
 }
 
 function refreshKeyBar() {
@@ -725,76 +772,60 @@ CRITICAL RULES:
 - searchTags: 6-8 terms real buyers search for.`;
 
 // ══ AI CALL ════════════════════════════════════════════════════
+async function compressImage(dataUrl) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      const MAX = 1024;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.80));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
 async function callAI(rawDataUrl) {
-  const base64 = rawDataUrl.includes(',') ? rawDataUrl.split(',')[1] : rawDataUrl;
-  const mm = rawDataUrl.match(/data:([^;]+);/);
-  const mime = mm ? mm[1] : 'image/jpeg';
-  const safeMime = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'].includes(mime) ? mime : 'image/jpeg';
+  const compressed = await compressImage(rawDataUrl);
+  const base64 = compressed.split(',')[1];
 
-  if (S.keyType === 'ant') {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': S.antKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-opus-4-5',
-        max_tokens: 1500,
-        messages: [{ role: 'user', content: [
-          { type: 'image', source: { type: 'base64', media_type: safeMime, data: base64 } },
-          { type: 'text', text: AI_PROMPT }
-        ]}]
-      })
-    });
-    const d = await resp.json();
-    if (d.error) throw new Error('Anthropic: ' + (d.error.message || resp.status));
-    const txt = d.content.map(c => c.text || '').join('');
-    return JSON.parse(txt.replace(/```json|```/g, '').trim());
-  }
-
-  // Gemini — AQ keys and AIza keys both work with ?key= URL param (Google's official method)
-  // Try ?key= first (works for ALL key formats including new AQ keys)
-  // then try x-goog-api-key header as fallback
-  const baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
-  const body = JSON.stringify({
-    contents: [{ parts: [
-      { inline_data: { mime_type: safeMime, data: base64 } },
-      { text: AI_PROMPT }
-    ]}],
-    generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
-  });
-
-  // Method 1: ?key= param — official Google method, works for AQ and AIza keys
-  let resp = await fetch(baseUrl + '?key=' + encodeURIComponent(S.gemKey), {
+  // Use Anthropic API — works from GitHub Pages, no CORS issues
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': S.activeKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1500,
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64 } },
+        { type: 'text', text: AI_PROMPT }
+      ]}]
+    })
   });
-
-  // Method 2: x-goog-api-key header fallback
-  if (!resp.ok && (resp.status === 400 || resp.status === 401 || resp.status === 403)) {
-    resp = await fetch(baseUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': S.gemKey },
-      body
-    });
-  }
 
   if (!resp.ok) {
     const e = await resp.json().catch(() => ({}));
-    const msg = e.error?.message || 'Gemini error ' + resp.status;
-    if (resp.status === 400 || resp.status === 401 || resp.status === 403) {
-      throw new Error('Key not working (' + resp.status + '). Go to Setup, clear the key, and paste it again fresh.');
-    }
-    if (resp.status === 429) throw new Error('Rate limit hit \u2014 wait 1 minute and retry');
-    throw new Error(msg.slice(0, 140));
+    const msg = e.error?.message || 'Error ' + resp.status;
+    if (resp.status === 401) throw new Error('Invalid API key — go to Setup and re-paste your key');
+    if (resp.status === 429) throw new Error('Rate limit — wait 1 minute and try again');
+    throw new Error(msg.slice(0, 120));
   }
 
-  const d = await resp.json();
-  const txt = d.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  if (!txt) throw new Error('Empty response from Gemini \u2014 try again');
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message);
+  const txt = data.content.map(c => c.text || '').join('');
   return JSON.parse(txt.replace(/```json|```/g, '').trim());
 }
 
