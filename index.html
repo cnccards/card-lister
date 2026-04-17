@@ -521,6 +521,7 @@ const ls = {
   S.accounts = JSON.parse(ls.get('accts') || '[]');
   S.activeId = ls.get('aid') || S.accounts[0]?.id || null;
 
+  S.exported = JSON.parse(ls.get('exported') || '[]');
   pickBestKey();
 
   if (S.gemKey) document.getElementById('gemInput').value = maskKey(S.gemKey);
@@ -1128,6 +1129,7 @@ function addToExport(id) {
   const idx = S.exported.findIndex(p => p._id === id);
   if (idx >= 0) S.exported[idx] = data;
   else S.exported.push(data);
+  ls.set('exported', JSON.stringify(S.exported));
   addToHistory(data);
   toast('Added to export!');
   document.getElementById('prevArea').innerHTML = '';
@@ -1149,7 +1151,7 @@ function buildCSV(acctId) {
     const s = String(v || '').replace(/"/g, '""');
     return /[,"\n\r]/.test(s) ? '"' + s + '"' : s;
   };
-  return [cols, ...rows.map(d => [
+  return [cols, ...rows.map((d, idx) => [
     'Draft',
     d.ebayTitle,
     d.description,
