@@ -1140,23 +1140,30 @@ function addToExport(id) {
 function buildCSV(acctId) {
   const rows = S.exported.filter(d => d.acctId === acctId);
   if (!rows.length) return '';
-  // eBay Draft format — no photo required, add photos in eBay drafts folder
+
+  // eBay draft template — exact INFO lines eBay requires (do not modify)
+  const INFO = [
+    '#INFO,Version=0.0.2,Template= eBay-draft-listings-template_US,,,,,,,,',
+    '#INFO Action and Category ID are required fields. 1) Set Action to Draft 2) Please find the category ID for your listings here: https://pages.ebay.com/sellerinformation/news/categorychanges.html,,,,,,,,,,',
+    '"#INFO After you\'ve successfully uploaded your draft from the Seller Hub Reports tab, complete your drafts to active listings here: https://www.ebay.com/sh/lst/drafts",,,,,,,,,,',
+    '#INFO,,,,,,,,,,'
+  ].join('\r\n') + '\r\n';
+
   const cols = [
-    CSV_HDR,
+    'Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)',
     'Custom label (SKU)', 'Category ID', 'Title',
     'UPC', 'Price', 'Quantity', 'Item photo URL',
     'Condition ID', 'Description', 'Format'
   ];
+
   const esc = v => {
     const s = String(v || '').replace(/"/g, '""');
     return /[,"\n\r]/.test(s) ? '"' + s + '"' : s;
   };
-  return [cols, ...rows.map((d, idx) => [
+
+  const dataRows = rows.map((d, idx) => [
     'Draft',
-    d.ebayTitle,
-    d.description,
-    d.sport === 'Baseball' || d.sport === 'Basketball' || d.sport === 'Football' || d.sport === 'Hockey' || d.sport === 'Soccer' ? '261328' : '261328',
-    'CNC-' + String(idx+1).padStart(4,'0'),
+    'CNC-' + String(idx + 1).padStart(4, '0'),
     '261328',
     d.ebayTitle,
     '',
@@ -1165,9 +1172,13 @@ function buildCSV(acctId) {
     '',
     d.isGraded ? '2750' : '4000',
     d.description,
-    'FixedPrice', 'United States'
-  ])].map(r => r.map(esc).join(',')).join('\r\n');
+    'FixedPrice'
+  ]);
+
+  const csvBody = [cols, ...dataRows].map(r => r.map(esc).join(',')).join('\r\n');
+  return INFO + csvBody;
 }
+
 
 function downloadCSV(acctId) {
   const csv = buildCSV(acctId);
