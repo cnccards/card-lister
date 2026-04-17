@@ -826,7 +826,11 @@ async function callAI(rawDataUrl) {
   const data = await resp.json();
   if (data.error) throw new Error(data.error.message);
   const txt = data.content.map(c => c.text || '').join('');
-  return JSON.parse(txt.replace(/```json|```/g, '').trim());
+  // Robustly extract JSON even if model wraps it in markdown or adds extra text
+  const clean = txt.replace(/```json|```/g, '').trim();
+  const jsonMatch = clean.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error('Invalid response format - try again');
+  return JSON.parse(jsonMatch[0]);
 }
 
 // ══ ANALYZE ════════════════════════════════════════════════════
@@ -1139,7 +1143,7 @@ function buildCSV(acctId) {
     'BuyItNowPrice', 'Quantity', 'ConditionID', 'ConditionDescription',
     'ListingDuration', 'ListingType',
     'ReturnsAcceptedOption', 'ReturnsWithinOption', 'RefundOption',
-    'ShippingCostPaidByOption', 'ShippingService-1:Option', 'ShippingService-1:Cost',
+    'ShippingCostPaidByOption', 'ShippingService-1:Option', 'ShippingService-1:Cost', 'Location',
     'C:Player/Athlete', 'C:Year Manufactured', 'C:Set',
     'C:Card Number', 'C:Parallel/Variety', 'C:Team', 'C:Sport'
   ];
@@ -1164,7 +1168,7 @@ function buildCSV(acctId) {
     'Buyer',
     'USPSFirstClass',
     d.useEnvelope ? '1.00' : String(S.shipping),
-    d.player, d.year, d.set, d.cardNumber, d.variation, d.team, d.sport || 'Baseball'
+    d.player, d.year, d.set, d.cardNumber, d.variation, d.team, d.sport || 'Baseball', 'United States'
   ])].map(r => r.map(esc).join(',')).join('\r\n');
 }
 
