@@ -1241,6 +1241,18 @@ function buildCSV(acctId) {
   return INFO + csvBody;
 }
 
+function delExported(acctId, cardIdx) {
+  const acctCards = S.exported.filter(d => d.acctId === acctId);
+  const card = acctCards[cardIdx];
+  if (!card) return;
+  if (!confirm('Remove "' + (card.player || 'Card') + ' ' + (card.year || '') + '" from export?')) return;
+  S.exported = S.exported.filter(d => d !== card);
+  ls.set('exported', JSON.stringify(S.exported));
+  renderExport();
+  refreshStats();
+  toast('Removed from export');
+}
+
 function downloadCSV(acctId) {
   const csv = buildCSV(acctId);
   if (!csv) { toast('No cards for this account', 'err'); return; }
@@ -1289,12 +1301,12 @@ function renderExport() {
       </div>
       <div class="exp-body">
         <div style="margin-bottom:10px">
-          ${cards.slice(0, 6).map(c => `<div class="exp-row">
+          ${cards.map((c,ci) => `<div class="exp-row">
             <div class="exp-name">${c.player || 'Card'} ${c.year || ''} ${c.variation || ''}</div>
             <div style="font-size:10px;color:var(--fog);margin:0 4px">${c.useEnvelope ? '\uD83D\uDCEC' : '\uD83D\uDCE6'}</div>
-            <div class="exp-price">$${c.suggestedBIN || '?'} BIN</div>
+            <div class="exp-price">$${c.suggestedBIN || '?'}</div>
+            <button onclick="delExported('${aId}',${ci})" style="border:none;background:none;color:var(--r);cursor:pointer;font-size:14px;padding:0 0 0 6px;flex-shrink:0" title="Remove">&#x00D7;</button>
           </div>`).join('')}
-          ${cards.length > 6 ? `<div style="font-size:11px;color:var(--dim);padding:4px 0">+ ${cards.length - 6} more cards...</div>` : ''}
         </div>
         <button class="btn bg-y" onclick="downloadCSV('${acctId}')">&#x2193; Download CSV for ${name}</button>
         <div style="font-size:11px;color:var(--fog);margin-top:10px;line-height:1.7">
