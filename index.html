@@ -767,7 +767,10 @@ Reply ONLY with compact valid JSON. No markdown. No backticks. No explanation:
 {"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isRelic":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface, excellent centering","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}
 
 CRITICAL RULES:
-- ebayTitle: EXACTLY max 80 chars. Format: YEAR BRAND PLAYER CARDNUM VARIATION CONDITION. Use every character.
+- Identify manufacturer/brand (Topps, Panini, Upper Deck, Bowman, Donruss, Prizm, etc).
+Identify league (MLB, NBA, NFL, NHL, MLS).
+Identify ALL features that apply: Serial Numbered, Rookie, 1st Bowman, Refractor, Prizm, Short Print, Auto, Relic, Patch.
+ebayTitle: EXACTLY max 80 chars. Format: YEAR BRAND PLAYER CARDNUM VARIATION CONDITION. Use every character.
 - description: 190-220 words. Include: full card details, condition observations, ships in penny sleeve + rigid top loader + team bag via USPS First Class with tracking, payment within 3 days, all sales final on raw ungraded cards, check photos for condition.
 - suggestedBIN: accurate current eBay market USD price for this specific card, variation, and condition. Research-quality estimate.
 - searchTags: 6-8 terms real buyers search for.`;
@@ -1141,7 +1144,7 @@ function buildCSV(acctId) {
   const rows = S.exported.filter(d => d.acctId === acctId);
   if (!rows.length) return '';
 
-  // eBay draft template — exact INFO lines eBay requires (do not modify)
+  // eBay draft template exact INFO lines
   const INFO = [
     '#INFO,Version=0.0.2,Template= eBay-draft-listings-template_US,,,,,,,,',
     '#INFO Action and Category ID are required fields. 1) Set Action to Draft 2) Please find the category ID for your listings here: https://pages.ebay.com/sellerinformation/news/categorychanges.html,,,,,,,,,,',
@@ -1149,11 +1152,18 @@ function buildCSV(acctId) {
     '#INFO,,,,,,,,,,'
   ].join('\r\n') + '\r\n';
 
+  // All columns including every item specific for maximum search visibility (lightning bolt)
   const cols = [
     'Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)',
     'Custom label (SKU)', 'Category ID', 'Title',
     'UPC', 'Price', 'Quantity', 'Item photo URL',
-    'Condition ID', 'Description', 'Format'
+    'Condition ID', 'Description', 'Format',
+    'C:Player/Athlete', 'C:Season', 'C:Set', 'C:Manufacturer',
+    'C:Card Number', 'C:Parallel/Variety', 'C:Team',
+    'C:Sport', 'C:Graded', 'C:Autographed',
+    'C:Type', 'C:League', 'C:Features',
+    'C:Card Name', 'C:Signed', 'C:Original/Licensed Reprint',
+    'C:Year Manufactured'
   ];
 
   const esc = v => {
@@ -1161,24 +1171,75 @@ function buildCSV(acctId) {
     return /[,"\n\r]/.test(s) ? '"' + s + '"' : s;
   };
 
-  const dataRows = rows.map((d, idx) => [
-    'Draft',
-    'CNC-' + String(idx + 1).padStart(4, '0'),
-    '261328',
-    d.ebayTitle,
-    '',
-    parseFloat(d.suggestedBIN || 9.99).toFixed(2),
-    '1',
-    '',
-    d.isGraded ? '2750' : '4000',
-    d.description,
-    'FixedPrice'
-  ]);
+  const dataRows = rows.map((d, idx) => {
+    // Build features list
+    const features = [];
+    if (d.isNumbered) features.push('Serial Numbered');
+    if (d.isRookie || d.is1stBowman) features.push('Rookie');
+    if (d.is1stBowman) features.push('1st Bowman');
+    if (d.variation && d.variation.toLowerCase().includes('refractor')) features.push('Refractor');
+    if (d.variation && d.variation.toLowerCase().includes('prizm')) features.push('Prizm');
+    if (d.variation && (d.variation.includes('/') || d.isNumbered)) features.push('Short Print');
+    if (features.length === 0) features.push('Base Set');
+
+    // Parallel/Variety — clean version without serial number
+    const parallel = d.variation || '';
+
+    // Season = year
+    const season = d.year || '';
+
+    // Manufacturer from brand/set
+    const mfr = d.brand || (d.set && d.set.includes('Topps') ? 'Topps' :
+                 d.set && d.set.includes('Panini') ? 'Panini' :
+                 d.set && d.set.includes('Bowman') ? 'Topps' :
+                 d.set && d.set.includes('Donruss') ? 'Panini' :
+                 d.set && d.set.includes('Upper Deck') ? 'Upper Deck' : 'Topps');
+
+    // League from sport/team
+    const league = d.sport === 'Baseball' ? 'MLB' :
+                   d.sport === 'Basketball' ? 'NBA' :
+                   d.sport === 'Football' ? 'NFL' :
+                   d.sport === 'Hockey' ? 'NHL' :
+                   d.sport === 'Soccer' ? 'MLS' : '';
+
+    // Card type
+    const cardType = d.isGraded ? 'Graded Card' : 'Sports Trading Card';
+
+    return [
+      'Draft',
+      'CNC-' + String(idx + 1).padStart(4, '0'),
+      '261328',
+      d.ebayTitle,
+      '',
+      parseFloat(d.suggestedBIN || 9.99).toFixed(2),
+      '1',
+      '',
+      d.isGraded ? '2750' : '4000',
+      d.description,
+      'FixedPrice',
+      d.player || '',
+      season,
+      d.set || '',
+      mfr,
+      d.cardNumber || '',
+      parallel,
+      d.team || '',
+      d.sport || 'Baseball',
+      d.isGraded ? 'Yes' : 'No',
+      d.isAuto ? 'Yes' : 'No',
+      cardType,
+      league,
+      features.join(', '),
+      d.player || '',
+      d.isAuto ? 'Yes' : 'No',
+      'Original',
+      d.year || ''
+    ];
+  });
 
   const csvBody = [cols, ...dataRows].map(r => r.map(esc).join(',')).join('\r\n');
   return INFO + csvBody;
 }
-
 
 function downloadCSV(acctId) {
   const csv = buildCSV(acctId);
