@@ -1140,12 +1140,14 @@ function buildCSV(acctId) {
   if (!rows.length) return '';
   const cols = [
     CSV_HDR, 'Title', 'Description', 'Category',
-    'BuyItNowPrice', 'Quantity', 'ConditionID', 'ConditionDescription',
-    'ListingDuration', 'ListingType',
+    'StartPrice', 'Quantity',
+    'ConditionID', 'CD:Card Condition - (ID: 40001)', 'ConditionDescription',
+    'DispatchTimeMax', 'ListingDuration', 'ListingType', 'Location',
     'ReturnsAcceptedOption', 'ReturnsWithinOption', 'RefundOption',
-    'ShippingCostPaidByOption', 'ShippingService-1:Option', 'ShippingService-1:Cost', 'Location',
+    'ShippingCostPaidByOption', 'ShippingService-1:Option', 'ShippingService-1:Cost',
+    'PicURL',
     'C:Player/Athlete', 'C:Year Manufactured', 'C:Set',
-    'C:Card Number', 'C:Parallel/Variety', 'C:Team', 'C:Sport'
+    'C:Card Number', 'C:Parallel/Variety', 'C:Team', 'C:Sport', 'C:Graded'
   ];
   const esc = v => {
     const s = String(v || '').replace(/"/g, '""');
@@ -1155,20 +1157,25 @@ function buildCSV(acctId) {
     'Add',
     d.ebayTitle,
     d.description,
-    CAT[d.sport] || '213',
-    d.suggestedBIN || 9.99,
+    d.sport === 'Baseball' || d.sport === 'Basketball' || d.sport === 'Football' || d.sport === 'Hockey' || d.sport === 'Soccer' ? '261328' : '261328',
+    parseFloat(d.suggestedBIN || 9.99).toFixed(2),
     '1',
-    d.isGraded && d.grade ? (d.gradingCompany + ' ' + d.grade) : 'USED',
+    d.isGraded ? '2750' : '4000',
+    d.isGraded ? '' : '400010',
     d.conditionNote || 'Near Mint or Better',
+    '3',
     S.duration,
     'FixedPriceItem',
+    'United States',
     S.returns,
     'Days_30',
     'MoneyBack',
     'Buyer',
     'USPSFirstClass',
     d.useEnvelope ? '1.00' : String(S.shipping),
-    d.player, d.year, d.set, d.cardNumber, d.variation, d.team, d.sport || 'Baseball', 'United States'
+    '',
+    d.player, d.year, d.set, d.cardNumber, d.variation, d.team, d.sport || 'Baseball',
+    d.isGraded ? 'Yes' : 'No', 'United States'
   ])].map(r => r.map(esc).join(',')).join('\r\n');
 }
 
