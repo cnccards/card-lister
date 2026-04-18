@@ -312,6 +312,16 @@ select.inp{cursor:pointer}
     <a class="btn bg-o" style="margin-top:8px" href="https://aistudio.google.com/apikey" target="_blank">Open Google AI Studio &rarr;</a>
   </div>
   <div class="panel">
+    <div class="phd"><div class="bub" style="background:#fef3c7;border-color:#fde68a;color:#92400e">V</div>Key Vault &mdash; Survives App Restarts</div>
+    <div class="hint" style="margin-bottom:10px">Paste your full key here. The vault reloads it automatically if Safari ever clears it.</div>
+    <div class="lbl">Full Key (visible backup)</div>
+    <textarea class="inp" id="vaultIn" rows="3" placeholder="Paste your complete Gemini key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-size:11px;resize:none"></textarea>
+    <div class="brow">
+      <button class="btn bg-g" onclick="saveVault()">Save to Vault</button>
+      <button class="btn bg-o" onclick="reloadFromVault()">Reload from Vault</button>
+    </div
+  </div>
+  <div class="panel">
     <div class="phd"><div class="bub">B</div>PIN Lock <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe">OPTIONAL</span></div>
     <div class="hint" style="margin-bottom:10px">Set a 4-digit PIN so only you can open the app.</div>
     <div class="lbl">4-Digit PIN</div>
@@ -348,8 +358,32 @@ const CSV_H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
 let selColor=COLORS[0];
 const ls={
   get:k=>{try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},
-  set:(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}}
+  set:(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}},
+  del:k=>{try{localStorage.removeItem(k);}catch(e){}}
 };
+
+// ── IMAGE COMPRESSION ──────────────────────────────
+function compressImage(dataUrl){
+  return new Promise(function(resolve){
+    const img=new Image();
+    img.onload=function(){
+      const MAX=1024;
+      let w=img.width,h=img.height;
+      if(w>MAX||h>MAX){
+        if(w>h){h=Math.round(h*MAX/w);w=MAX;}
+        else{w=Math.round(w*MAX/h);h=MAX;}
+      }
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      resolve(canvas.toDataURL('image/jpeg',0.82));
+    };
+    img.onerror=function(){resolve(dataUrl);};
+    img.src=dataUrl;
+  });
+}
+
 (function init(){
   S.gemKey=ls.get('gk')||'';
   S.duration=ls.get('dur')||'GTC';
@@ -366,7 +400,17 @@ const ls={
       return;
     }
   }
-  if(S.gemKey)document.getElementById('gemIn').value=mask(S.gemKey);
+  // Load key from vault if main key is missing
+  if(!S.gemKey){
+    const vaultKey=ls.get('vault');
+    if(vaultKey){S.gemKey=vaultKey;ls.set('gk',vaultKey);}
+  }
+  if(S.gemKey){
+    document.getElementById('gemIn').value=mask(S.gemKey);
+    document.getElementById('vaultIn').value=S.gemKey;
+  }
+  const savedVault=ls.get('vault');
+  if(savedVault)document.getElementById('vaultIn').value=savedVault;
   document.getElementById('cfgDur').value=S.duration;
   document.getElementById('cfgRet').value=S.returns;
   document.getElementById('cfgShip').value=S.shipping;
@@ -388,13 +432,38 @@ function saveKey(){
   const raw=document.getElementById('gemIn').value.trim();
   if(raw.length<10){document.getElementById('gemMsg').innerHTML=iHtml('ir','Key too short - paste the complete key');return;}
   S.gemKey=raw;ls.set('gk',raw);
+  // Auto-save to vault too
+  ls.set('vault',raw);
+  document.getElementById('vaultIn').value=raw;
   document.getElementById('gemIn').value=mask(raw);
-  document.getElementById('gemMsg').innerHTML=iHtml('ig','Saved! Starts: '+raw.slice(0,8)+'...');
-  refreshKeyBar();toast('Gemini key saved - ready!');
+  document.getElementById('gemMsg').innerHTML=iHtml('ig','Saved and backed up to vault!');
+  refreshKeyBar();toast('Gemini key saved!');
 }
-function clearKey(){if(!confirm('Remove saved key?'))return;S.gemKey='';ls.set('gk','');document.getElementById('gemIn').value='';document.getElementById('gemMsg').innerHTML='';refreshKeyBar();toast('Key removed','warn');}
+function clearKey(){
+  if(!confirm('Remove saved key?'))return;
+  S.gemKey='';ls.del('gk');
+  document.getElementById('gemIn').value='';
+  document.getElementById('gemMsg').innerHTML='';
+  refreshKeyBar();toast('Key removed','warn');
+}
+function saveVault(){
+  const raw=document.getElementById('vaultIn').value.trim();
+  if(raw.length<10){toast('Key too short','err');return;}
+  ls.set('vault',raw);
+  // Also set as main key
+  S.gemKey=raw;ls.set('gk',raw);
+  document.getElementById('gemIn').value=mask(raw);
+  refreshKeyBar();toast('Vault saved - key will survive app restarts!');
+}
+function reloadFromVault(){
+  const v=ls.get('vault');
+  if(!v){toast('No vault key saved yet','err');return;}
+  S.gemKey=v;ls.set('gk',v);
+  document.getElementById('gemIn').value=mask(v);
+  refreshKeyBar();toast('Key reloaded from vault!');
+}
 function savePIN(){const v=String(document.getElementById('pinIn').value).trim();if(v.length!==4||isNaN(Number(v))){toast('Enter exactly 4 digits','err');return;}ls.set('pin',v);document.getElementById('pinIn').value='';toast('PIN saved!');}
-function clearPIN(){ls.set('pin',null);toast('PIN removed','warn');}
+function clearPIN(){ls.del('pin');toast('PIN removed','warn');}
 function refreshKeyBar(){
   const ok=!!S.gemKey;
   document.getElementById('kdot').className='kdot'+(ok?' ok':'');
@@ -472,13 +541,13 @@ function addToQueue(files){
   });
 }
 const PROMPT='You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface, excellent centering","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}\n\nebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.\ndescription: 190-220 words professional listing. Ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.\nsuggestedBIN: accurate current eBay market USD price.\nsearchTags: 6-8 terms real buyers search.';
+
 async function callAI(rawDataUrl){
-  const base64=rawDataUrl.includes(',')?rawDataUrl.split(',')[1]:rawDataUrl;
-  const mm=rawDataUrl.match(/data:([^;]+);/);
-  const mime=mm?mm[1]:'image/jpeg';
-  const sm=['image/jpeg','image/png','image/webp','image/heic','image/heif'].includes(mime)?mime:'image/jpeg';
+  // Compress image before sending
+  const compressed=await compressImage(rawDataUrl);
+  const base64=compressed.includes(',')?compressed.split(',')[1]:compressed;
   const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
-  const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:sm,data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:1500}});
+  const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:'image/jpeg',data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:1500}});
   let resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':S.gemKey},body});
   if(resp.status===401||resp.status===403){
     resp=await fetch(url+'?key='+encodeURIComponent(S.gemKey),{method:'POST',headers:{'Content-Type':'application/json'},body});
@@ -486,16 +555,17 @@ async function callAI(rawDataUrl){
   if(!resp.ok){
     const e=await resp.json().catch(()=>({}));
     const msg=e.error?e.error.message:'Error '+resp.status;
-    if(resp.status===401||resp.status===403)throw new Error('Key rejected - re-paste in Setup');
-    if(resp.status===429)throw new Error('Rate limit - wait 1 min');
+    if(resp.status===401||resp.status===403)throw new Error('Key rejected - check Setup tab');
+    if(resp.status===429)throw new Error('Rate limit - wait 1 min and retry');
     throw new Error(msg.slice(0,140));
   }
   const d=await resp.json();
   const txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:'';
-  if(!txt)throw new Error('Empty response - try again');
-  return JSON.parse(txt.replace(/```json|```/g,'').trim());
+  if(!txt)throw new Error('Empty response - tap AI to retry');
+  const cleaned=txt.replace(/```json/g,'').replace(/```/g,'').trim();
+  return JSON.parse(cleaned);
 }
-const STEPS=['Sending to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel...','Assessing condition...','Writing eBay title...','Generating description...','Setting market price...'];
+const STEPS=['Compressing image...','Sending to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel...','Assessing condition...','Writing eBay title...','Setting market price...'];
 async function analyzeCard(item){
   item.status='reading';renderQI(item);
   let si=0;showLdr('Reading card...',STEPS[0]);
@@ -524,7 +594,7 @@ async function runBatch(){
   for(const item of pend){
     if(S.stop)break;
     document.getElementById('bst').textContent=(done+1)+'/'+tot+': '+item.name+'...';
-    item.status='reading';renderQI(item);showLdr('Card '+(done+1)+' of '+tot,'Sending to Gemini...');
+    item.status='reading';renderQI(item);showLdr('Card '+(done+1)+' of '+tot,'Compressing...');
     try{
       const result=await callAI(item.rawData);
       item.result=result;item.status='ready';
@@ -534,7 +604,7 @@ async function runBatch(){
     document.getElementById('bfill').style.width=Math.round(done/tot*100)+'%';
     document.getElementById('binfo').textContent=done+'/'+tot+' done';
     renderQI(item);refreshStats();
-    await sleep(500);
+    await sleep(600);
   }
   S.stop=false;btn.textContent='AI Read All Cards';btn.onclick=runBatch;
   document.getElementById('bst').textContent='Done - '+done+'/'+tot+' analyzed';
@@ -702,7 +772,7 @@ function buildCSV(acctId){
   if(!rows.length)return'';
   const cols=[CSV_H,'Title','Description','Category','BuyItNowPrice','Quantity','ConditionID','ConditionDescription','ListingDuration','ListingType','ReturnsAcceptedOption','ReturnsWithinOption','RefundOption','ShippingCostPaidByOption','ShippingService-1:Option','ShippingService-1:Cost','C:Player/Athlete','C:Year Manufactured','C:Set','C:Card Number','C:Parallel/Variety','C:Team','C:Sport'];
   const dataRows=rows.map(function(d){
-    return ['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',
+    return['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',
       (d.isGraded&&d.grade)?d.gradingCompany+' '+d.grade:'USED',
       d.conditionNote||'Near Mint or Better',S.duration,'FixedPriceItem',
       S.returns,'Days_30','MoneyBack','Buyer','USPSFirstClass',
@@ -720,8 +790,7 @@ function dlCSV(acctId){
   const el=document.createElement('a');el.href=url;
   el.download='ebay_'+(a?a.name:'cards').replace(/ /g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(el);el.click();document.body.removeChild(el);
-  URL.revokeObjectURL(url);
-  toast('Downloaded!');
+  URL.revokeObjectURL(url);toast('Downloaded!');
 }
 function renderExport(){
   const el=document.getElementById('expBlocks');
@@ -819,7 +888,6 @@ function iHtml(cls,msg){
   return '<div class="info '+cls+'" style="padding:8px 11px;font-size:11px;margin:0"><span>'+(cls.indexOf('g')>=0?'OK':'!')+' </span><div>'+msg+'</div></div>';
 }
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
-
 </script>
 </body>
 </html>
