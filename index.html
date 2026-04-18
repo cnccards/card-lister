@@ -23,8 +23,8 @@ nav{position:sticky;top:0;z-index:90;background:rgba(8,10,15,.95);backdrop-filte
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:10px 12px;font-size:10px;font-weight:700;color:var(--fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;font-family:'Syne Mono',monospace}
 .tab.on{color:var(--g);border-bottom-color:var(--g)}
-.screen{display:none;padding:14px;max-width:520px;margin:0 auto}
-.screen.on{display:block}
+.screen{display:none!important;padding:14px;max-width:520px;margin:0 auto}
+.screen.on{display:block!important}
 .panel{background:var(--c2);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:10px}
 .btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 16px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;width:100%;transition:opacity .15s}
 .btn:active{opacity:.75}
@@ -307,6 +307,9 @@ const ls = {
   const envEl = document.getElementById('cfg-env');
   if (shipEl) shipEl.value = S.shipping;
   if (envEl) envEl.value = S.envCutoff;
+
+  // Make sure tabs work on load
+  goTab('list');
 })();
 
 // ══ TABS ════════════════════════════════════════════════════════
@@ -489,7 +492,7 @@ STEP 2 - PRICE CONSERVATIVELY using recent eBay SOLD prices:
 - Auto star player (All-Star level): $25-80
 - Auto top rookie prospect: $15-50
 - PSA 9: 1.5x raw price. PSA 10: 2.5x raw price.
-- NEVER price above $100 unless PSA 10 of a superstar.
+- NEVER price above $100 unless PSA 10 of a superstar. Be conservative — use the LOWER end of recent sold comps.
 - Use the LOWER end of sold comps, not asking prices.
 
 Reply ONLY with valid compact JSON. No markdown. No backticks. No explanation:
