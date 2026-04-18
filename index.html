@@ -9,190 +9,187 @@
 <meta name="apple-mobile-web-app-title" content="Card Lister"/>
 <title>Card Lister Pro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap');
-:root{--bg:#080a0f;--s1:#0e1118;--s2:#151b24;--s3:#1c2430;--bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.12);--bdr3:rgba(255,255,255,.22);--txt:#e8f0fa;--fog:#5a7090;--dim:#2a3848;--g:#00ff88;--g2:rgba(0,255,136,.08);--g3:rgba(0,255,136,.2);--b:#0088ff;--b2:rgba(0,136,255,.08);--b3:rgba(0,136,255,.2);--y:#ffbb00;--y2:rgba(255,187,0,.08);--y3:rgba(255,187,0,.2);--r:#ff3366;--r2:rgba(255,51,102,.08);--r3:rgba(255,51,102,.2);--p:#aa55ff;--p2:rgba(170,85,255,.08);--p3:rgba(170,85,255,.2);--rad:10px;--rads:6px;--radl:14px}
+/* iOS Safari safe CSS - no z-index stacking, no pseudo elements */
+:root{
+  --bg:#080a0f;--s1:#0e1118;--s2:#151b24;--s3:#1c2430;
+  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.12);--bdr3:rgba(255,255,255,.22);
+  --txt:#e8f0fa;--fog:#5a7090;--dim:#2a3848;
+  --g:#00ff88;--g2:rgba(0,255,136,.08);--g3:rgba(0,255,136,.2);
+  --b:#0088ff;--b2:rgba(0,136,255,.08);--b3:rgba(0,136,255,.2);
+  --y:#ffbb00;--y2:rgba(255,187,0,.08);--y3:rgba(255,187,0,.2);
+  --r:#ff3366;--r2:rgba(255,51,102,.08);--r3:rgba(255,51,102,.2);
+  --p:#aa55ff;--p2:rgba(170,85,255,.08);--p3:rgba(170,85,255,.2);
+  --rad:10px;--rads:6px;--radl:14px;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
-
-nav{position:sticky;top:0;z-index:90;background:rgba(8,10,15,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(–bdr);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+html,body{background:#080a0f;color:#e8f0fa;min-height:100vh;font-family:'Syne',sans-serif}
+nav{position:sticky;top:0;background:#0e1118;border-bottom:1px solid rgba(255,255,255,.06);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;z-index:50}
 .logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:var(–g);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 0 20px rgba(0,255,136,.3)}
-.logo-text{font-size:15px;font-weight:800;letter-spacing:-.4px}
-.logo-sub{font-size:9px;color:var(–fog);font-family:‘Syne Mono’,monospace;margin-top:1px}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:#00ff88;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:800;letter-spacing:-.4px;color:#e8f0fa}
+.logo-sub{font-size:9px;color:#5a7090;font-family:'Syne Mono',monospace;margin-top:1px}
 .ncs{display:flex;gap:6px}
-.nc{background:var(–s2);border:1px solid var(–bdr);border-radius:6px;padding:4px 8px;text-align:center;min-width:38px}
-.nc-n{font-size:13px;font-weight:800;font-family:‘Syne Mono’,monospace;color:var(–g);line-height:1}
-.nc-l{font-size:7px;color:var(–fog);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
-.tabs{background:var(–s1);border-bottom:1px solid var(–bdr);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px;position:relative;z-index:10}
+.nc{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:4px 8px;text-align:center;min-width:38px}
+.nc-n{font-size:13px;font-weight:800;font-family:'Syne Mono',monospace;color:#00ff88;line-height:1}
+.nc-l{font-size:7px;color:#5a7090;text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
+.tabs{background:#0e1118;border-bottom:1px solid rgba(255,255,255,.06);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px;position:relative;z-index:40}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:10px 11px;font-size:10px;font-weight:700;color:var(–fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;transition:all .15s;flex-shrink:0;font-family:‘Syne Mono’,monospace}
-.tab.on{color:var(–g);border-bottom-color:var(–g)}
-.screen{display:none;padding:14px;max-width:520px;margin:0 auto;}
+.tab{padding:10px 11px;font-size:10px;font-weight:700;color:#5a7090;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;font-family:'Syne Mono',monospace}
+.tab.on{color:#00ff88;border-bottom-color:#00ff88}
+.screen{display:none;padding:14px;max-width:520px;margin:0 auto;background:#080a0f}
 .screen.on{display:block}
-.panel{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–radl);padding:14px;margin-bottom:10px}
-.phd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(–fog);margin-bottom:10px;display:flex;align-items:center;gap:7px;font-family:‘Syne Mono’,monospace}
-.bub{width:18px;height:18px;border-radius:50%;background:var(–g2);border:1px solid var(–g3);color:var(–g);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:‘Syne Mono’,monospace}
-.bub.r{background:var(–r2);border-color:var(–r3);color:var(–r)}
-.bub.y{background:var(–y2);border-color:var(–y3);color:var(–y)}
-.inp{width:100%;background:var(–s1);border:1px solid var(–bdr);border-radius:var(–rads);padding:9px 11px;font-size:13px;color:var(–txt);font-family:‘Syne’,sans-serif;outline:none;margin-bottom:8px;transition:border-color .15s;-webkit-appearance:none}
-.inp:focus{border-color:var(–g)}
-.inp::placeholder{color:var(–dim)}
+.panel{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px;margin-bottom:10px}
+.phd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#5a7090;margin-bottom:10px;display:flex;align-items:center;gap:7px;font-family:'Syne Mono',monospace}
+.bub{width:18px;height:18px;border-radius:50%;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne Mono',monospace}
+.inp{width:100%;background:#0e1118;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:9px 11px;font-size:13px;color:#e8f0fa;font-family:'Syne',sans-serif;outline:none;margin-bottom:8px;-webkit-appearance:none}
+.inp:focus{border-color:#00ff88}
+.inp::placeholder{color:#2a3848}
 select.inp{cursor:pointer}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .g2 .inp{margin-bottom:0}
-.lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:var(–fog);margin-bottom:4px;font-family:‘Syne Mono’,monospace}
-.hint{font-size:11px;color:var(–fog);line-height:1.55;margin-top:3px}
-.hint a{color:var(–b)}
-.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 14px;border-radius:var(–rad);border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:‘Syne’,sans-serif;transition:opacity .15s,transform .08s;text-decoration:none;width:100%;letter-spacing:-.2px}
-.btn:active{opacity:.75;transform:scale(.97)}
-.btn:disabled{opacity:.3;cursor:not-allowed}
-.bg-g{background:var(–g);color:#000}
-.bg-o{background:transparent;border:1px solid var(–bdr2);color:var(–txt)}
-.bg-r{background:var(–r2);color:var(–r);border:1px solid var(–r3)}
-.bg-b{background:var(–b2);color:var(–b);border:1px solid var(–b3)}
-.bg-y{background:var(–y2);color:var(–y);border:1px solid var(–y3)}
-.bsm{padding:6px 12px;font-size:11px;width:auto;border-radius:var(–rads)}
+.lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#5a7090;margin-bottom:4px;font-family:'Syne Mono',monospace}
+.hint{font-size:11px;color:#5a7090;line-height:1.55;margin-top:3px}
+.hint a{color:#0088ff}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 14px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;text-decoration:none;width:100%}
+.btn:active{opacity:.75}
+.bg-g{background:#00ff88;color:#000}
+.bg-o{background:transparent;border:1px solid rgba(255,255,255,.12);color:#e8f0fa}
+.bg-r{background:rgba(255,51,102,.08);color:#ff3366;border:1px solid rgba(255,51,102,.2)}
+.bg-b{background:rgba(0,136,255,.08);color:#0088ff;border:1px solid rgba(0,136,255,.2)}
+.bg-y{background:rgba(255,187,0,.08);color:#ffbb00;border:1px solid rgba(255,187,0,.2)}
+.bsm{padding:6px 12px;font-size:11px;width:auto;border-radius:6px}
 .brow{display:flex;gap:8px}
 .brow .btn{flex:1;padding:10px}
-.info{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:var(–rads);font-size:12px;line-height:1.55;margin-bottom:10px}
-.ig{background:var(–g2);border:1px solid var(–g3);color:var(–g)}
-.iy{background:var(–y2);border:1px solid var(–y3);color:var(–y)}
-.ib{background:var(–b2);border:1px solid var(–b3);color:var(–b)}
-.ir{background:var(–r2);border:1px solid var(–r3);color:var(–r)}
-.kbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(–rad);border:1px solid var(–bdr);background:var(–s2);margin-bottom:10px}
-.kdot{width:8px;height:8px;border-radius:50%;background:var(–r);flex-shrink:0;transition:all .4s}
-.kdot.ok{background:var(–g);box-shadow:0 0 10px rgba(0,255,136,.5)}
+.info{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.55;margin-bottom:10px}
+.ig{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88}
+.iy{background:rgba(255,187,0,.08);border:1px solid rgba(255,187,0,.2);color:#ffbb00}
+.ib{background:rgba(0,136,255,.08);border:1px solid rgba(0,136,255,.2);color:#0088ff}
+.ir{background:rgba(255,51,102,.08);border:1px solid rgba(255,51,102,.2);color:#ff3366}
+.kbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:#151b24;margin-bottom:10px}
+.kdot{width:8px;height:8px;border-radius:50%;background:#ff3366;flex-shrink:0}
+.kdot.ok{background:#00ff88;box-shadow:0 0 10px rgba(0,255,136,.5)}
 .kinfo{flex:1;min-width:0}
 .klbl{font-size:12px;font-weight:700}
-.ksub{font-size:10px;color:var(–fog);margin-top:1px;font-family:‘Syne Mono’,monospace}
-.kact{font-size:11px;font-weight:700;color:var(–b);cursor:pointer;white-space:nowrap;flex-shrink:0}
-.abanner{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(–rad);border:1px solid var(–bdr);background:var(–s2);margin-bottom:10px}
+.ksub{font-size:10px;color:#5a7090;margin-top:1px;font-family:'Syne Mono',monospace}
+.kact{font-size:11px;font-weight:700;color:#0088ff;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.abanner{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:#151b24;margin-bottom:10px}
 .ab-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .ab-body{flex:1;min-width:0}
 .ab-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ab-lbl{font-size:9px;color:var(–fog);font-family:‘Syne Mono’,monospace}
-.ab-sw{font-size:11px;font-weight:700;color:var(–b);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ab-lbl{font-size:9px;color:#5a7090;font-family:'Syne Mono',monospace}
+.ab-sw{font-size:11px;font-weight:700;color:#0088ff;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .sstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-.stat{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–rad);padding:10px;text-align:center}
-.stat-n{font-size:22px;font-weight:800;font-family:‘Syne Mono’,monospace;line-height:1}
-.stat-l{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(–fog);margin-top:3px;font-family:‘Syne Mono’,monospace}
-.drop{position:relative;background:var(–s2);border:2px dashed var(–bdr2);border-radius:var(–radl);padding:28px 16px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:10px}
-.drop:hover,.drop.drag{border-color:var(–g);background:rgba(0,255,136,.04)}
+.stat{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px;text-align:center}
+.stat-n{font-size:22px;font-weight:800;font-family:'Syne Mono',monospace;line-height:1}
+.stat-l{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;margin-top:3px;font-family:'Syne Mono',monospace}
+.drop{position:relative;background:#151b24;border:2px dashed rgba(255,255,255,.12);border-radius:14px;padding:28px 16px;text-align:center;cursor:pointer;margin-bottom:10px}
+.drop.drag{border-color:#00ff88;background:rgba(0,255,136,.04)}
 .drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.drop-ring{width:56px;height:56px;border-radius:50%;background:var(–g2);border:2px solid var(–g3);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px;box-shadow:0 0 30px rgba(0,255,136,.15)}
-.drop-h{font-size:17px;font-weight:800;margin-bottom:5px;letter-spacing:-.3px}
-.drop-s{font-size:12px;color:var(–fog);line-height:1.5}
-.drop-chip{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;color:var(–g);padding:3px 11px;border-radius:99px;background:var(–g2);border:1px solid var(–g3);font-family:‘Syne Mono’,monospace}
+.drop-ring{width:56px;height:56px;border-radius:50%;background:rgba(0,255,136,.08);border:2px solid rgba(0,255,136,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px}
+.drop-h{font-size:17px;font-weight:800;margin-bottom:5px;letter-spacing:-.3px;color:#e8f0fa}
+.drop-s{font-size:12px;color:#5a7090;line-height:1.5}
+.drop-chip{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;color:#00ff88;padding:3px 11px;border-radius:99px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);font-family:'Syne Mono',monospace}
 .qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.qlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(–fog);font-family:‘Syne Mono’,monospace}
-.qct{font-size:10px;color:var(–g);padding:2px 8px;background:var(–g2);border-radius:99px;border:1px solid var(–g3);font-family:‘Syne Mono’,monospace}
+.qlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;font-family:'Syne Mono',monospace}
+.qct{font-size:10px;color:#00ff88;padding:2px 8px;background:rgba(0,255,136,.08);border-radius:99px;border:1px solid rgba(0,255,136,.2);font-family:'Syne Mono',monospace}
 .qlist{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
-.qi{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–rad);display:flex;align-items:stretch;overflow:hidden}
-.qi-img{width:58px;flex-shrink:0;object-fit:cover;background:var(–s3)}
-.qi-ph{width:58px;flex-shrink:0;background:var(–s3);display:flex;align-items:center;justify-content:center;font-size:20px}
+.qi{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;display:flex;align-items:stretch;overflow:hidden}
+.qi-img{width:58px;flex-shrink:0;object-fit:cover;background:#1c2430}
+.qi-ph{width:58px;flex-shrink:0;background:#1c2430;display:flex;align-items:center;justify-content:center;font-size:20px}
 .qi-body{flex:1;padding:8px 10px;min-width:0}
-.qi-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.qi-st{font-size:10px;margin-top:2px;font-family:‘Syne Mono’,monospace}
-.qi-price{font-size:12px;font-weight:800;color:var(–g);margin-top:2px;font-family:‘Syne Mono’,monospace}
-.qi-ship{font-size:9px;color:var(–fog);margin-top:1px;font-family:‘Syne Mono’,monospace}
-.qi-meta{font-size:10px;color:var(–fog);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.qi-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8f0fa}
+.qi-st{font-size:10px;margin-top:2px;font-family:'Syne Mono',monospace}
+.qi-price{font-size:12px;font-weight:800;color:#00ff88;margin-top:2px;font-family:'Syne Mono',monospace}
+.qi-ship{font-size:9px;color:#5a7090;margin-top:1px;font-family:'Syne Mono',monospace}
+.qi-meta{font-size:10px;color:#5a7090;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
 .qi-acct{font-size:10px;margin-top:2px;display:flex;align-items:center;gap:4px}
 .qi-adot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.qi-side{display:flex;flex-direction:column;border-left:1px solid var(–bdr);flex-shrink:0}
-.qib{width:42px;flex:1;border:none;background:transparent;color:var(–fog);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .12s}
-.qib:hover{background:var(–s3)}
-.qib.del:hover{background:var(–r2);color:var(–r)}
-.qib.view:hover{background:var(–g2);color:var(–g)}
-.qib.retry:hover{background:var(–y2);color:var(–y)}
-.sp{color:var(–dim)}.sr{color:var(–b)}.sok{color:var(–g)}.se{color:var(–r)}
-.batch{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–rad);padding:12px;margin-bottom:10px}
+.qi-side{display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.qib{width:42px;flex:1;border:none;background:transparent;color:#5a7090;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.qib.del:active{background:rgba(255,51,102,.08);color:#ff3366}
+.qib.view:active{background:rgba(0,255,136,.08);color:#00ff88}
+.sp{color:#2a3848}.sr{color:#0088ff}.sok{color:#00ff88}.se{color:#ff3366}
+.batch{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px;margin-bottom:10px}
 .btop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.prog{height:4px;background:var(–bdr);border-radius:99px;overflow:hidden;margin-bottom:5px;display:none}
-.prog-f{height:100%;border-radius:99px;background:var(–g);transition:width .4s;box-shadow:0 0 8px rgba(0,255,136,.4)}
-.bst{font-size:10px;color:var(–fog);font-family:‘Syne Mono’,monospace}
-.prev{background:var(–s2);border:1px solid var(–g3);border-radius:var(–radl);overflow:hidden;margin-bottom:12px}
-.prev-hdr{background:rgba(0,255,136,.06);border-bottom:1px solid var(–g3);padding:10px 13px;display:flex;align-items:center;justify-content:space-between}
-.prev-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(–g);font-family:‘Syne Mono’,monospace}
-.pf{padding:9px 13px;border-bottom:1px solid var(–bdr)}
+.prog{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-bottom:5px;display:none}
+.prog-f{height:100%;border-radius:99px;background:#00ff88;transition:width .4s}
+.bst{font-size:10px;color:#5a7090;font-family:'Syne Mono',monospace}
+.prev{background:#151b24;border:1px solid rgba(0,255,136,.2);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.prev-hdr{background:rgba(0,255,136,.06);border-bottom:1px solid rgba(0,255,136,.2);padding:10px 13px;display:flex;align-items:center;justify-content:space-between}
+.prev-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#00ff88;font-family:'Syne Mono',monospace}
+.pf{padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
 .pf:last-child{border-bottom:none}
-.pf-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:var(–dim);margin-bottom:3px;font-family:‘Syne Mono’,monospace}
-.pf-inp{width:100%;background:var(–s3);border:1px solid var(–bdr);border-radius:var(–rads);padding:8px 10px;font-size:12px;color:var(–txt);font-family:‘Syne’,sans-serif;outline:none;resize:vertical;min-height:32px;transition:border-color .15s;-webkit-appearance:none}
-.pf-inp:focus{border-color:var(–g)}
-.pbox{background:var(–s3);border-radius:var(–rads);padding:10px 12px;border:1px solid var(–bdr)}
-.pbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:var(–fog);margin-bottom:3px;font-family:‘Syne Mono’,monospace}
+.pf-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#2a3848;margin-bottom:3px;font-family:'Syne Mono',monospace}
+.pf-inp{width:100%;background:#1c2430;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 10px;font-size:12px;color:#e8f0fa;font-family:'Syne',sans-serif;outline:none;resize:vertical;min-height:32px;-webkit-appearance:none}
+.pf-inp:focus{border-color:#00ff88}
+.pbox{background:#1c2430;border-radius:6px;padding:10px 12px;border:1px solid rgba(255,255,255,.06)}
+.pbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#5a7090;margin-bottom:3px;font-family:'Syne Mono',monospace}
 .prow{display:flex;align-items:center}
-.pcur{font-size:14px;color:var(–fog);margin-right:2px;font-family:‘Syne Mono’,monospace}
-.pinp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:var(–g);outline:none;-webkit-appearance:none;font-family:‘Syne Mono’,monospace}
-.stag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;font-family:‘Syne Mono’,monospace}
-.senv{background:var(–g2);color:var(–g);border:1px solid var(–g3)}
-.susps{background:var(–b2);color:var(–b);border:1px solid var(–b3)}
-.tags-row{padding:8px 13px;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(–bdr)}
-.tag{font-size:9px;padding:2px 7px;border-radius:99px;background:var(–p2);color:var(–p);border:1px solid var(–p3);font-family:‘Syne Mono’,monospace}
+.pcur{font-size:14px;color:#5a7090;margin-right:2px;font-family:'Syne Mono',monospace}
+.pinp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:#00ff88;outline:none;-webkit-appearance:none;font-family:'Syne Mono',monospace}
+.stag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;font-family:'Syne Mono',monospace}
+.senv{background:rgba(0,255,136,.08);color:#00ff88;border:1px solid rgba(0,255,136,.2)}
+.susps{background:rgba(0,136,255,.08);color:#0088ff;border:1px solid rgba(0,136,255,.2)}
+.tags-row{padding:8px 13px;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid rgba(255,255,255,.06)}
+.tag{font-size:9px;padding:2px 7px;border-radius:99px;background:rgba(170,85,255,.08);color:#aa55ff;border:1px solid rgba(170,85,255,.2);font-family:'Syne Mono',monospace}
 .prev-btns{padding:10px 13px;display:flex;gap:8px}
 .prev-btns .btn{flex:1;padding:10px}
-.asgn-row{padding:9px 13px;border-bottom:1px solid var(–bdr)}
+.asgn-row{padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
 .asgn-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
-.asgn-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid var(–bdr);background:transparent;color:var(–fog);font-size:10px;font-weight:700;cursor:pointer;font-family:‘Syne’,sans-serif;transition:all .15s}
-.asgn-btn.sel{border-color:var(–bdr3);color:var(–txt);background:var(–s3)}
+.asgn-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid rgba(255,255,255,.06);background:transparent;color:#5a7090;font-size:10px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif}
+.asgn-btn.sel{border-color:rgba(255,255,255,.22);color:#e8f0fa;background:#1c2430}
 .asgn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .acct-stack{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.ai{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–rad);padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s}
-.ai:hover{border-color:var(–bdr2)}
-.ai.active{border-color:var(–g);background:rgba(0,255,136,.04)}
+.ai{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.ai.active{border-color:#00ff88;background:rgba(0,255,136,.04)}
 .ai-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
 .ai-body{flex:1;min-width:0}
-.ai-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ai-det{font-size:10px;color:var(–fog);margin-top:2px;font-family:‘Syne Mono’,monospace}
-.ai-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(–g2);border:1px solid var(–g3);color:var(–g);white-space:nowrap;flex-shrink:0;font-family:‘Syne Mono’,monospace}
-.ai-del{width:28px;height:28px;border:none;background:transparent;color:var(–dim);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:13px;flex-shrink:0;transition:all .15s}
-.ai-del:hover{background:var(–r2);color:var(–r)}
+.ai-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8f0fa}
+.ai-det{font-size:10px;color:#5a7090;margin-top:2px;font-family:'Syne Mono',monospace}
+.ai-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88;white-space:nowrap;flex-shrink:0;font-family:'Syne Mono',monospace}
+.ai-del{width:28px;height:28px;border:none;background:transparent;color:#2a3848;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:13px;flex-shrink:0}
 .cpick{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
-.copt{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0}
-.copt.sel{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.2)}
-.exp-block{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–radl);overflow:hidden;margin-bottom:10px}
-.exp-hd{padding:12px 14px;border-bottom:1px solid var(–bdr);display:flex;align-items:center;gap:10px}
+.copt{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0}
+.copt.sel{border-color:#fff}
+.exp-block{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;margin-bottom:10px}
+.exp-hd{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
 .exp-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
 .exp-body{padding:13px}
-.exp-row{font-size:11px;color:var(–fog);padding:4px 0;border-bottom:1px solid var(–bdr);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.exp-row{font-size:11px;color:#5a7090;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .exp-row:last-child{border-bottom:none}
 .exp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.exp-price{color:var(–g);font-weight:800;flex-shrink:0;font-family:‘Syne Mono’,monospace}
+.exp-price{color:#00ff88;font-weight:800;flex-shrink:0;font-family:'Syne Mono',monospace}
 .steps{margin-bottom:12px}
-.step{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(–bdr);font-size:12px;line-height:1.5;color:var(–fog)}
+.step{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px;line-height:1.5;color:#5a7090}
 .step:last-child{border-bottom:none}
-.sn{width:18px;height:18px;border-radius:50%;background:var(–y2);border:1px solid var(–y3);color:var(–y);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-family:‘Syne Mono’,monospace}
-.step strong{color:var(–txt)}
-.log-item{background:var(–s2);border:1px solid var(–bdr);border-radius:var(–rads);padding:8px 11px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
-.log-ck{width:18px;height:18px;border-radius:50%;background:var(–g2);border:1px solid var(–g3);display:flex;align-items:center;justify-content:center;color:var(–g);font-size:10px;flex-shrink:0}
+.sn{width:18px;height:18px;border-radius:50%;background:rgba(255,187,0,.08);border:1px solid rgba(255,187,0,.2);color:#ffbb00;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-family:'Syne Mono',monospace}
+.step strong{color:#e8f0fa}
+.log-item{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 11px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.log-ck{width:18px;height:18px;border-radius:50%;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);display:flex;align-items:center;justify-content:center;color:#00ff88;font-size:10px;flex-shrink:0}
 .log-info{flex:1;min-width:0}
-.log-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.log-det{font-size:10px;color:var(–fog);margin-top:1px;display:flex;align-items:center;gap:4px;font-family:‘Syne Mono’,monospace}
+.log-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8f0fa}
+.log-det{font-size:10px;color:#5a7090;margin-top:1px;display:flex;align-items:center;gap:4px;font-family:'Syne Mono',monospace}
 .log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.ldr{display:none;position:fixed;inset:0;background:rgba(8,10,15,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.ldr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,10,15,.93);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .ldr.on{display:flex}
-.spin{width:50px;height:50px;border:2px solid rgba(0,255,136,.2);border-top-color:var(–g);border-radius:50%;animation:spin .7s linear infinite}
+.spin{width:50px;height:50px;border:2px solid rgba(0,255,136,.2);border-top-color:#00ff88;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ldr-t{font-size:16px;font-weight:800;letter-spacing:-.3px}
-.ldr-s{font-size:11px;color:var(–fog);text-align:center;max-width:250px;line-height:1.5;font-family:‘Syne Mono’,monospace}
-.ldr-cancel{font-size:11px;color:var(–r);cursor:pointer;padding:6px 14px;border:1px solid var(–r3);border-radius:var(–rads);background:var(–r2);margin-top:4px;font-weight:700}
-.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:var(–s3);border:1px solid var(–g3);color:var(–g);padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:88vw;text-align:center;font-family:‘Syne Mono’,monospace}
+.ldr-t{font-size:16px;font-weight:800;color:#e8f0fa}
+.ldr-s{font-size:11px;color:#5a7090;text-align:center;max-width:250px;line-height:1.5;font-family:'Syne Mono',monospace}
+.ldr-cancel{font-size:11px;color:#ff3366;cursor:pointer;padding:6px 14px;border:1px solid rgba(255,51,102,.2);border-radius:6px;background:rgba(255,51,102,.08);font-weight:700}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:#1c2430;border:1px solid rgba(0,255,136,.2);color:#00ff88;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .35s;white-space:nowrap;max-width:88vw;text-align:center;font-family:'Syne Mono',monospace}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast.err{border-color:var(–r3);color:var(–r);background:var(–r2)}
-.toast.warn{border-color:var(–y3);color:var(–y);background:var(–y2)}
+.toast.err{border-color:rgba(255,51,102,.2);color:#ff3366;background:rgba(255,51,102,.08)}
+.toast.warn{border-color:rgba(255,187,0,.2);color:#ffbb00;background:rgba(255,187,0,.08)}
 .row-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
-.row-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(–fog);font-family:‘Syne Mono’,monospace}
-.empty{text-align:center;padding:36px 20px;color:var(–dim);font-size:13px}
+.row-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;font-family:'Syne Mono',monospace}
+.empty{text-align:center;padding:36px 20px;color:#2a3848;font-size:13px}
 .empty-i{font-size:36px;margin-bottom:10px}
-@media(max-width:380px){.g2{grid-template-columns:1fr}}
 </style>
-
 </head>
 <body>
-
 <div class="ldr" id="ldr">
   <div class="spin"></div>
   <div class="ldr-t" id="ldrT">Reading card...</div>
@@ -207,8 +204,8 @@ select.inp{cursor:pointer}
   </div>
   <div class="ncs">
     <div class="nc"><div class="nc-n" id="nc-q">0</div><div class="nc-l">Queue</div></div>
-    <div class="nc"><div class="nc-n" style="color:var(--b)" id="nc-r">0</div><div class="nc-l">Ready</div></div>
-    <div class="nc"><div class="nc-n" style="color:var(--y)" id="nc-v">$0</div><div class="nc-l">Value</div></div>
+    <div class="nc"><div class="nc-n" style="color:#0088ff" id="nc-r">0</div><div class="nc-l">Ready</div></div>
+    <div class="nc"><div class="nc-n" style="color:#ffbb00" id="nc-v">$0</div><div class="nc-l">Value</div></div>
   </div>
 </nav>
 <div class="tabs">
@@ -223,12 +220,12 @@ select.inp{cursor:pointer}
 <!-- LIST -->
 
 <div class="screen" id="s-list">
-  <div class="kbar"><div class="kdot" id="kdot"></div><div class="kinfo"><div class="klbl" id="klbl">No API key</div><div class="ksub" id="ksub">Go to Setup tab to add your free Gemini key</div></div><div class="kact" onclick="goTab('setup')">Setup &rarr;</div></div>
+  <div class="kbar"><div class="kdot" id="kdot"></div><div class="kinfo"><div class="klbl" id="klbl">No API key</div><div class="ksub" id="ksub">Go to Setup to add your free Gemini key</div></div><div class="kact" onclick="goTab('setup')">Setup &rarr;</div></div>
   <div class="abanner"><div class="ab-dot" id="abd"></div><div class="ab-body"><div class="ab-lbl">Listing to account</div><div class="ab-name" id="abn">No account &mdash; add one first</div></div><div class="ab-sw" onclick="goTab('accts')">Switch &rarr;</div></div>
   <div class="sstrip">
-    <div class="stat"><div class="stat-n" style="color:var(--fog)" id="s-tot">0</div><div class="stat-l">In Queue</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--g)" id="s-rdy">0</div><div class="stat-l">Ready</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--y)" id="s-val">$0</div><div class="stat-l">Value</div></div>
+    <div class="stat"><div class="stat-n" style="color:#5a7090" id="s-tot">0</div><div class="stat-l">In Queue</div></div>
+    <div class="stat"><div class="stat-n" style="color:#00ff88" id="s-rdy">0</div><div class="stat-l">Ready</div></div>
+    <div class="stat"><div class="stat-n" style="color:#ffbb00" id="s-val">$0</div><div class="stat-l">Value</div></div>
   </div>
   <div class="drop" id="dropzone" ondragover="doDrag(event,1)" ondragleave="doDrag(event,0)" ondrop="doDrop(event)">
     <input type="file" id="fileIn" accept="image/*" multiple onchange="onFiles(event)"/>
@@ -242,7 +239,7 @@ select.inp{cursor:pointer}
     <div class="qhdr"><div class="qlbl">Card Queue</div><div class="qct" id="qct">0</div></div>
     <div class="qlist" id="qlist"></div>
     <div class="batch">
-      <div class="btop"><span style="font-size:12px;font-weight:700">Batch Actions</span><span class="bst" id="binfo">0 cards</span></div>
+      <div class="btop"><span style="font-size:12px;font-weight:700;color:#e8f0fa">Batch Actions</span><span class="bst" id="binfo">0 cards</span></div>
       <div class="brow" style="margin-bottom:8px">
         <button class="btn bg-b" id="batchBtn" onclick="runBatch()">&#x1F916; AI Read All Cards</button>
         <button class="btn bg-r bsm" onclick="clearQueue()">Clear</button>
@@ -256,13 +253,13 @@ select.inp{cursor:pointer}
 <!-- ACCOUNTS -->
 
 <div class="screen" id="s-accts">
-  <div class="row-hd"><div class="row-ttl">eBay Accounts</div><div style="font-size:10px;color:var(--fog);font-family:'Syne Mono',monospace" id="actLbl"></div></div>
-  <div class="info iy"><span>&#x1F4CB;</span><div><strong>No eBay developer account needed.</strong> Each account gets its own CSV. Sign into that account in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload. All listings are <strong>Buy It Now</strong>. Switch accounts and repeat for each CSV.</div></div>
+  <div class="row-hd"><div class="row-ttl">eBay Accounts</div><div style="font-size:10px;color:#5a7090;font-family:'Syne Mono',monospace" id="actLbl"></div></div>
+  <div class="info iy"><span>&#x1F4CB;</span><div><strong>No eBay developer account needed.</strong> Each account gets its own CSV. Sign into that account in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload. All listings are <strong>Buy It Now</strong>.</div></div>
   <div id="acctList"></div>
   <div class="panel">
     <div class="phd"><div class="bub">+</div>Add eBay Account</div>
     <div class="lbl">eBay username or nickname</div>
-    <input class="inp" id="newName" placeholder="e.g. cnccards23, shop2..."/>
+    <input class="inp" id="newName" placeholder="e.g. cnccards23..."/>
     <div class="lbl">Color</div>
     <div class="cpick" id="cpick"></div>
     <button class="btn bg-g" onclick="addAcct()">Add Account</button>
@@ -272,16 +269,16 @@ select.inp{cursor:pointer}
 <!-- EXPORT -->
 
 <div class="screen" id="s-export">
-  <div class="row-hd"><div class="row-ttl">Download CSVs</div><div style="font-size:10px;color:var(--fog);font-family:'Syne Mono',monospace" id="expLbl">0 ready</div></div>
+  <div class="row-hd"><div class="row-ttl">Download CSVs</div><div style="font-size:10px;color:#5a7090;font-family:'Syne Mono',monospace" id="expLbl">0 ready</div></div>
   <div id="expEmpty" class="empty"><div class="empty-i">&#x1F4CB;</div>Analyze cards and tap "Add to Export" on each listing.</div>
   <div id="expBlocks"></div>
   <div id="expGuide" style="display:none">
     <div class="panel" style="margin-top:4px">
-      <div class="phd"><div class="bub y">?</div>How to upload to eBay</div>
+      <div class="phd"><div class="bub" style="background:rgba(255,187,0,.08);border-color:rgba(255,187,0,.2);color:#ffbb00">?</div>How to upload to eBay</div>
       <div class="steps">
         <div class="step"><div class="sn">1</div><div>Open <strong>Safari</strong> &rarr; sign into your eBay account</div></div>
         <div class="step"><div class="sn">2</div><div>Go to <strong>Seller Hub &rarr; Reports &rarr; Upload</strong></div></div>
-        <div class="step"><div class="sn">3</div><div>Tap <strong>Upload Template</strong> &rarr; select the CSV from Files</div></div>
+        <div class="step"><div class="sn">3</div><div>Tap <strong>Upload Template</strong> &rarr; select CSV from Files</div></div>
         <div class="step"><div class="sn">4</div><div>eBay creates <strong>Draft listings</strong> &rarr; add photos &rarr; publish</div></div>
         <div class="step"><div class="sn">5</div><div>Sign out &rarr; next account &rarr; upload that account's CSV</div></div>
       </div>
@@ -304,59 +301,46 @@ select.inp{cursor:pointer}
   <div class="panel">
     <div class="phd"><div class="bub">?</div>Condition Guide</div>
     <div style="display:flex;flex-direction:column;gap:0">
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)"><span style="font-size:11px;font-weight:800;color:var(--g);font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">NM-MT</span><div><div style="font-size:11px;color:var(--txt)">Near perfect. Razor corners, clean surface, 55/45 or better centering.</div><div style="font-size:10px;color:var(--fog);margin-top:2px">PSA 8-9 if submitted</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)"><span style="font-size:11px;font-weight:800;color:var(--g);font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">NM</span><div><div style="font-size:11px;color:var(--txt)">Near mint. Tiny corner wear, clean otherwise.</div><div style="font-size:10px;color:var(--fog);margin-top:2px">PSA 7-8</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)"><span style="font-size:11px;font-weight:800;color:var(--y);font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">EX-MT</span><div><div style="font-size:11px;color:var(--txt)">Light corner wear, minor surface touch.</div><div style="font-size:10px;color:var(--fog);margin-top:2px">PSA 6-7</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)"><span style="font-size:11px;font-weight:800;color:var(--y);font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">EX</span><div><div style="font-size:11px;color:var(--txt)">Moderate corner rounding, minor creases.</div><div style="font-size:10px;color:var(--fog);margin-top:2px">PSA 5-6</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0"><span style="font-size:11px;font-weight:800;color:var(--r);font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">VG/G</span><div><div style="font-size:11px;color:var(--txt)">Heavy wear, rounded corners, possible creases.</div><div style="font-size:10px;color:var(--fog);margin-top:2px">PSA 1-4</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#00ff88;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">NM-MT</span><div><div style="font-size:11px;color:#e8f0fa">Near perfect. Razor corners, clean surface, 55/45 or better centering.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 8-9 if submitted</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#00ff88;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">NM</span><div><div style="font-size:11px;color:#e8f0fa">Near mint. Tiny corner wear, clean otherwise.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 7-8</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#ffbb00;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">EX-MT</span><div><div style="font-size:11px;color:#e8f0fa">Light corner wear, minor surface touch.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 6-7</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#ffbb00;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">EX</span><div><div style="font-size:11px;color:#e8f0fa">Moderate corner rounding, minor creases.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 5-6</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0"><span style="font-size:11px;font-weight:800;color:#ff3366;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">VG/G</span><div><div style="font-size:11px;color:#e8f0fa">Heavy wear, rounded corners, possible creases.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 1-4</div></div></div>
     </div>
   </div>
   <div class="panel">
     <div class="phd"><div class="bub">&#x1F4EC;</div>Shipping Rules</div>
-    <div style="font-size:12px;color:var(--fog);line-height:1.8">
-      <div>Cards under <strong style="color:var(--txt)">$20</strong> &rarr; <span class="stag senv">&#x1F4EC; Envelope $1.00</span></div>
-      <div style="margin-top:8px">Cards <strong style="color:var(--txt)">$20+</strong> &rarr; <span class="stag susps">&#x1F4E6; USPS First Class</span> (your rate in Setup)</div>
-      <div style="margin-top:10px;font-size:11px;color:var(--dim)">Applied automatically. Override per card in the listing preview.</div>
+    <div style="font-size:12px;color:#5a7090;line-height:1.8">
+      <div>Cards under <strong style="color:#e8f0fa">$20</strong> &rarr; <span class="stag senv">&#x1F4EC; Envelope $1.00</span></div>
+      <div style="margin-top:8px">Cards <strong style="color:#e8f0fa">$20+</strong> &rarr; <span class="stag susps">&#x1F4E6; USPS First Class</span></div>
+      <div style="margin-top:10px;font-size:11px;color:#2a3848">Applied automatically. Override per card in the listing preview.</div>
     </div>
   </div>
   <div class="panel">
     <div class="phd"><div class="bub">&#x2605;</div>Pro Tips</div>
-    <div style="font-size:12px;color:var(--fog);line-height:1.9">
-      <div>&#x1F4F8; <strong style="color:var(--txt)">Shoot straight down</strong> on a dark surface. Better photos = better AI reads.</div>
-      <div>&#x1F4B0; <strong style="color:var(--txt)">Verify prices.</strong> Check eBay sold comps before listing &mdash; market moves fast.</div>
-      <div>&#x1F4CB; <strong style="color:var(--txt)">Batch by account.</strong> Switch accounts before adding a new batch of cards.</div>
-      <div>&#x270F;&#xFE0F; <strong style="color:var(--txt)">Edit before exporting.</strong> Tap the eye icon to review and fix AI output.</div>
-      <div>&#x1F522; <strong style="color:var(--txt)">Check serial numbers.</strong> AI reads /50 etc but always double-check.</div>
-      <div>&#x1F512; <strong style="color:var(--txt)">Key saves permanently.</strong> Paste once, never again.</div>
+    <div style="font-size:12px;color:#5a7090;line-height:1.9">
+      <div>&#x1F4F8; <strong style="color:#e8f0fa">Shoot straight down</strong> on a dark surface. Better photos = better AI reads.</div>
+      <div>&#x1F4B0; <strong style="color:#e8f0fa">Verify prices.</strong> Check eBay sold comps before listing.</div>
+      <div>&#x1F4CB; <strong style="color:#e8f0fa">Batch by account.</strong> Switch accounts before adding a new batch.</div>
+      <div>&#x270F;&#xFE0F; <strong style="color:#e8f0fa">Edit before exporting.</strong> Tap the eye icon to review AI output.</div>
+      <div>&#x1F512; <strong style="color:#e8f0fa">Key saves permanently.</strong> Paste once, never again.</div>
     </div>
-  </div>
-  <div class="panel">
-    <div class="phd"><div class="bub">&#x1F310;</div>GitHub Pages Setup</div>
-    <div class="steps">
-      <div class="step"><div class="sn">1</div><div>Go to <strong>github.com</strong> &rarr; sign up free &rarr; new repository named <strong>card-lister</strong></div></div>
-      <div class="step"><div class="sn">2</div><div>Make repo <strong>Public</strong> during creation (important!)</div></div>
-      <div class="step"><div class="sn">3</div><div>Upload this file, rename to <strong>index.html</strong> &rarr; Commit</div></div>
-      <div class="step"><div class="sn">4</div><div>Settings &rarr; Pages &rarr; Source: <strong>main branch</strong> &rarr; Save</div></div>
-      <div class="step"><div class="sn">5</div><div>App is live at <strong>yourusername.github.io/card-lister</strong></div></div>
-      <div class="step"><div class="sn">6</div><div>Safari &rarr; Share &rarr; <strong>Add to Home Screen</strong> &rarr; permanent app icon</div></div>
-    </div>
-    <div class="info ig" style="margin-top:10px;margin-bottom:0"><span>&#x2713;</span><div>On GitHub Pages, the <strong>free Gemini key works</strong> and the Load Failed error is gone permanently.</div></div>
   </div>
 </div>
 
 <!-- SETUP -->
 
 <div class="screen" id="s-setup">
-  <div class="info ig" style="margin-bottom:12px"><span>&#x2713;</span><div><strong>Free Gemini key works on GitHub Pages!</strong> 1,500 free card reads per day. No credit card needed.</div></div>
+  <div class="info ig" style="margin-bottom:12px"><span>&#x2713;</span><div><strong>Free Gemini key works here!</strong> 1,500 free card reads per day. No credit card needed.</div></div>
   <div class="panel">
-    <div class="phd"><div class="bub">A</div>Google Gemini Key <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:var(--g2);color:var(--g);border:1px solid var(--g3);font-family:'Syne Mono',monospace">FREE &mdash; 1,500/DAY</span></div>
+    <div class="phd"><div class="bub">A</div>Google Gemini Key <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:rgba(0,255,136,.08);color:#00ff88;border:1px solid rgba(0,255,136,.2);font-family:'Syne Mono',monospace">FREE &mdash; 1,500/DAY</span></div>
     <div class="steps" style="margin-bottom:12px">
       <div class="step"><div class="sn">1</div><div>Open Safari &rarr; go to <strong>aistudio.google.com/apikey</strong></div></div>
       <div class="step"><div class="sn">2</div><div>Sign in with Gmail &rarr; tap <strong>Create API key</strong></div></div>
       <div class="step"><div class="sn">3</div><div>Tap the <strong>copy icon</strong> next to your key</div></div>
       <div class="step"><div class="sn">4</div><div>Come back here &rarr; long-press &rarr; <strong>Paste</strong> below</div></div>
     </div>
-    <div class="info iy" style="margin-bottom:10px"><span>&#x1F511;</span><div>Key starts with <strong>AQ</strong> or <strong>AIza</strong> &mdash; both work. Free forever, no billing needed.</div></div>
+    <div class="info iy" style="margin-bottom:10px"><span>&#x1F511;</span><div>Key starts with <strong>AQ</strong> or <strong>AIza</strong> &mdash; both work. Free forever.</div></div>
     <div class="lbl">Paste Your Gemini Key</div>
     <input class="inp" id="gemIn" type="text" placeholder="Paste full key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-family:'Syne Mono',monospace;font-size:12px"/>
     <div id="gemMsg" style="margin-top:4px"></div>
@@ -364,8 +348,8 @@ select.inp{cursor:pointer}
     <a class="btn bg-o" style="margin-top:8px" href="https://aistudio.google.com/apikey" target="_blank">Open Google AI Studio &rarr;</a>
   </div>
   <div class="panel">
-    <div class="phd"><div class="bub">B</div>PIN Lock <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:var(--b2);color:var(--b);border:1px solid var(--b3);font-family:'Syne Mono',monospace">OPTIONAL</span></div>
-    <div class="hint" style="margin-bottom:10px">Set a 4-digit PIN so only you can open the app. Leave blank to skip.</div>
+    <div class="phd"><div class="bub">B</div>PIN Lock <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:rgba(0,136,255,.08);color:#0088ff;border:1px solid rgba(0,136,255,.2);font-family:'Syne Mono',monospace">OPTIONAL</span></div>
+    <div class="hint" style="margin-bottom:10px">Set a 4-digit PIN so only you can open the app.</div>
     <div class="lbl">4-Digit PIN</div>
     <input class="inp" id="pinIn" type="number" placeholder="e.g. 7842" style="font-family:'Syne Mono',monospace;font-size:20px;letter-spacing:.3em"/>
     <div class="brow">
@@ -374,13 +358,13 @@ select.inp{cursor:pointer}
     </div>
   </div>
   <div class="panel">
-    <div class="phd"><div class="bub r">&times;</div>Clear Key</div>
+    <div class="phd"><div class="bub" style="background:rgba(255,51,102,.08);border-color:rgba(255,51,102,.2);color:#ff3366">&times;</div>Clear Key</div>
     <div class="hint" style="margin-bottom:10px">If your key stops working, clear it and paste a fresh one.</div>
     <button class="btn bg-r" onclick="clearKey()">Remove Saved Key</button>
   </div>
   <div class="panel">
     <div class="phd"><div class="bub">C</div>Listing Defaults</div>
-    <div class="info ig" style="margin-bottom:10px"><span>&#x1F4EC;</span><div>Under <strong>$20</strong> &rarr; envelope $1.00. $20+ &rarr; USPS. All listings are <strong>Buy It Now only</strong> &mdash; no auctions ever.</div></div>
+    <div class="info ig" style="margin-bottom:10px"><span>&#x1F4EC;</span><div>Under <strong>$20</strong> &rarr; envelope $1.00. $20+ &rarr; USPS. All listings are <strong>Buy It Now only</strong>.</div></div>
     <div class="g2">
       <div><div class="lbl">Duration</div><select class="inp" id="cfgDur"><option value="GTC">Good Till Cancelled</option><option value="Days_30">30 Days</option><option value="Days_10">10 Days</option><option value="Days_7">7 Days</option></select></div>
       <div><div class="lbl">Returns</div><select class="inp" id="cfgRet"><option value="ReturnsAccepted">30-Day Returns</option><option value="ReturnsNotAccepted">No Returns</option></select></div>
@@ -401,22 +385,21 @@ const CAT={Baseball:'213',Basketball:'261329',Football:'261328',Hockey:'247',Soc
 const CSV_H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
 let selColor=COLORS[0];
 const ls={
-  get:k=>{try{return localStorage.getItem(k)||'';}catch(e){return'';}},
-  set:(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}},
-  del:k=>{try{localStorage.removeItem(k);}catch(e){}}
+  get:k=>{try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},
+  set:(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}}
 };
 (function init(){
-  S.gemKey=ls.get('gk');
+  S.gemKey=ls.get('gk')||'';
   S.duration=ls.get('dur')||'GTC';
   S.returns=ls.get('ret')||'ReturnsAccepted';
-  S.shipping=parseFloat(ls.get('ship')||'4.99');
-  S.envCutoff=parseFloat(ls.get('env')||'20');
-  S.accounts=JSON.parse(ls.get('accts')||'[]');
+  S.shipping=parseFloat(ls.get('ship')||4.99);
+  S.envCutoff=parseFloat(ls.get('env')||20);
+  S.accounts=ls.get('accts')||[];
   S.activeId=ls.get('aid')||S.accounts[0]?.id||null;
   const pin=ls.get('pin');
   if(pin){
     const entered=prompt('Enter your Card Lister PIN:');
-    if(String(entered)!==pin){
+    if(String(entered)!==String(pin)){
       document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:20px;color:#ff3366;background:#080a0f">Wrong PIN</div>';
       return;
     }
@@ -426,7 +409,8 @@ const ls={
   document.getElementById('cfgRet').value=S.returns;
   document.getElementById('cfgShip').value=S.shipping;
   document.getElementById('cfgEnv').value=S.envCutoff;
-  buildColors();renderAccts();updateBanner();refreshKeyBar();refreshStats();goTab('list');
+  buildColors();renderAccts();updateBanner();refreshKeyBar();refreshStats();
+  goTab('list');
 })();
 function mask(v){return v.length<=8?'****':v.slice(0,6)+'****'+v.slice(-4);}
 function goTab(n){
@@ -440,47 +424,50 @@ function goTab(n){
 }
 function saveKey(){
   const raw=document.getElementById('gemIn').value.trim();
-  if(raw.length<10){document.getElementById('gemMsg').innerHTML=iHtml('ir','Key too short &mdash; paste the complete key');return;}
+  if(raw.length<10){document.getElementById('gemMsg').innerHTML=iHtml('ir','Key too short — paste the complete key');return;}
   S.gemKey=raw;ls.set('gk',raw);
   document.getElementById('gemIn').value=mask(raw);
   document.getElementById('gemMsg').innerHTML=iHtml('ig','&#x2713; Saved! Starts: '+raw.slice(0,8)+'...');
-  refreshKeyBar();toast('Gemini key saved &mdash; ready to read cards!');
+  refreshKeyBar();toast('Gemini key saved — ready!');
 }
-function clearKey(){if(!confirm('Remove saved key?'))return;S.gemKey='';ls.del('gk');document.getElementById('gemIn').value='';document.getElementById('gemMsg').innerHTML='';refreshKeyBar();toast('Key removed','warn');}
+function clearKey(){if(!confirm('Remove saved key?'))return;S.gemKey='';ls.set('gk','');document.getElementById('gemIn').value='';document.getElementById('gemMsg').innerHTML='';refreshKeyBar();toast('Key removed','warn');}
 function savePIN(){
   const v=String(document.getElementById('pinIn').value).trim();
   if(v.length!==4||isNaN(Number(v))){toast('Enter exactly 4 digits','err');return;}
-  ls.set('pin',v);document.getElementById('pinIn').value='';
-  toast('PIN saved! You need it every time you open the app.');
+  ls.set('pin',v);document.getElementById('pinIn').value='';toast('PIN saved!');
 }
-function clearPIN(){ls.del('pin');toast('PIN removed','warn');}
+function clearPIN(){ls.set('pin',null);toast('PIN removed','warn');}
 function refreshKeyBar(){
   const ok=!!S.gemKey;
   document.getElementById('kdot').className='kdot'+(ok?' ok':'');
-  document.getElementById('klbl').textContent=ok?'Gemini AI ready \u2014 Free key active':'No API key \u2014 AI disabled';
-  document.getElementById('ksub').textContent=ok?mask(S.gemKey)+' \u00B7 tap Setup to change':'Go to Setup \u2192 paste your free Gemini key';
+  document.getElementById('klbl').textContent=ok?'Gemini AI ready — Free key active':'No API key — AI disabled';
+  document.getElementById('ksub').textContent=ok?mask(S.gemKey)+' · tap Setup to change':'Go to Setup → paste your free Gemini key';
 }
 function saveDefaults(){
-  S.duration=document.getElementById('cfgDur').value;S.returns=document.getElementById('cfgRet').value;
-  S.shipping=parseFloat(document.getElementById('cfgShip').value)||4.99;S.envCutoff=parseFloat(document.getElementById('cfgEnv').value)||20;
+  S.duration=document.getElementById('cfgDur').value;
+  S.returns=document.getElementById('cfgRet').value;
+  S.shipping=parseFloat(document.getElementById('cfgShip').value)||4.99;
+  S.envCutoff=parseFloat(document.getElementById('cfgEnv').value)||20;
   ls.set('dur',S.duration);ls.set('ret',S.returns);ls.set('ship',S.shipping);ls.set('env',S.envCutoff);
-  toast('Defaults saved!');
+  toast('Saved!');
 }
-function buildColors(){document.getElementById('cpick').innerHTML=COLORS.map((c,i)=>`<div class="copt${i===0?' sel':''}" style="background:${c}" onclick="pickCol(this,'${c}')"></div>`).join('');}
+function buildColors(){
+  document.getElementById('cpick').innerHTML=COLORS.map((c,i)=>`<div class="copt${i===0?' sel':''}" style="background:${c}" onclick="pickCol(this,'${c}')"></div>`).join('');
+}
 function pickCol(el,c){document.querySelectorAll('.copt').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');selColor=c;}
 function addAcct(){
   const n=document.getElementById('newName').value.trim();
   if(!n){toast('Enter account name','err');return;}
   const a={id:'a'+Date.now(),name:n,color:selColor};
-  S.accounts.push(a);ls.set('accts',JSON.stringify(S.accounts));
+  S.accounts.push(a);ls.set('accts',S.accounts);
   if(!S.activeId){S.activeId=a.id;ls.set('aid',a.id);}
   document.getElementById('newName').value='';renderAccts();updateBanner();toast('Account added!');
 }
 function setActive(id){S.activeId=id;ls.set('aid',id);renderAccts();updateBanner();goTab('list');}
 function delAcct(id){
-  if(!confirm('Remove this account?'))return;
-  S.accounts=S.accounts.filter(a=>a.id!==id);ls.set('accts',JSON.stringify(S.accounts));
-  if(S.activeId===id){S.activeId=S.accounts[0]?.id||null;ls.set('aid',S.activeId||'');}
+  if(!confirm('Remove?'))return;
+  S.accounts=S.accounts.filter(a=>a.id!==id);ls.set('accts',S.accounts);
+  if(S.activeId===id){S.activeId=S.accounts[0]?.id||null;ls.set('aid',S.activeId||null);}
   renderAccts();updateBanner();
 }
 function renderAccts(){
@@ -491,7 +478,7 @@ function renderAccts(){
     const act=a.id===S.activeId,ct=S.exported.filter(p=>p.acctId===a.id).length;
     return `<div class="ai${act?' active':''}" onclick="setActive('${a.id}')">
       <div class="ai-dot" style="background:${a.color}"></div>
-      <div class="ai-body"><div class="ai-name">${a.name}</div><div class="ai-det">${ct} card${ct!==1?'s':''} ready${act?' \u00B7 ACTIVE':''}</div></div>
+      <div class="ai-body"><div class="ai-name">${a.name}</div><div class="ai-det">${ct} card${ct!==1?'s':''} ready${act?' · ACTIVE':''}</div></div>
       ${act?'<div class="ai-badge">ACTIVE</div>':''}
       <button class="ai-del" onclick="event.stopPropagation();delAcct('${a.id}')">&#x00D7;</button>
     </div>`;
@@ -499,8 +486,8 @@ function renderAccts(){
 }
 function updateBanner(){
   const a=S.accounts.find(x=>x.id===S.activeId);
-  document.getElementById('abd').style.background=a?.color||'var(--dim)';
-  document.getElementById('abn').textContent=a?.name||'No account \u2014 add one first';
+  document.getElementById('abd').style.background=a?.color||'#2a3848';
+  document.getElementById('abn').textContent=a?.name||'No account — add one first';
 }
 function onFiles(e){addToQueue([...e.target.files]);e.target.value='';}
 function doDrag(e,on){e.preventDefault();document.getElementById('dropzone').classList.toggle('drag',!!on);}
@@ -519,14 +506,14 @@ function addToQueue(files){
 }
 const PROMPT=`You are an expert sports card authenticator and eBay power seller. Analyze this card photo with maximum precision.
 
-IDENTIFY: player full name (read jersey/nameplate/caption carefully), year on card, complete set and brand (e.g. "2024 Bowman Chrome Draft"), card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Patch/Numbered/RC/1st Bowman), serial number if numbered (extract both numbers e.g. 42 of 99), team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.
+IDENTIFY: player full name (read jersey/nameplate/caption carefully), year on card, complete set and brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Patch/Numbered/RC/1st Bowman), serial number if numbered (e.g. 42 of 99), team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.
 
 Reply ONLY with valid JSON. No markdown. No backticks:
 {"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface, excellent centering","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}
 
 ebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.
-description: 190-220 words professional listing. Include card details, condition, ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.
-suggestedBIN: accurate current eBay market USD price for this exact card, variation, and condition.
+description: 190-220 words professional listing. Card details, condition, ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.
+suggestedBIN: accurate current eBay market USD price.
 searchTags: 6-8 terms real buyers search.`;
 
 async function callAI(rawDataUrl){
@@ -540,17 +527,17 @@ async function callAI(rawDataUrl){
   if(resp.status===401||resp.status===403)resp=await fetch(url+'?key='+encodeURIComponent(S.gemKey),{method:'POST',headers:{'Content-Type':'application/json'},body});
   if(!resp.ok){
     const e=await resp.json().catch(()=>({}));
-    const msg=e.error?.message||'Gemini error '+resp.status;
-    if(resp.status===401||resp.status===403)throw new Error('Key rejected \u2014 re-paste in Setup');
-    if(resp.status===429)throw new Error('Rate limit \u2014 wait 1 min and retry');
+    const msg=e.error?.message||'Error '+resp.status;
+    if(resp.status===401||resp.status===403)throw new Error('Key rejected — re-paste in Setup');
+    if(resp.status===429)throw new Error('Rate limit — wait 1 min and retry');
     throw new Error(msg.slice(0,140));
   }
   const d=await resp.json();
   const txt=d.candidates?.[0]?.content?.parts?.[0]?.text||'';
-  if(!txt)throw new Error('Empty response \u2014 try again');
+  if(!txt)throw new Error('Empty response — try again');
   return JSON.parse(txt.replace(/```json|```/g,'').trim());
 }
-const STEPS=['Sending image to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel/variation...','Assessing condition...','Writing eBay title...','Generating description...','Setting market price...'];
+const STEPS=['Sending to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel/variation...','Assessing condition...','Writing eBay title...','Generating description...','Setting market price...'];
 async function analyzeCard(item){
   item.status='reading';renderQI(item);
   let si=0;showLdr('Reading card...',STEPS[0]);
@@ -605,15 +592,15 @@ function buildQI(item){
     ${item.thumb?`<img class="qi-img" src="${item.thumb}" alt=""/>`:'<div class="qi-ph">&#x1F0CF;</div>'}
     <div class="qi-body">
       <div class="qi-name">${item.result?.player||item.name}</div>
-      <div class="qi-st"><span class="${sc[item.status]||'sp'}">${sl[item.status]||item.status}</span>${item.result?.variation?` <span style="color:var(--dim)">\u00B7 ${item.result.variation}</span>`:''}</div>
-      ${a?`<div class="qi-acct"><div class="qi-adot" style="background:${a.color}"></div><span style="color:var(--fog);font-size:10px">${a.name}</span></div>`:''}
+      <div class="qi-st"><span class="${sc[item.status]||'sp'}">${sl[item.status]||item.status}</span></div>
+      ${a?`<div class="qi-acct"><div class="qi-adot" style="background:${a.color}"></div><span style="color:#5a7090;font-size:10px">${a.name}</span></div>`:''}
       ${pr?`<div class="qi-price">$${pr} BIN</div>`:''}
       ${pr?`<div class="qi-ship">${env?'\uD83D\uDCEC Envelope $1.00':'\uD83D\uDCE6 USPS $'+S.shipping}</div>`:''}
       <div class="qi-meta">${item.result?.ebayTitle||''}</div>
     </div>
     <div class="qi-side">
       ${item.status==='ready'?`<button class="qib view" onclick="showPreview(S.queue.find(i=>i.id==='${item.id}'))">\uD83D\uDC41</button>`:''}
-      ${item.status!=='reading'&&item.status!=='ready'?`<button class="qib retry" onclick="analyzeById('${item.id}')" style="font-size:10px;font-weight:800">AI</button>`:''}
+      ${item.status!=='reading'&&item.status!=='ready'?`<button class="qib retry" onclick="analyzeById('${item.id}')" style="font-size:10px;font-weight:800;color:#ffbb00">AI</button>`:''}
       <button class="qib del" onclick="rmCard('${item.id}')">&#x00D7;</button>
     </div>
   </div>`;
@@ -626,7 +613,7 @@ function showPreview(item){
   const sec=document.getElementById('prevArea');
   const asgH=S.accounts.length>1?`<div class="asgn-row"><div class="pf-lbl">Assign to account</div><div class="asgn-grid" id="ag_${item.id}">${S.accounts.map(a=>`<button class="asgn-btn${a.id===item.acctId?' sel':''}" onclick="reassign('${item.id}','${a.id}',this)"><div class="asgn-dot" style="background:${a.color}"></div>${a.name}</button>`).join('')}</div></div>`:'';
   sec.innerHTML=`<div class="prev" id="pv_${item.id}">
-    <div class="prev-hdr"><div class="prev-ttl">\u2713 Listing Ready &mdash; Review &amp; Edit</div>
+    <div class="prev-hdr"><div class="prev-ttl">\u2713 Listing Ready \u2014 Review &amp; Edit</div>
       <div style="display:flex;gap:5px">
         <button class="btn bg-o bsm" onclick="copyCard('${item.id}')">Copy</button>
         <button class="btn bg-o bsm" onclick="document.getElementById('prevArea').innerHTML=''">&#x00D7;</button>
@@ -637,10 +624,10 @@ function showPreview(item){
       <textarea class="pf-inp" id="pt_${item.id}" rows="2" oninput="document.getElementById('ptc_${item.id}').textContent=this.value.length+'/80'">${hEsc(d.ebayTitle)}</textarea>
 
 ```
-  <div style="font-size:9px;color:var(--fog);margin-top:2px;font-family:'Syne Mono',monospace" id="ptc_${item.id}">${(d.ebayTitle||'').length}/80</div>
+  <div style="font-size:9px;color:#5a7090;margin-top:2px;font-family:'Syne Mono',monospace" id="ptc_${item.id}">${(d.ebayTitle||'').length}/80</div>
 </div>
 <div class="pf"><div class="pf-lbl">Description</div><textarea class="pf-inp" id="pd_${item.id}" rows="5">${hEsc(d.description)}</textarea></div>
-<div class="pf"><div class="pf-lbl">Buy It Now Price &mdash; Fixed Price Only</div>
+<div class="pf"><div class="pf-lbl">Buy It Now Price — Fixed Price Only</div>
   <div class="pbox"><div class="pbl">BUY IT NOW</div>
     <div class="prow"><span class="pcur">$</span><input class="pinp" id="pp_${item.id}" type="number" value="${pr}" step="0.01" min="0.99" oninput="liveShip('${item.id}',this.value)"/></div>
   </div>
@@ -686,7 +673,8 @@ function addExport(id){
   const d={...item.result,_id:id,acctId:item.acctId||S.activeId,
     ebayTitle:(document.getElementById('pt_'+id)?.value||item.result.ebayTitle||'').slice(0,80),
     description:document.getElementById('pd_'+id)?.value||item.result.description||'',
-    suggestedBIN:price,player:document.getElementById('ppl_'+id)?.value||item.result.player||'',
+    suggestedBIN:price,
+    player:document.getElementById('ppl_'+id)?.value||item.result.player||'',
     year:document.getElementById('pyr_'+id)?.value||item.result.year||'',
     set:document.getElementById('pst_'+id)?.value||item.result.set||'',
     cardNumber:document.getElementById('pcn_'+id)?.value||item.result.cardNumber||'',
@@ -724,11 +712,11 @@ function renderExport(){
     const tot=cards.reduce((s,c)=>s+(c.suggestedBIN||0),0);const env=cards.filter(c=>c.useEnvelope).length;
     return `<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:${color}"></div>
       <div><div style="font-size:14px;font-weight:800;color:${color}">${name}</div>
-        <div style="font-size:10px;color:var(--fog);margin-top:2px;font-family:'Syne Mono',monospace">${cards.length} listings \u00B7 $${Math.round(tot)} total \u00B7 ${env} envelope / ${cards.length-env} USPS \u00B7 All Buy It Now</div></div></div>
+        <div style="font-size:10px;color:#5a7090;margin-top:2px;font-family:'Syne Mono',monospace">${cards.length} listings · $${Math.round(tot)} · ${env} envelope / ${cards.length-env} USPS · All Buy It Now</div></div></div>
       <div class="exp-body">
-        <div style="margin-bottom:10px">${cards.slice(0,6).map(c=>`<div class="exp-row"><div class="exp-name">${c.player||'Card'} ${c.year||''} ${c.variation||''}</div><div style="font-size:10px;color:var(--fog);margin:0 4px">${c.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</div><div class="exp-price">$${c.suggestedBIN||'?'} BIN</div></div>`).join('')}${cards.length>6?`<div style="font-size:11px;color:var(--dim);padding:4px 0">+ ${cards.length-6} more...</div>`:''}</div>
+        <div style="margin-bottom:10px">${cards.slice(0,6).map(c=>`<div class="exp-row"><div class="exp-name">${c.player||'Card'} ${c.year||''} ${c.variation||''}</div><div style="font-size:10px;color:#5a7090;margin:0 4px">${c.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</div><div class="exp-price">$${c.suggestedBIN||'?'} BIN</div></div>`).join('')}${cards.length>6?`<div style="font-size:11px;color:#2a3848;padding:4px 0">+ ${cards.length-6} more...</div>`:''}</div>
         <button class="btn bg-y" onclick="dlCSV('${aId}')">&#x2193; Download CSV for ${name}</button>
-        <div style="font-size:11px;color:var(--fog);margin-top:10px;line-height:1.7"><strong style="color:var(--txt)">To list:</strong> Sign into <strong style="color:${color}">${name}</strong> in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload Template &rarr; select this CSV. Add photos in eBay app &rarr; publish.</div>
+        <div style="font-size:11px;color:#5a7090;margin-top:10px;line-height:1.7">Sign into <strong style="color:#e8f0fa">${name}</strong> in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload Template &rarr; select this CSV.</div>
       </div></div>`;
   }).join('');
 }
@@ -736,7 +724,7 @@ function addHistory(d){
   const a=S.accounts.find(x=>x.id===d.acctId);
   document.getElementById('logEmpty').style.display='none';
   const el=document.createElement('div');el.className='log-item';
-  el.innerHTML=`<div class="log-ck">&#x2713;</div><div class="log-info"><div class="log-name">${d.player||'Card'} ${d.year||''} ${d.variation||''}</div><div class="log-det">${a?`<div class="log-dot" style="background:${a.color}"></div><span>${a.name}</span> \u00B7 `:''}<span>${d.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</span> <span style="color:var(--g)">$${d.suggestedBIN||'?'} BIN</span></div></div>`;
+  el.innerHTML=`<div class="log-ck">&#x2713;</div><div class="log-info"><div class="log-name">${d.player||'Card'} ${d.year||''} ${d.variation||''}</div><div class="log-det">${a?`<div class="log-dot" style="background:${a.color}"></div><span>${a.name}</span> · `:''}<span>${d.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</span> <span style="color:#00ff88">$${d.suggestedBIN||'?'} BIN</span></div></div>`;
   document.getElementById('logList').prepend(el);
 }
 function renderHistory(){
@@ -744,7 +732,7 @@ function renderHistory(){
   if(!S.exported.length){list.innerHTML='';emp.style.display='block';return;}
   emp.style.display='none';
   list.innerHTML=[...S.exported].reverse().map(d=>{const a=S.accounts.find(x=>x.id===d.acctId);
-    return `<div class="log-item"><div class="log-ck">&#x2713;</div><div class="log-info"><div class="log-name">${d.player||'Card'} ${d.year||''} ${d.variation||''}</div><div class="log-det">${a?`<div class="log-dot" style="background:${a.color}"></div><span>${a.name}</span> \u00B7 `:''}<span>${d.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</span> <span style="color:var(--g)">$${d.suggestedBIN||'?'} BIN</span></div></div></div>`;
+    return `<div class="log-item"><div class="log-ck">&#x2713;</div><div class="log-info"><div class="log-name">${d.player||'Card'} ${d.year||''} ${d.variation||''}</div><div class="log-det">${a?`<div class="log-dot" style="background:${a.color}"></div><span>${a.name}</span> · `:''}<span>${d.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</span> <span style="color:#00ff88">$${d.suggestedBIN||'?'} BIN</span></div></div></div>`;
   }).join('');
 }
 function exportLog(){
