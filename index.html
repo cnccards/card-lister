@@ -7,29 +7,29 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="Card Lister"/>
 <title>Card Lister Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:#f0f4ff;color:#0f1e3a;min-height:100vh;font-family:'Inter',sans-serif}
-nav{position:sticky;top:0;background:#1d4ed8;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;z-index:50}
+html{background:#eef3fb}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#eef3fb;color:#0f1e3a;min-height:100vh}
+nav{background:#1d4ed8;padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:9px}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.logo-text{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.3px}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.7);margin-top:1px;letter-spacing:.05em}
+.logo-ico{width:32px;height:32px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{font-size:15px;font-weight:800;color:#fff}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.7);margin-top:1px}
 .ncs{display:flex;gap:6px}
-.nc{background:rgba(255,255,255,.15);border-radius:6px;padding:4px 8px;text-align:center;min-width:38px}
-.nc-n{font-size:13px;font-weight:800;color:#fff;line-height:1;font-family:'Space Mono',monospace}
+.nc{background:rgba(255,255,255,.2);border-radius:6px;padding:4px 8px;text-align:center;min-width:38px}
+.nc-n{font-size:13px;font-weight:800;color:#fff;line-height:1}
 .nc-l{font-size:7px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
 .tabs{background:#fff;border-bottom:2px solid #e2e8f0;display:flex;overflow-x:auto;scrollbar-width:none;padding:0 10px}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:10px 11px;font-size:10px;font-weight:700;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0}
+.tab{padding:10px 11px;font-size:10px;font-weight:700;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit}
 .tab.on{color:#1d4ed8;border-bottom-color:#1d4ed8}
 .screen{display:none;padding:14px;max-width:520px;margin:0 auto}
 .screen.on{display:block}
-.panel{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:10px}
-.phd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#94a3b8;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:10px}
+.card-hd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#94a3b8;margin-bottom:10px;display:flex;align-items:center;gap:7px}
 .bub{width:18px;height:18px;border-radius:50%;background:#dbeafe;border:1px solid #bfdbfe;color:#1d4ed8;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.inp{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:9px 11px;font-size:13px;color:#0f1e3a;font-family:'Inter',sans-serif;outline:none;margin-bottom:8px;-webkit-appearance:none}
+.inp{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:9px 11px;font-size:13px;color:#0f1e3a;font-family:inherit;outline:none;margin-bottom:8px;-webkit-appearance:none}
 .inp:focus{border-color:#1d4ed8;background:#fff}
 .inp::placeholder{color:#cbd5e1}
 select.inp{cursor:pointer}
@@ -37,17 +37,17 @@ select.inp{cursor:pointer}
 .g2 .inp{margin-bottom:0}
 .lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:4px}
 .hint{font-size:11px;color:#64748b;line-height:1.55;margin-top:3px}
-.hint a{color:#1d4ed8}
-.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 14px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;width:100%}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 14px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;width:100%;margin-bottom:8px}
 .btn:active{opacity:.8}
+.btn:last-child{margin-bottom:0}
 .bg-g{background:#16a34a;color:#fff}
 .bg-b{background:#1d4ed8;color:#fff}
 .bg-o{background:#fff;border:1px solid #e2e8f0;color:#0f1e3a}
 .bg-r{background:#fee2e2;color:#dc2626;border:1px solid #fecaca}
 .bg-y{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
-.bsm{padding:6px 12px;font-size:11px;width:auto;border-radius:6px}
-.brow{display:flex;gap:8px}
-.brow .btn{flex:1;padding:10px}
+.bsm{padding:7px 12px;font-size:11px;width:auto;border-radius:6px;margin-bottom:0}
+.brow{display:flex;gap:8px;margin-bottom:8px}
+.brow .btn{flex:1;margin-bottom:0}
 .info{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.55;margin-bottom:10px}
 .ig{background:#dcfce7;border:1px solid #bbf7d0;color:#15803d}
 .iy{background:#fef3c7;border:1px solid #fde68a;color:#92400e}
@@ -55,20 +55,20 @@ select.inp{cursor:pointer}
 .ir{background:#fee2e2;border:1px solid #fecaca;color:#dc2626}
 .kbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;margin-bottom:10px}
 .kdot{width:8px;height:8px;border-radius:50%;background:#dc2626;flex-shrink:0}
-.kdot.ok{background:#16a34a;box-shadow:0 0 8px rgba(22,163,74,.4)}
+.kdot.ok{background:#16a34a}
 .kinfo{flex:1;min-width:0}
 .klbl{font-size:12px;font-weight:700;color:#0f1e3a}
-.ksub{font-size:10px;color:#64748b;margin-top:1px;font-family:'Space Mono',monospace}
-.kact{font-size:11px;font-weight:700;color:#1d4ed8;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ksub{font-size:10px;color:#64748b;margin-top:1px}
+.kact{font-size:11px;font-weight:700;color:#1d4ed8;cursor:pointer;white-space:nowrap;flex-shrink:0;background:none;border:none;font-family:inherit;padding:0}
 .abanner{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;margin-bottom:10px}
-.ab-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ab-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:#cbd5e1}
 .ab-body{flex:1;min-width:0}
 .ab-name{font-size:13px;font-weight:700;color:#0f1e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ab-lbl{font-size:9px;color:#94a3b8}
-.ab-sw{font-size:11px;font-weight:700;color:#1d4ed8;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ab-sw{font-size:11px;font-weight:700;color:#1d4ed8;cursor:pointer;white-space:nowrap;flex-shrink:0;background:none;border:none;font-family:inherit;padding:0}
 .sstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
 .stat{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px;text-align:center}
-.stat-n{font-size:22px;font-weight:800;line-height:1;font-family:'Space Mono',monospace}
+.stat-n{font-size:22px;font-weight:800;line-height:1}
 .stat-l{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-top:3px}
 .drop{position:relative;background:#fff;border:2px dashed #bfdbfe;border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;margin-bottom:10px}
 .drop.drag{border-color:#1d4ed8;background:#eff6ff}
@@ -83,17 +83,17 @@ select.inp{cursor:pointer}
 .qlist{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .qi{background:#fff;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:stretch;overflow:hidden}
 .qi-img{width:58px;flex-shrink:0;object-fit:cover;background:#f1f5f9}
-.qi-ph{width:58px;flex-shrink:0;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:20px}
+.qi-ph{width:58px;flex-shrink:0;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:20px;color:#94a3b8;font-size:11px;font-weight:600}
 .qi-body{flex:1;padding:8px 10px;min-width:0}
 .qi-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#0f1e3a}
 .qi-st{font-size:10px;margin-top:2px}
-.qi-price{font-size:12px;font-weight:800;color:#16a34a;margin-top:2px;font-family:'Space Mono',monospace}
+.qi-price{font-size:12px;font-weight:800;color:#16a34a;margin-top:2px}
 .qi-ship{font-size:9px;color:#64748b;margin-top:1px}
 .qi-meta{font-size:10px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
 .qi-acct{font-size:10px;margin-top:2px;display:flex;align-items:center;gap:4px}
 .qi-adot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .qi-side{display:flex;flex-direction:column;border-left:1px solid #f1f5f9;flex-shrink:0}
-.qib{width:42px;flex:1;border:none;background:transparent;color:#94a3b8;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.qib{width:42px;flex:1;border:none;background:transparent;color:#94a3b8;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:inherit}
 .sp{color:#cbd5e1}.sr{color:#3b82f6}.sok{color:#16a34a}.se{color:#dc2626}
 .batch{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px}
 .btop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
@@ -106,23 +106,23 @@ select.inp{cursor:pointer}
 .pf{padding:9px 13px;border-bottom:1px solid #f1f5f9}
 .pf:last-child{border-bottom:none}
 .pf-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:3px}
-.pf-inp{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;font-size:12px;color:#0f1e3a;font-family:'Inter',sans-serif;outline:none;resize:vertical;min-height:32px;-webkit-appearance:none}
+.pf-inp{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;font-size:12px;color:#0f1e3a;font-family:inherit;outline:none;resize:vertical;min-height:32px;-webkit-appearance:none}
 .pf-inp:focus{border-color:#1d4ed8}
 .pbox{background:#f8fafc;border-radius:6px;padding:10px 12px;border:1px solid #e2e8f0}
 .pbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:3px}
 .prow{display:flex;align-items:center}
-.pcur{font-size:14px;color:#64748b;margin-right:2px;font-family:'Space Mono',monospace}
-.pinp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:#16a34a;outline:none;-webkit-appearance:none;font-family:'Space Mono',monospace}
+.pcur{font-size:14px;color:#64748b;margin-right:2px}
+.pinp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:#16a34a;outline:none;-webkit-appearance:none;font-family:inherit}
 .stag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px}
 .senv{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
 .susps{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
 .tags-row{padding:8px 13px;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid #f1f5f9}
 .tag{font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff}
 .prev-btns{padding:10px 13px;display:flex;gap:8px}
-.prev-btns .btn{flex:1;padding:10px}
+.prev-btns .btn{flex:1;margin-bottom:0;padding:10px}
 .asgn-row{padding:9px 13px;border-bottom:1px solid #f1f5f9}
 .asgn-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
-.asgn-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.asgn-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
 .asgn-btn.sel{border-color:#1d4ed8;color:#1d4ed8;background:#eff6ff}
 .asgn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .acct-stack{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
@@ -133,7 +133,7 @@ select.inp{cursor:pointer}
 .ai-name{font-size:13px;font-weight:700;color:#0f1e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ai-det{font-size:10px;color:#64748b;margin-top:2px}
 .ai-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;background:#dbeafe;border:1px solid #bfdbfe;color:#1e40af;white-space:nowrap;flex-shrink:0}
-.ai-del{width:28px;height:28px;border:none;background:transparent;color:#cbd5e1;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:13px;flex-shrink:0}
+.ai-del{width:28px;height:28px;border:none;background:transparent;color:#cbd5e1;cursor:pointer;font-size:13px;flex-shrink:0;font-family:inherit}
 .cpick{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
 .copt{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0}
 .copt.sel{border-color:#0f1e3a}
@@ -144,7 +144,7 @@ select.inp{cursor:pointer}
 .exp-row{font-size:11px;color:#64748b;padding:4px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .exp-row:last-child{border-bottom:none}
 .exp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.exp-price{color:#16a34a;font-weight:800;flex-shrink:0;font-family:'Space Mono',monospace}
+.exp-price{color:#16a34a;font-weight:800;flex-shrink:0}
 .steps{margin-bottom:12px}
 .step{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:12px;line-height:1.5;color:#64748b}
 .step:last-child{border-bottom:none}
@@ -156,35 +156,35 @@ select.inp{cursor:pointer}
 .log-name{font-size:12px;font-weight:700;color:#0f1e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .log-det{font-size:10px;color:#64748b;margin-top:1px;display:flex;align-items:center;gap:4px}
 .log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.ldr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,30,58,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.ldr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,30,58,.85);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .ldr.on{display:flex}
-.spin{width:50px;height:50px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+.spin{width:48px;height:48px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ldr-t{font-size:16px;font-weight:800;color:#fff}
 .ldr-s{font-size:11px;color:rgba(255,255,255,.7);text-align:center;max-width:250px;line-height:1.5}
-.ldr-cancel{font-size:11px;color:#fca5a5;cursor:pointer;padding:6px 14px;border:1px solid rgba(252,165,165,.4);border-radius:6px;background:rgba(220,38,38,.2);font-weight:700}
-.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:#0f1e3a;color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .35s;white-space:nowrap;max-width:88vw;text-align:center}
+.ldr-cancel{font-size:11px;color:#fca5a5;cursor:pointer;padding:6px 14px;border:1px solid rgba(252,165,165,.4);border-radius:6px;background:rgba(220,38,38,.2);font-weight:700;font-family:inherit}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:#0f1e3a;color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:1000;transition:transform .35s;white-space:nowrap;max-width:88vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.err{background:#dc2626}
 .toast.warn{background:#92400e}
 .row-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
 .row-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b}
 .empty{text-align:center;padding:36px 20px;color:#94a3b8;font-size:13px}
-.empty-i{font-size:36px;margin-bottom:10px}
+.vault-inp{width:100%;background:#fffbeb;border:2px solid #fde68a;border-radius:6px;padding:9px 11px;font-size:11px;color:#0f1e3a;font-family:monospace;outline:none;margin-bottom:8px;resize:none;min-height:60px}
+.vault-inp:focus{border-color:#d97706}
 </style>
-
 </head>
 <body>
 <div class="ldr" id="ldr">
   <div class="spin"></div>
   <div class="ldr-t" id="ldrT">Reading card...</div>
-  <div class="ldr-s" id="ldrS">Sending to Gemini AI...</div>
-  <div class="ldr-cancel" onclick="S.stop=true;hideLdr();toast('Cancelled','warn')">Cancel</div>
+  <div class="ldr-s" id="ldrS">Compressing image...</div>
+  <button class="ldr-cancel" onclick="S.stop=true;hideLdr();showToast('Cancelled','warn')">Cancel</button>
 </div>
 <div class="toast" id="toast"></div>
 <nav>
   <div class="logo">
-    <div class="logo-mark">&#x1F0CF;</div>
+    <div class="logo-ico">&#x1F0CF;</div>
     <div><div class="logo-text">Card Lister Pro</div><div class="logo-sub">GEMINI AI &middot; BUY IT NOW</div></div>
   </div>
   <div class="ncs">
@@ -194,18 +194,18 @@ select.inp{cursor:pointer}
   </div>
 </nav>
 <div class="tabs">
-  <div class="tab on" onclick="goTab('list')" id="t-list">&#x1F4F7; List</div>
-  <div class="tab" onclick="goTab('accts')" id="t-accts">&#x1F465; Accounts</div>
-  <div class="tab" onclick="goTab('export')" id="t-export">&#x1F4E6; Export</div>
-  <div class="tab" onclick="goTab('history')" id="t-history">&#x2705; History</div>
-  <div class="tab" onclick="goTab('guide')" id="t-guide">&#x1F4D6; Guide</div>
-  <div class="tab" onclick="goTab('setup')" id="t-setup">&#x2699; Setup</div>
+  <button class="tab on" onclick="goTab('list')" id="t-list">&#x1F4F7; List</button>
+  <button class="tab" onclick="goTab('accts')" id="t-accts">&#x1F465; Accounts</button>
+  <button class="tab" onclick="goTab('export')" id="t-export">&#x1F4E6; Export</button>
+  <button class="tab" onclick="goTab('history')" id="t-history">&#x2705; History</button>
+  <button class="tab" onclick="goTab('setup')" id="t-setup">&#x2699; Setup</button>
 </div>
+
 <div class="screen on" id="s-list">
-  <div class="kbar"><div class="kdot" id="kdot"></div><div class="kinfo"><div class="klbl" id="klbl">No API key</div><div class="ksub" id="ksub">Go to Setup to add your free Gemini key</div></div><div class="kact" onclick="goTab('setup')">Setup &rarr;</div></div>
-  <div class="abanner"><div class="ab-dot" id="abd"></div><div class="ab-body"><div class="ab-lbl">Listing to account</div><div class="ab-name" id="abn">No account &mdash; add one first</div></div><div class="ab-sw" onclick="goTab('accts')">Switch &rarr;</div></div>
+  <div class="kbar"><div class="kdot" id="kdot"></div><div class="kinfo"><div class="klbl" id="klbl">No API key</div><div class="ksub" id="ksub">Go to Setup tab</div></div><button class="kact" onclick="goTab('setup')">Setup &rarr;</button></div>
+  <div class="abanner"><div class="ab-dot" id="abd"></div><div class="ab-body"><div class="ab-lbl">Listing to</div><div class="ab-name" id="abn">No account</div></div><button class="ab-sw" onclick="goTab('accts')">Switch &rarr;</button></div>
   <div class="sstrip">
-    <div class="stat"><div class="stat-n" style="color:#64748b" id="s-tot">0</div><div class="stat-l">In Queue</div></div>
+    <div class="stat"><div class="stat-n" style="color:#64748b" id="s-tot">0</div><div class="stat-l">Queue</div></div>
     <div class="stat"><div class="stat-n" style="color:#16a34a" id="s-rdy">0</div><div class="stat-l">Ready</div></div>
     <div class="stat"><div class="stat-n" style="color:#1d4ed8" id="s-val">$0</div><div class="stat-l">Value</div></div>
   </div>
@@ -213,8 +213,8 @@ select.inp{cursor:pointer}
     <input type="file" id="fileIn" accept="image/*" multiple onchange="onFiles(event)"/>
     <div class="drop-ring">&#x1F4F8;</div>
     <div class="drop-h">Photograph your cards</div>
-    <div class="drop-s">Tap to use camera or photo library &middot; Add multiple at once</div>
-    <div class="drop-chip">&#x25C6; Gemini AI reads every card &mdash; Buy It Now listing</div>
+    <div class="drop-s">Tap to use camera or photo library</div>
+    <div class="drop-chip">Gemini AI reads every card &mdash; Buy It Now</div>
   </div>
   <div id="prevArea"></div>
   <div id="qwrap" style="display:none">
@@ -222,7 +222,7 @@ select.inp{cursor:pointer}
     <div class="qlist" id="qlist"></div>
     <div class="batch">
       <div class="btop"><span style="font-size:12px;font-weight:700">Batch Actions</span><span class="bst" id="binfo">0 cards</span></div>
-      <div class="brow" style="margin-bottom:8px">
+      <div class="brow">
         <button class="btn bg-b" id="batchBtn" onclick="runBatch()">&#x1F916; AI Read All Cards</button>
         <button class="btn bg-r bsm" onclick="clearQueue()">Clear</button>
       </div>
@@ -231,115 +231,78 @@ select.inp{cursor:pointer}
     </div>
   </div>
 </div>
+
 <div class="screen" id="s-accts">
-  <div class="row-hd"><div class="row-ttl">eBay Accounts</div><div style="font-size:10px;color:#64748b" id="actLbl"></div></div>
-  <div class="info iy"><span>&#x1F4CB;</span><div><strong>No eBay developer account needed.</strong> Each account gets its own CSV. Sign into that account in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload. All listings are <strong>Buy It Now</strong>.</div></div>
+  <div class="row-hd"><div class="row-ttl">eBay Accounts</div><span style="font-size:10px;color:#64748b" id="actLbl"></span></div>
+  <div class="info iy"><span>&#x1F4CB;</span><div>No eBay developer account needed. Each account gets its own CSV. Sign into eBay in Safari, upload the CSV at Seller Hub. All listings are <strong>Buy It Now</strong>.</div></div>
   <div id="acctList"></div>
-  <div class="panel">
-    <div class="phd"><div class="bub">+</div>Add eBay Account</div>
-    <div class="lbl">eBay username or nickname</div>
-    <input class="inp" id="newName" placeholder="e.g. cnccards23..."/>
+  <div class="card">
+    <div class="card-hd"><div class="bub">+</div>Add eBay Account</div>
+    <div class="lbl">Username or nickname</div>
+    <input class="inp" id="newName" placeholder="e.g. cnccards23"/>
     <div class="lbl">Color</div>
     <div class="cpick" id="cpick"></div>
     <button class="btn bg-g" onclick="addAcct()">Add Account</button>
   </div>
 </div>
+
 <div class="screen" id="s-export">
-  <div class="row-hd"><div class="row-ttl">Download CSVs</div><div style="font-size:10px;color:#64748b" id="expLbl">0 ready</div></div>
-  <div id="expEmpty" class="empty"><div class="empty-i">&#x1F4CB;</div>Analyze cards and tap Add to Export on each listing.</div>
+  <div class="row-hd"><div class="row-ttl">Download CSVs</div><span style="font-size:10px;color:#64748b" id="expLbl">0 ready</span></div>
+  <div id="expEmpty" class="empty">Analyze cards and tap Add to Export on each listing.</div>
   <div id="expBlocks"></div>
   <div id="expGuide" style="display:none">
-    <div class="panel" style="margin-top:4px">
-      <div class="phd"><div class="bub" style="background:#fef3c7;border-color:#fde68a;color:#92400e">?</div>How to upload to eBay</div>
+    <div class="card">
+      <div class="card-hd"><div class="bub" style="background:#fef3c7;border-color:#fde68a;color:#92400e">?</div>How to upload to eBay</div>
       <div class="steps">
-        <div class="step"><div class="sn">1</div><div>Open <strong>Safari</strong> &rarr; sign into your eBay account</div></div>
-        <div class="step"><div class="sn">2</div><div>Go to <strong>Seller Hub &rarr; Reports &rarr; Upload</strong></div></div>
+        <div class="step"><div class="sn">1</div><div>Safari &rarr; sign into your eBay account</div></div>
+        <div class="step"><div class="sn">2</div><div><strong>Seller Hub &rarr; Reports &rarr; Upload</strong></div></div>
         <div class="step"><div class="sn">3</div><div>Tap <strong>Upload Template</strong> &rarr; select CSV from Files</div></div>
-        <div class="step"><div class="sn">4</div><div>eBay creates <strong>Draft listings</strong> &rarr; add photos &rarr; publish</div></div>
-        <div class="step"><div class="sn">5</div><div>Sign out &rarr; next account &rarr; upload that account's CSV</div></div>
+        <div class="step"><div class="sn">4</div><div>Drafts created &rarr; add photos &rarr; publish</div></div>
+        <div class="step"><div class="sn">5</div><div>Sign out &rarr; next account &rarr; repeat</div></div>
       </div>
       <a class="btn bg-b" href="https://www.ebay.com/sh/reports/uploads" target="_blank">Open eBay Seller Hub &rarr;</a>
     </div>
   </div>
 </div>
+
 <div class="screen" id="s-history">
-  <div class="row-hd"><div class="row-ttl">Export History</div><button class="btn bg-o bsm" onclick="exportLog()">Download Log</button></div>
+  <div class="row-hd"><div class="row-ttl">History</div><button class="btn bg-o bsm" onclick="exportLog()">Download Log</button></div>
   <div id="logList"></div>
-  <div id="logEmpty" class="empty"><div class="empty-i">&#x1F0CF;</div>No cards exported yet.</div>
+  <div id="logEmpty" class="empty">No cards exported yet.</div>
 </div>
-<div class="screen" id="s-guide">
-  <div class="panel">
-    <div class="phd"><div class="bub">?</div>Condition Guide</div>
-    <div style="display:flex;flex-direction:column">
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#16a34a;width:44px;flex-shrink:0">NM-MT</span><div><div style="font-size:11px;color:#0f1e3a">Near perfect. Razor corners, clean surface, 55/45 centering.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 8-9</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#16a34a;width:44px;flex-shrink:0">NM</span><div><div style="font-size:11px;color:#0f1e3a">Near mint. Tiny corner wear, clean otherwise.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 7-8</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#92400e;width:44px;flex-shrink:0">EX-MT</span><div><div style="font-size:11px;color:#0f1e3a">Light corner wear, minor surface touch.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 6-7</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#92400e;width:44px;flex-shrink:0">EX</span><div><div style="font-size:11px;color:#0f1e3a">Moderate corner rounding, minor creases.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 5-6</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0"><span style="font-size:11px;font-weight:800;color:#dc2626;width:44px;flex-shrink:0">VG/G</span><div><div style="font-size:11px;color:#0f1e3a">Heavy wear, rounded corners, possible creases.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 1-4</div></div></div>
-    </div>
-  </div>
-  <div class="panel">
-    <div class="phd"><div class="bub">&#x1F4EC;</div>Shipping Rules</div>
-    <div style="font-size:12px;color:#64748b;line-height:1.8">
-      <div>Cards under <strong style="color:#0f1e3a">$20</strong> &rarr; <span class="stag senv">&#x1F4EC; Envelope $1.00</span></div>
-      <div style="margin-top:8px">Cards <strong style="color:#0f1e3a">$20+</strong> &rarr; <span class="stag susps">&#x1F4E6; USPS First Class</span></div>
-    </div>
-  </div>
-  <div class="panel">
-    <div class="phd"><div class="bub">&#x2605;</div>Pro Tips</div>
-    <div style="font-size:12px;color:#64748b;line-height:1.9">
-      <div>&#x1F4F8; <strong style="color:#0f1e3a">Shoot straight down</strong> on a dark surface. Better photos = better AI reads.</div>
-      <div>&#x1F4B0; <strong style="color:#0f1e3a">Verify prices.</strong> Check eBay sold comps before listing.</div>
-      <div>&#x1F4CB; <strong style="color:#0f1e3a">Batch by account.</strong> Switch accounts before adding a new batch.</div>
-      <div>&#x270F;&#xFE0F; <strong style="color:#0f1e3a">Edit before exporting.</strong> Tap the eye icon to review AI output.</div>
-      <div>&#x1F512; <strong style="color:#0f1e3a">Key saves permanently.</strong> Paste once, never again.</div>
-    </div>
-  </div>
-</div>
+
 <div class="screen" id="s-setup">
-  <div class="info ig" style="margin-bottom:12px"><span>&#x2713;</span><div><strong>Free Gemini key works on GitHub Pages!</strong> 1,500 free card reads per day. No credit card needed.</div></div>
-  <div class="panel">
-    <div class="phd"><div class="bub">A</div>Google Gemini Key <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:#dcfce7;color:#15803d;border:1px solid #bbf7d0">FREE</span></div>
+  <div class="info ig"><span>&#x2713;</span><div><strong>Free Gemini key works here!</strong> 1,500 free reads/day. No credit card needed. Key starts with AIza or AQ &mdash; both work.</div></div>
+  <div class="card">
+    <div class="card-hd"><div class="bub">A</div>Gemini API Key</div>
     <div class="steps" style="margin-bottom:12px">
-      <div class="step"><div class="sn">1</div><div>Open Safari &rarr; go to <strong>aistudio.google.com/apikey</strong></div></div>
+      <div class="step"><div class="sn">1</div><div>Go to <strong>aistudio.google.com/apikey</strong> in Safari</div></div>
       <div class="step"><div class="sn">2</div><div>Sign in with Gmail &rarr; tap <strong>Create API key</strong></div></div>
-      <div class="step"><div class="sn">3</div><div>Tap the <strong>copy icon</strong> next to your key</div></div>
-      <div class="step"><div class="sn">4</div><div>Come back here &rarr; long-press &rarr; <strong>Paste</strong> below</div></div>
+      <div class="step"><div class="sn">3</div><div>Copy the key &rarr; long-press below &rarr; <strong>Paste</strong></div></div>
     </div>
-    <div class="info iy" style="margin-bottom:10px"><span>&#x1F511;</span><div>Key starts with <strong>AQ</strong> or <strong>AIza</strong> &mdash; both work. Free forever.</div></div>
-    <div class="lbl">Paste Your Gemini Key</div>
-    <input class="inp" id="gemIn" type="text" placeholder="Paste full key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-    <div id="gemMsg" style="margin-top:4px"></div>
-    <button class="btn bg-g" style="margin-top:8px" onclick="saveKey()">Save Gemini Key</button>
-    <a class="btn bg-o" style="margin-top:8px" href="https://aistudio.google.com/apikey" target="_blank">Open Google AI Studio &rarr;</a>
+    <div class="lbl">Paste Key Here</div>
+    <input class="inp" id="gemIn" type="text" placeholder="Paste your Gemini key..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+    <div id="gemMsg" style="margin-top:4px;margin-bottom:8px"></div>
+    <button class="btn bg-g" onclick="saveKey()">Save Gemini Key</button>
+    <a class="btn bg-o" href="https://aistudio.google.com/apikey" target="_blank" style="text-align:center">Get Free Key &rarr;</a>
   </div>
-  <div class="panel">
-    <div class="phd"><div class="bub" style="background:#fef3c7;border-color:#fde68a;color:#92400e">V</div>Key Vault &mdash; Survives App Restarts</div>
-    <div class="hint" style="margin-bottom:10px">Paste your full key here. The vault reloads it automatically if Safari ever clears it.</div>
-    <div class="lbl">Full Key (visible backup)</div>
-    <textarea class="inp" id="vaultIn" rows="3" placeholder="Paste your complete Gemini key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-size:11px;resize:none"></textarea>
+  <div class="card">
+    <div class="card-hd"><div class="bub" style="background:#fffbeb;border-color:#fde68a;color:#92400e">V</div>Key Vault &mdash; Survives Restarts</div>
+    <div class="hint" style="margin-bottom:10px">Paste your full key here visibly. If the app ever forgets your key, tap Reload from Vault.</div>
+    <div class="lbl">Full Key Backup</div>
+    <textarea class="vault-inp" id="vaultIn" placeholder="Paste your complete key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
     <div class="brow">
-      <button class="btn bg-g" onclick="saveVault()">Save to Vault</button>
-      <button class="btn bg-o" onclick="reloadFromVault()">Reload from Vault</button>
-    </div
-  </div>
-  <div class="panel">
-    <div class="phd"><div class="bub">B</div>PIN Lock <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe">OPTIONAL</span></div>
-    <div class="hint" style="margin-bottom:10px">Set a 4-digit PIN so only you can open the app.</div>
-    <div class="lbl">4-Digit PIN</div>
-    <input class="inp" id="pinIn" type="number" placeholder="e.g. 7842"/>
-    <div class="brow">
-      <button class="btn bg-b" onclick="savePIN()">Save PIN</button>
-      <button class="btn bg-r" onclick="clearPIN()">Remove PIN</button>
+      <button class="btn bg-y bsm" onclick="saveVault()" style="flex:1;margin-bottom:0">Save Vault</button>
+      <button class="btn bg-o bsm" onclick="reloadVault()" style="flex:1;margin-bottom:0">Reload from Vault</button>
     </div>
   </div>
-  <div class="panel">
-    <div class="phd"><div class="bub" style="background:#fee2e2;border-color:#fecaca;color:#dc2626">&times;</div>Clear Key</div>
+  <div class="card">
+    <div class="card-hd"><div class="bub" style="background:#fee2e2;border-color:#fecaca;color:#dc2626">C</div>Clear Key</div>
     <button class="btn bg-r" onclick="clearKey()">Remove Saved Key</button>
   </div>
-  <div class="panel">
-    <div class="phd"><div class="bub">C</div>Listing Defaults</div>
-    <div class="info ig" style="margin-bottom:10px"><span>&#x1F4EC;</span><div>Under <strong>$20</strong> &rarr; envelope $1.00. $20+ &rarr; USPS. All listings <strong>Buy It Now only</strong>.</div></div>
+  <div class="card">
+    <div class="card-hd"><div class="bub">D</div>Listing Defaults</div>
+    <div class="info ig" style="margin-bottom:10px"><span>&#x2713;</span><div>Under <strong>$20</strong> = envelope $1. $20+ = USPS. All listings <strong>Buy It Now only</strong>.</div></div>
     <div class="g2">
       <div><div class="lbl">Duration</div><select class="inp" id="cfgDur"><option value="GTC">Good Till Cancelled</option><option value="Days_30">30 Days</option><option value="Days_10">10 Days</option><option value="Days_7">7 Days</option></select></div>
       <div><div class="lbl">Returns</div><select class="inp" id="cfgRet"><option value="ReturnsAccepted">30-Day Returns</option><option value="ReturnsNotAccepted">No Returns</option></select></div>
@@ -353,32 +316,26 @@ select.inp{cursor:pointer}
   <button class="btn bg-g" onclick="goTab('list')">Start Listing Cards &rarr;</button>
 </div>
 <script>
-const S={gemKey:'',duration:'GTC',returns:'ReturnsAccepted',shipping:4.99,envCutoff:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
-const COLORS=['#16a34a','#1d4ed8','#d97706','#dc2626','#7c3aed','#ea580c','#0891b2','#db2777','#059669','#9333ea'];
-const CAT={Baseball:'213',Basketball:'261329',Football:'261328',Hockey:'247',Soccer:'261330',Other:'213'};
-const CSV_H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
-let selColor=COLORS[0];
-const ls={
-  get:k=>{try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},
-  set:(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}},
-  del:k=>{try{localStorage.removeItem(k);}catch(e){}}
-};
 
-// ── IMAGE COMPRESSION ──────────────────────────────
+var S={gemKey:’’,duration:‘GTC’,returns:‘ReturnsAccepted’,shipping:4.99,envCutoff:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
+var COLORS=[’#16a34a’,’#1d4ed8’,’#d97706’,’#dc2626’,’#7c3aed’,’#ea580c’,’#0891b2’,’#db2777’,’#059669’,’#9333ea’];
+var CAT={Baseball:‘213’,Basketball:‘261329’,Football:‘261328’,Hockey:‘247’,Soccer:‘261330’,Other:‘213’};
+var CSV_H=‘Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)’;
+var selColor=COLORS[0];
+
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,typeof v===‘string’?v:JSON.stringify(v));}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+
 function compressImage(dataUrl){
 return new Promise(function(resolve){
-const img=new Image();
+var img=new Image();
 img.onload=function(){
-const MAX=1024;
-let w=img.width,h=img.height;
-if(w>MAX||h>MAX){
-if(w>h){h=Math.round(h*MAX/w);w=MAX;}
-else{w=Math.round(w*MAX/h);h=MAX;}
-}
-const canvas=document.createElement(‘canvas’);
+var MAX=1024,w=img.width,h=img.height;
+if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+var canvas=document.createElement(‘canvas’);
 canvas.width=w;canvas.height=h;
-const ctx=canvas.getContext(‘2d’);
-ctx.drawImage(img,0,0,w,h);
+canvas.getContext(‘2d’).drawImage(img,0,0,w,h);
 resolve(canvas.toDataURL(‘image/jpeg’,0.82));
 };
 img.onerror=function(){resolve(dataUrl);};
@@ -386,284 +343,317 @@ img.src=dataUrl;
 });
 }
 
-(function init(){
-S.gemKey=ls.get(‘gk’)||’’;
-S.duration=ls.get(‘dur’)||‘GTC’;
-S.returns=ls.get(‘ret’)||‘ReturnsAccepted’;
-S.shipping=parseFloat(ls.get(‘ship’)||4.99);
-S.envCutoff=parseFloat(ls.get(‘env’)||20);
-S.accounts=ls.get(‘accts’)||[];
-S.activeId=ls.get(‘aid’)||S.accounts[0]?.id||null;
-const pin=ls.get(‘pin’);
-if(pin){
-const entered=prompt(‘Enter your Card Lister PIN:’);
-if(String(entered)!==String(pin)){
-document.body.innerHTML=’<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:20px;color:#dc2626">Wrong PIN</div>’;
-return;
-}
-}
-// Load key from vault if main key is missing
-if(!S.gemKey){
-const vaultKey=ls.get(‘vault’);
-if(vaultKey){S.gemKey=vaultKey;ls.set(‘gk’,vaultKey);}
-}
-if(S.gemKey){
-document.getElementById(‘gemIn’).value=mask(S.gemKey);
-document.getElementById(‘vaultIn’).value=S.gemKey;
-}
-const savedVault=ls.get(‘vault’);
-if(savedVault)document.getElementById(‘vaultIn’).value=savedVault;
+window.onload=function(){
+S.gemKey=lsGet(‘gk’)||’’;
+S.duration=lsGet(‘dur’)||‘GTC’;
+S.returns=lsGet(‘ret’)||‘ReturnsAccepted’;
+S.shipping=parseFloat(lsGet(‘ship’)||4.99);
+S.envCutoff=parseFloat(lsGet(‘env’)||20);
+S.accounts=lsGet(‘accts’)||[];
+S.activeId=lsGet(‘aid’)||null;
+if(!S.activeId&&S.accounts.length)S.activeId=S.accounts[0].id;
+if(!S.gemKey){var v=lsGet(‘vault’);if(v){S.gemKey=v;lsSet(‘gk’,v);}}
+if(S.gemKey){document.getElementById(‘gemIn’).value=mask(S.gemKey);}
+var sv=lsGet(‘vault’);if(sv)document.getElementById(‘vaultIn’).value=sv;
 document.getElementById(‘cfgDur’).value=S.duration;
 document.getElementById(‘cfgRet’).value=S.returns;
 document.getElementById(‘cfgShip’).value=S.shipping;
 document.getElementById(‘cfgEnv’).value=S.envCutoff;
 buildColors();renderAccts();updateBanner();refreshKeyBar();refreshStats();
-goTab(‘list’);
-})();
+};
+
 function mask(v){return v.length<=8?’****’:v.slice(0,6)+’****’+v.slice(-4);}
+
 function goTab(n){
-[‘list’,‘accts’,‘export’,‘history’,‘guide’,‘setup’].forEach(t=>{
+var tabs=[‘list’,‘accts’,‘export’,‘history’,‘setup’];
+for(var i=0;i<tabs.length;i++){
+var t=tabs[i];
 document.getElementById(‘s-’+t).className=‘screen’+(t===n?’ on’:’’);
 document.getElementById(‘t-’+t).className=‘tab’+(t===n?’ on’:’’);
-});
+}
 if(n===‘accts’)renderAccts();
 if(n===‘export’)renderExport();
 if(n===‘history’)renderHistory();
 }
+
 function saveKey(){
-const raw=document.getElementById(‘gemIn’).value.trim();
-if(raw.length<10){document.getElementById(‘gemMsg’).innerHTML=iHtml(‘ir’,‘Key too short - paste the complete key’);return;}
-S.gemKey=raw;ls.set(‘gk’,raw);
-// Auto-save to vault too
-ls.set(‘vault’,raw);
+var raw=document.getElementById(‘gemIn’).value.trim();
+if(raw.length<10){document.getElementById(‘gemMsg’).innerHTML=’<div class="info ir" style="padding:8px;font-size:11px;margin:0">Key too short - paste the complete key</div>’;return;}
+S.gemKey=raw;lsSet(‘gk’,raw);lsSet(‘vault’,raw);
 document.getElementById(‘vaultIn’).value=raw;
 document.getElementById(‘gemIn’).value=mask(raw);
-document.getElementById(‘gemMsg’).innerHTML=iHtml(‘ig’,‘Saved and backed up to vault!’);
-refreshKeyBar();toast(‘Gemini key saved!’);
+document.getElementById(‘gemMsg’).innerHTML=’<div class="info ig" style="padding:8px;font-size:11px;margin:0">Saved! Also backed up to vault.</div>’;
+refreshKeyBar();showToast(‘Key saved!’);
 }
+
 function clearKey(){
 if(!confirm(‘Remove saved key?’))return;
-S.gemKey=’’;ls.del(‘gk’);
+S.gemKey=’’;lsDel(‘gk’);
 document.getElementById(‘gemIn’).value=’’;
 document.getElementById(‘gemMsg’).innerHTML=’’;
-refreshKeyBar();toast(‘Key removed’,‘warn’);
+refreshKeyBar();showToast(‘Key removed’,‘warn’);
 }
+
 function saveVault(){
-const raw=document.getElementById(‘vaultIn’).value.trim();
-if(raw.length<10){toast(‘Key too short’,‘err’);return;}
-ls.set(‘vault’,raw);
-// Also set as main key
-S.gemKey=raw;ls.set(‘gk’,raw);
+var raw=document.getElementById(‘vaultIn’).value.trim();
+if(raw.length<10){showToast(‘Key too short’,‘err’);return;}
+lsSet(‘vault’,raw);S.gemKey=raw;lsSet(‘gk’,raw);
 document.getElementById(‘gemIn’).value=mask(raw);
-refreshKeyBar();toast(‘Vault saved - key will survive app restarts!’);
+refreshKeyBar();showToast(‘Vault saved!’);
 }
-function reloadFromVault(){
-const v=ls.get(‘vault’);
-if(!v){toast(‘No vault key saved yet’,‘err’);return;}
-S.gemKey=v;ls.set(‘gk’,v);
+
+function reloadVault(){
+var v=lsGet(‘vault’);
+if(!v){showToast(‘No vault key saved yet’,‘err’);return;}
+S.gemKey=v;lsSet(‘gk’,v);
 document.getElementById(‘gemIn’).value=mask(v);
-refreshKeyBar();toast(‘Key reloaded from vault!’);
+refreshKeyBar();showToast(‘Key reloaded from vault!’);
 }
-function savePIN(){const v=String(document.getElementById(‘pinIn’).value).trim();if(v.length!==4||isNaN(Number(v))){toast(‘Enter exactly 4 digits’,‘err’);return;}ls.set(‘pin’,v);document.getElementById(‘pinIn’).value=’’;toast(‘PIN saved!’);}
-function clearPIN(){ls.del(‘pin’);toast(‘PIN removed’,‘warn’);}
+
 function refreshKeyBar(){
-const ok=!!S.gemKey;
+var ok=!!S.gemKey;
 document.getElementById(‘kdot’).className=‘kdot’+(ok?’ ok’:’’);
-document.getElementById(‘klbl’).textContent=ok?‘Gemini AI ready - Free key active’:‘No API key - AI disabled’;
-document.getElementById(‘ksub’).textContent=ok?mask(S.gemKey)+’ - tap Setup to change’:‘Go to Setup and paste your free Gemini key’;
+document.getElementById(‘klbl’).textContent=ok?‘Gemini AI ready’:‘No API key - AI disabled’;
+document.getElementById(‘ksub’).textContent=ok?mask(S.gemKey)+’ - tap Setup to change’:‘Go to Setup and paste your Gemini key’;
 }
+
 function saveDefaults(){
 S.duration=document.getElementById(‘cfgDur’).value;
 S.returns=document.getElementById(‘cfgRet’).value;
 S.shipping=parseFloat(document.getElementById(‘cfgShip’).value)||4.99;
 S.envCutoff=parseFloat(document.getElementById(‘cfgEnv’).value)||20;
-ls.set(‘dur’,S.duration);ls.set(‘ret’,S.returns);ls.set(‘ship’,S.shipping);ls.set(‘env’,S.envCutoff);
-toast(‘Saved!’);
+lsSet(‘dur’,S.duration);lsSet(‘ret’,S.returns);lsSet(‘ship’,S.shipping);lsSet(‘env’,S.envCutoff);
+showToast(‘Saved!’);
 }
+
 function buildColors(){
-document.getElementById(‘cpick’).innerHTML=COLORS.map((c,i)=>’<div class="copt'+(i===0?' sel':'')+'" style="background:'+c+'" onclick="pickCol(this,\''+c+'\')"></div>’).join(’’);
+var html=’’;
+for(var i=0;i<COLORS.length;i++){
+html+=’<div class="copt'+(i===0?' sel':'')+'" style="background:'+COLORS[i]+'" onclick="pickCol(this,\''+COLORS[i]+'\')"></div>’;
 }
-function pickCol(el,c){document.querySelectorAll(’.copt’).forEach(e=>e.classList.remove(‘sel’));el.classList.add(‘sel’);selColor=c;}
+document.getElementById(‘cpick’).innerHTML=html;
+}
+
+function pickCol(el,c){
+var opts=document.querySelectorAll(’.copt’);
+for(var i=0;i<opts.length;i++)opts[i].classList.remove(‘sel’);
+el.classList.add(‘sel’);selColor=c;
+}
+
 function addAcct(){
-const n=document.getElementById(‘newName’).value.trim();
-if(!n){toast(‘Enter account name’,‘err’);return;}
-const a={id:‘a’+Date.now(),name:n,color:selColor};
-S.accounts.push(a);ls.set(‘accts’,S.accounts);
-if(!S.activeId){S.activeId=a.id;ls.set(‘aid’,a.id);}
-document.getElementById(‘newName’).value=’’;renderAccts();updateBanner();toast(‘Account added!’);
+var n=document.getElementById(‘newName’).value.trim();
+if(!n){showToast(‘Enter account name’,‘err’);return;}
+var a={id:‘a’+Date.now(),name:n,color:selColor};
+S.accounts.push(a);lsSet(‘accts’,S.accounts);
+if(!S.activeId){S.activeId=a.id;lsSet(‘aid’,a.id);}
+document.getElementById(‘newName’).value=’’;
+renderAccts();updateBanner();showToast(‘Account added!’);
 }
-function setActive(id){S.activeId=id;ls.set(‘aid’,id);renderAccts();updateBanner();goTab(‘list’);}
+
+function setActive(id){S.activeId=id;lsSet(‘aid’,id);renderAccts();updateBanner();goTab(‘list’);}
+
 function delAcct(id){
-if(!confirm(‘Remove?’))return;
-S.accounts=S.accounts.filter(a=>a.id!==id);ls.set(‘accts’,S.accounts);
-if(S.activeId===id){S.activeId=S.accounts[0]?.id||null;ls.set(‘aid’,S.activeId||null);}
+if(!confirm(‘Remove this account?’))return;
+S.accounts=S.accounts.filter(function(a){return a.id!==id;});
+lsSet(‘accts’,S.accounts);
+if(S.activeId===id){S.activeId=S.accounts.length?S.accounts[0].id:null;lsSet(‘aid’,S.activeId);}
 renderAccts();updateBanner();
 }
+
 function renderAccts(){
-const el=document.getElementById(‘acctList’);
-const lbl=document.getElementById(‘actLbl’);
+var el=document.getElementById(‘acctList’);
+var lbl=document.getElementById(‘actLbl’);
 if(lbl)lbl.textContent=S.accounts.length+’ account’+(S.accounts.length!==1?‘s’:’’);
-if(!S.accounts.length){el.innerHTML=’<div class="empty"><div class="empty-i">No accounts yet.</div></div>’;return;}
-el.innerHTML=’<div class="acct-stack">’+S.accounts.map(a=>{
-const act=a.id===S.activeId;
-const ct=S.exported.filter(p=>p.acctId===a.id).length;
-return ‘<div class="ai'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">’
-+’<div class="ai-dot" style="background:'+a.color+'"></div>’
-+’<div class="ai-body"><div class="ai-name">’+a.name+’</div>’
-+’<div class="ai-det">’+ct+’ card’+(ct!==1?‘s’:’’)+’ ready’+(act?’ - ACTIVE’:’’)+’</div></div>’
-+(act?’<div class="ai-badge">ACTIVE</div>’:’’)
-+’<button class="ai-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">X</button>’
-+’</div>’;
-}).join(’’)+’</div>’;
+if(!S.accounts.length){el.innerHTML=’<div class="empty">No accounts yet. Add one below.</div>’;return;}
+var html=’<div class="acct-stack">’;
+for(var i=0;i<S.accounts.length;i++){
+var a=S.accounts[i];
+var act=a.id===S.activeId;
+var ct=S.exported.filter(function(p){return p.acctId===a.id;}).length;
+html+=’<div class="ai'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">’;
+html+=’<div class="ai-dot" style="background:'+a.color+'"></div>’;
+html+=’<div class="ai-body"><div class="ai-name">’+a.name+’</div>’;
+html+=’<div class="ai-det">’+ct+’ card’+(ct!==1?‘s’:’’)+’ ready’+(act?’ - ACTIVE’:’’)+’</div></div>’;
+if(act)html+=’<div class="ai-badge">ACTIVE</div>’;
+html+=’<button class="ai-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">X</button>’;
+html+=’</div>’;
 }
+html+=’</div>’;
+el.innerHTML=html;
+}
+
 function updateBanner(){
-const a=S.accounts.find(x=>x.id===S.activeId);
+var a=null;
+for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===S.activeId){a=S.accounts[i];break;}}
 document.getElementById(‘abd’).style.background=a?a.color:’#cbd5e1’;
 document.getElementById(‘abn’).textContent=a?a.name:‘No account - add one first’;
 }
-function onFiles(e){addToQueue([…e.target.files]);e.target.value=’’;}
+
+function onFiles(e){addToQueue(Array.prototype.slice.call(e.target.files));e.target.value=’’;}
 function doDrag(e,on){e.preventDefault();document.getElementById(‘dropzone’).classList.toggle(‘drag’,!!on);}
 function doDrop(e){
-e.preventDefault();
-document.getElementById(‘dropzone’).classList.remove(‘drag’);
-addToQueue([…e.dataTransfer.files].filter(f=>f.type.startsWith(‘image/’)));
+e.preventDefault();document.getElementById(‘dropzone’).classList.remove(‘drag’);
+var files=Array.prototype.slice.call(e.dataTransfer.files).filter(function(f){return f.type.indexOf(‘image/’)===0;});
+addToQueue(files);
 }
+
 function addToQueue(files){
-if(!S.gemKey){toast(‘Add Gemini key in Setup first’,‘err’);goTab(‘setup’);return;}
-if(!S.activeId){toast(‘Add eBay account first’,‘err’);goTab(‘accts’);return;}
-files.forEach(f=>{
-const id=‘c’+Date.now()+Math.random().toString(36).slice(2,5);
-const r=new FileReader();
-r.onload=ev=>{
-S.queue.push({id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:‘pending’,result:null,error:null,acctId:S.activeId});
+if(!S.gemKey){showToast(‘Add Gemini key in Setup first’,‘err’);goTab(‘setup’);return;}
+if(!S.activeId){showToast(‘Add eBay account first’,‘err’);goTab(‘accts’);return;}
+for(var i=0;i<files.length;i++){
+(function(f){
+var id=‘c’+Date.now()+Math.random().toString(36).slice(2,5);
+var r=new FileReader();
+r.onload=function(ev){
+S.queue.push({id:id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:‘pending’,result:null,error:null,acctId:S.activeId});
 renderQueue();
 if(files.length===1)analyzeCard(S.queue[S.queue.length-1]);
 };
 r.readAsDataURL(f);
+})(files[i]);
+}
+}
+
+var PROMPT=‘You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If PSA/BGS/SGC slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown, no extra text:\n{“player”:””,“year”:””,“brand”:””,“set”:””,“cardNumber”:””,“variation”:””,“team”:””,“sport”:“Baseball”,“position”:””,“isRookie”:false,“is1stBowman”:false,“isAuto”:false,“isNumbered”:false,“serialNumber”:null,“serialOf”:null,“isGraded”:false,“gradingCompany”:null,“grade”:null,“condition”:“Near Mint-Mint”,“conditionNote”:“Sharp corners, clean surface”,“ebayTitle”:””,“description”:””,“suggestedBIN”:0,“searchTags”:[]}\n\nebayTitle: max 80 chars. year brand player cardnum variation condition.\ndescription: 180-200 words. Ships penny sleeve + top loader + team bag USPS First Class with tracking. Payment 3 days. All sales final on raw cards.\nsuggestedBIN: realistic current eBay market price USD.\nsearchTags: 5-7 terms buyers search.’;
+
+function callAI(rawDataUrl){
+return compressImage(rawDataUrl).then(function(compressed){
+var base64=compressed.indexOf(’,’)>=0?compressed.split(’,’)[1]:compressed;
+var url=‘https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=’+encodeURIComponent(S.gemKey);
+var body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:‘image/jpeg’,data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}});
+return fetch(url,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:body});
+}).then(function(resp){
+if(!resp.ok){
+return resp.json().catch(function(){return {};}).then(function(e){
+var msg=e.error?e.error.message:‘Error ‘+resp.status;
+if(resp.status===400&&msg.indexOf(‘API key’)>=0)throw new Error(‘Key invalid - go to Setup and paste a fresh key’);
+if(resp.status===401||resp.status===403)throw new Error(‘Key rejected - go to Setup and paste a fresh key’);
+if(resp.status===429)throw new Error(‘Rate limit - wait 1 minute and tap AI Read All again’);
+throw new Error(msg.slice(0,120));
 });
 }
-const PROMPT=‘You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{“player”:””,“year”:””,“brand”:””,“set”:””,“cardNumber”:””,“variation”:””,“team”:””,“sport”:“Baseball”,“position”:””,“isRookie”:false,“is1stBowman”:false,“isAuto”:false,“isNumbered”:false,“serialNumber”:null,“serialOf”:null,“isGraded”:false,“gradingCompany”:null,“grade”:null,“condition”:“Near Mint-Mint”,“conditionNote”:“Sharp corners, clean surface, excellent centering”,“ebayTitle”:””,“description”:””,“suggestedBIN”:0,“searchTags”:[]}\n\nebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.\ndescription: 190-220 words professional listing. Ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.\nsuggestedBIN: accurate current eBay market USD price.\nsearchTags: 6-8 terms real buyers search.’;
-
-async function callAI(rawDataUrl){
-// Compress image before sending
-const compressed=await compressImage(rawDataUrl);
-const base64=compressed.includes(’,’)?compressed.split(’,’)[1]:compressed;
-const url=‘https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent’;
-const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:‘image/jpeg’,data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}});
-// Try query param first (works for ALL key types including AIza)
-let resp=await fetch(url+’?key=’+encodeURIComponent(S.gemKey),{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body});
-// Fallback to header auth
-if(resp.status===401||resp.status===403){
-resp=await fetch(url,{method:‘POST’,headers:{‘Content-Type’:‘application/json’,‘x-goog-api-key’:S.gemKey},body});
-}
-if(!resp.ok){
-const e=await resp.json().catch(()=>({}));
-const msg=e.error?e.error.message:‘Error ‘+resp.status;
-if(resp.status===401||resp.status===403)throw new Error(‘Key invalid - go to Setup and re-paste your key’);
-if(resp.status===429)throw new Error(‘Rate limit - wait 1 min and retry’);
-throw new Error(msg.slice(0,140));
-}
-const d=await resp.json();
-const txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:’’;
+return resp.json();
+}).then(function(d){
+var txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:’’;
 if(!txt)throw new Error(‘Empty response - tap AI to retry’);
-// Extract JSON even if response is truncated
-let cleaned=txt.replace(/`json/g,'').replace(/`/g,’’).trim();
-// Find the JSON object boundaries
-const start=cleaned.indexOf(’{’);
+var cleaned=txt.replace(/`json/g,'').replace(/`/g,’’).trim();
+var start=cleaned.indexOf(’{’);
 if(start<0)throw new Error(‘No JSON in response - tap AI to retry’);
 cleaned=cleaned.slice(start);
-// If truncated, try to close the JSON
-try{
-return JSON.parse(cleaned);
-}catch(e1){
-// Try adding closing brace if truncated
-try{return JSON.parse(cleaned+’}’);}catch(e2){}
-// Try closing with missing fields filled in
-try{
-const partial=cleaned.replace(/,\s*”[^”]*”\s*:\s*[^,}]*$/,’’);
-return JSON.parse(partial+’}’);
-}catch(e3){}
-throw new Error(‘JSON Parse error - tap AI to retry’);
+try{return JSON.parse(cleaned);}catch(e1){
+try{return JSON.parse(cleaned+’}’);}catch(e2){
+var cut=cleaned.lastIndexOf(’,’);
+if(cut>0){try{return JSON.parse(cleaned.slice(0,cut)+’}’);}catch(e3){}}
+throw new Error(‘Response parse failed - tap AI to retry’);
 }
 }
-const STEPS=[‘Compressing image…’,‘Sending to Gemini…’,‘Identifying player…’,‘Reading year and set…’,‘Detecting card number…’,‘Checking parallel…’,‘Assessing condition…’,‘Writing eBay title…’,‘Setting market price…’];
-async function analyzeCard(item){
+});
+}
+
+var STEPS=[‘Compressing image…’,‘Sending to Gemini…’,‘Identifying player…’,‘Reading year and set…’,‘Detecting card number…’,‘Checking parallel…’,‘Writing eBay title…’,‘Setting market price…’];
+
+function analyzeCard(item){
 item.status=‘reading’;renderQI(item);
-let si=0;showLdr(‘Reading card…’,STEPS[0]);
-const t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById(‘ldrS’).textContent=STEPS[si];},900);
-try{
-if(S.stop)throw new Error(‘Cancelled’);
-const result=await callAI(item.rawData);
+var si=0;showLdr(‘Reading card…’,STEPS[0]);
+var t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById(‘ldrS’).textContent=STEPS[si];},1000);
+callAI(item.rawData).then(function(result){
+clearInterval(t);hideLdr();S.stop=false;
 item.result=result;item.status=‘ready’;
-item.name=(result.player&&result.year)?result.player+’ ‘+result.year:item.name;
-}catch(e){
+if(result.player&&result.year)item.name=result.player+’ ’+result.year;
+renderQI(item);refreshStats();showPreview(item);
+}).catch(function(e){
+clearInterval(t);hideLdr();S.stop=false;
 item.status=‘error’;item.error=e.message||‘Failed’;
-if(e.message!==‘Cancelled’)toast(item.error,‘err’);
+renderQI(item);refreshStats();
+showToast(item.error,‘err’);
+});
 }
-clearInterval(t);hideLdr();S.stop=false;renderQI(item);refreshStats();
-if(item.status===‘ready’)showPreview(item);
+
+function analyzeById(id){
+var item=null;
+for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
+if(item)analyzeCard(item);
 }
-async function analyzeById(id){const i=S.queue.find(x=>x.id===id);if(i)await analyzeCard(i);}
-async function runBatch(){
-const pend=S.queue.filter(i=>i.status===‘pending’||i.status===‘error’);
-if(!pend.length){toast(‘No pending cards’);return;}
+
+function runBatch(){
+var pend=S.queue.filter(function(i){return i.status===‘pending’||i.status===‘error’;});
+if(!pend.length){showToast(‘No pending cards’);return;}
 S.stop=false;
-const btn=document.getElementById(‘batchBtn’);
+var btn=document.getElementById(‘batchBtn’);
 btn.textContent=‘Stop’;btn.onclick=function(){S.stop=true;};
 document.getElementById(‘bprog’).style.display=‘block’;
-let done=0;const tot=pend.length;
-for(const item of pend){
-if(S.stop)break;
-document.getElementById(‘bst’).textContent=(done+1)+’/’+tot+’: ‘+item.name+’…’;
-item.status=‘reading’;renderQI(item);showLdr(’Card ‘+(done+1)+’ of ‘+tot,‘Compressing…’);
-try{
-const result=await callAI(item.rawData);
-item.result=result;item.status=‘ready’;
-item.name=(result.player&&result.year)?result.player+’ ’+result.year:item.name;
-}catch(e){item.status=‘error’;item.error=e.message.slice(0,80);}
-hideLdr();done++;
-document.getElementById(‘bfill’).style.width=Math.round(done/tot*100)+’%’;
-document.getElementById(‘binfo’).textContent=done+’/’+tot+’ done’;
-renderQI(item);refreshStats();
-await sleep(600);
-}
+var done=0,tot=pend.length;
+function next(){
+if(done>=tot||S.stop){
 S.stop=false;btn.textContent=‘AI Read All Cards’;btn.onclick=runBatch;
 document.getElementById(‘bst’).textContent=‘Done - ‘+done+’/’+tot+’ analyzed’;
-toast(done+’ cards analyzed!’);
+showToast(done+’ cards analyzed!’);return;
 }
+var item=pend[done];
+document.getElementById(‘bst’).textContent=(done+1)+’/’+tot+’: ‘+item.name+’…’;
+item.status=‘reading’;renderQI(item);showLdr(‘Card ‘+(done+1)+’ of ‘+tot,‘Compressing…’);
+callAI(item.rawData).then(function(result){
+hideLdr();item.result=result;item.status=‘ready’;
+if(result.player&&result.year)item.name=result.player+’ ‘+result.year;
+done++;document.getElementById(‘bfill’).style.width=Math.round(done/tot*100)+’%’;
+document.getElementById(‘binfo’).textContent=done+’/’+tot+’ done’;
+renderQI(item);refreshStats();
+setTimeout(next,600);
+}).catch(function(e){
+hideLdr();item.status=‘error’;item.error=e.message.slice(0,80);
+done++;renderQI(item);refreshStats();
+setTimeout(next,600);
+});
+}
+next();
+}
+
 function renderQueue(){
-const ct=S.queue.length;
+var ct=S.queue.length;
 document.getElementById(‘qct’).textContent=ct;
 document.getElementById(‘binfo’).textContent=ct+’ card’+(ct!==1?‘s’:’’);
 document.getElementById(‘qwrap’).style.display=ct?‘block’:‘none’;
-document.getElementById(‘qlist’).innerHTML=S.queue.map(buildQI).join(’’);
+var html=’’;for(var i=0;i<S.queue.length;i++)html+=buildQI(S.queue[i]);
+document.getElementById(‘qlist’).innerHTML=html;
 refreshStats();
 }
-function renderQI(item){const el=document.getElementById(‘qi_’+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
+
+function renderQI(item){
+var el=document.getElementById(‘qi_’+item.id);
+if(el)el.outerHTML=buildQI(item);else renderQueue();
+}
+
 function buildQI(item){
-const sc={pending:‘sp’,reading:‘sr’,ready:‘sok’,error:‘se’};
-const sl={pending:‘Pending’,reading:‘Reading…’,‘ready’:‘Ready’,‘error’:‘Error: ‘+(item.error||’’)};
-const a=S.accounts.find(x=>x.id===item.acctId);
-const pr=item.result?item.result.suggestedBIN:null;
-const env=pr&&pr<S.envCutoff;
-let html=’<div class="qi" id="qi_'+item.id+'">’;
+var sc={pending:‘sp’,reading:‘sr’,ready:‘sok’,error:‘se’};
+var sl={pending:‘Pending’,reading:‘Reading…’,‘ready’:‘Ready’,‘error’:‘Error: ‘+(item.error||’’)};
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===item.acctId){a=S.accounts[i];break;}}
+var pr=item.result?item.result.suggestedBIN:null;
+var env=pr&&pr<S.envCutoff;
+var html=’<div class="qi" id="qi_'+item.id+'">’;
 html+=item.thumb?’<img class="qi-img" src="'+item.thumb+'" alt=""/>’:’<div class="qi-ph">Card</div>’;
 html+=’<div class="qi-body">’;
-html+=’<div class="qi-name">’+(item.result?item.result.player:item.name)+’</div>’;
+html+=’<div class="qi-name">’+(item.result&&item.result.player?item.result.player:item.name)+’</div>’;
 html+=’<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">’+(sl[item.status]||item.status)+’</span></div>’;
 if(a)html+=’<div class="qi-acct"><div class="qi-adot" style="background:'+a.color+'"></div><span style="color:#64748b;font-size:10px">’+a.name+’</span></div>’;
 if(pr)html+=’<div class="qi-price">$’+pr+’ BIN</div>’;
 if(pr)html+=’<div class="qi-ship">’+(env?‘Envelope $1.00’:‘USPS $’+S.shipping)+’</div>’;
 if(item.result&&item.result.ebayTitle)html+=’<div class="qi-meta">’+item.result.ebayTitle+’</div>’;
-html+=’</div>’;
-html+=’<div class="qi-side">’;
-if(item.status===‘ready’)html+=’<button class="qib" onclick="showPreview(S.queue.find(function(i){return i.id===\''+item.id+'\'}))">View</button>’;
-if(item.status!==‘reading’&&item.status!==‘ready’)html+=’<button class="qib" onclick="analyzeById(\''+item.id+'\')" style="font-size:10px;font-weight:800;color:#1d4ed8">AI</button>’;
+html+=’</div><div class="qi-side">’;
+if(item.status===‘ready’)html+=’<button class="qib" onclick="showPreviewById(\''+item.id+'\')">View</button>’;
+if(item.status!==‘reading’&&item.status!==‘ready’)html+=’<button class="qib" style="color:#1d4ed8;font-weight:800;font-size:10px" onclick="analyzeById(\''+item.id+'\')">AI</button>’;
 html+=’<button class="qib" onclick="rmCard(\''+item.id+'\')">X</button>’;
 html+=’</div></div>’;
 return html;
 }
-function rmCard(id){S.queue=S.queue.filter(i=>i.id!==id);renderQueue();}
+
+function showPreviewById(id){
+var item=null;
+for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
+if(item)showPreview(item);
+}
+
+function rmCard(id){S.queue=S.queue.filter(function(i){return i.id!==id;});renderQueue();}
+
 function clearQueue(){
 if(!confirm(‘Clear all cards?’))return;
 S.queue=[];
@@ -672,38 +662,36 @@ document.getElementById(‘qwrap’).style.display=‘none’;
 document.getElementById(‘prevArea’).innerHTML=’’;
 refreshStats();
 }
+
+function hEsc(s){return(s||’’).replace(/&/g,’&’).replace(/”/g,’"’).replace(/</g,’<’).replace(/>/g,’>’);}
+
 function showPreview(item){
 if(!item||!item.result)return;
-const d=item.result;
-const pr=d.suggestedBIN||9.99;
-const env=pr<S.envCutoff;
-const sec=document.getElementById(‘prevArea’);
-let asgH=’’;
+var d=item.result,pr=d.suggestedBIN||9.99,env=pr<S.envCutoff;
+var sec=document.getElementById(‘prevArea’);
+var asgH=’’;
 if(S.accounts.length>1){
 asgH=’<div class="asgn-row"><div class="pf-lbl">Assign to account</div><div class="asgn-grid" id="ag_'+item.id+'">’;
-S.accounts.forEach(function(a){
+for(var i=0;i<S.accounts.length;i++){
+var a=S.accounts[i];
 asgH+=’<button class="asgn-btn'+(a.id===item.acctId?' sel':'')+'" onclick="reassign(\''+item.id+'\',\''+a.id+'\',this)"><div class="asgn-dot" style="background:'+a.color+'"></div>’+a.name+’</button>’;
-});
+}
 asgH+=’</div></div>’;
 }
-const titleLen=(d.ebayTitle||’’).length;
-let html=’<div class="prev" id="pv_'+item.id+'">’;
+var html=’<div class="prev" id="pv_'+item.id+'">’;
 html+=’<div class="prev-hdr"><div class="prev-ttl">Listing Ready - Review and Edit</div>’;
-html+=’<div style="display:flex;gap:5px">’;
-html+=’<button class="btn bg-o bsm" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
-html+=’<button class="btn bg-o bsm" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>’;
-html+=’</div></div>’;
+html+=’<div style="display:flex;gap:5px"><button class="btn bg-o bsm" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
+html+=’<button class="btn bg-o bsm" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button></div></div>’;
 html+=asgH;
 html+=’<div class="pf"><div class="pf-lbl">eBay Title (max 80)</div>’;
 html+=’<textarea class="pf-inp" id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length+\'/80\'">’+hEsc(d.ebayTitle)+’</textarea>’;
-html+=’<div style="font-size:9px;color:#94a3b8;margin-top:2px" id="ptc_'+item.id+'">’+titleLen+’/80</div></div>’;
+html+=’<div style="font-size:9px;color:#94a3b8;margin-top:2px" id="ptc_'+item.id+'">’+(d.ebayTitle||’’).length+’/80</div></div>’;
 html+=’<div class="pf"><div class="pf-lbl">Description</div>’;
 html+=’<textarea class="pf-inp" id="pd_'+item.id+'" rows="5">’+hEsc(d.description)+’</textarea></div>’;
-html+=’<div class="pf"><div class="pf-lbl">Buy It Now Price - Fixed Price Only</div>’;
-html+=’<div class="pbox"><div class="pbl">BUY IT NOW</div>’;
+html+=’<div class="pf"><div class="pf-lbl">Buy It Now Price</div>’;
+html+=’<div class="pbox"><div class="pbl">BUY IT NOW - FIXED PRICE</div>’;
 html+=’<div class="prow"><span class="pcur">$</span>’;
-html+=’<input class="pinp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="liveShip(\''+item.id+'\',this.value)"/>’;
-html+=’</div></div></div>’;
+html+=’<input class="pinp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="liveShip(\''+item.id+'\',this.value)"/></div></div></div>’;
 html+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">’;
 html+=’<div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl_'+item.id+'" value="'+hEsc(d.player)+'"/></div>’;
 html+=’<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr_'+item.id+'" value="'+hEsc(d.year)+'"/></div></div>’;
@@ -720,7 +708,7 @@ html+=’<div class="pf-lbl" style="margin:0;flex-shrink:0">Shipping:</div>’;
 html+=’<div class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">’+(env?‘Envelope $1.00’:‘USPS $’+S.shipping)+’</div></div>’;
 if(d.searchTags&&d.searchTags.length){
 html+=’<div class="tags-row">’;
-d.searchTags.forEach(function(t){html+=’<span class="tag">’+t+’</span>’;});
+for(var j=0;j<d.searchTags.length;j++)html+=’<span class="tag">’+d.searchTags[j]+’</span>’;
 html+=’</div>’;
 }
 html+=’<div class="prev-btns">’;
@@ -730,127 +718,134 @@ html+=’</div></div>’;
 sec.innerHTML=html;
 sec.scrollIntoView({behavior:‘smooth’,block:‘start’});
 }
-function hEsc(s){return(s||’’).replace(/&/g,’&’).replace(/”/g,’"’).replace(/</g,’<’).replace(/>/g,’>’);}
+
 function liveShip(id,val){
-const t=document.getElementById(‘stag_’+id);
+var t=document.getElementById(‘stag_’+id);
 if(!t)return;
-const env=parseFloat(val)<S.envCutoff;
-t.className=‘stag ‘+(env?‘senv’:‘susps’);
+var env=parseFloat(val)<S.envCutoff;
+t.className=’stag ’+(env?‘senv’:‘susps’);
 t.textContent=env?‘Envelope $1.00’:‘USPS $’+S.shipping;
 }
+
 function reassign(cId,aId,btn){
-const i=S.queue.find(x=>x.id===cId);
-if(i)i.acctId=aId;
-renderQI(i);
-const grid=document.getElementById(‘ag_’+cId);
-if(grid)grid.querySelectorAll(’.asgn-btn’).forEach(function(b){b.classList.remove(‘sel’);});
+for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===cId){S.queue[i].acctId=aId;break;}}
+var grid=document.getElementById(‘ag_’+cId);
+if(grid){var bs=grid.querySelectorAll(’.asgn-btn’);for(var j=0;j<bs.length;j++)bs[j].classList.remove(‘sel’);}
 btn.classList.add(‘sel’);
 }
+
 function copyCard(id){
-const item=S.queue.find(function(i){return i.id===id;});
+var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
 if(!item||!item.result)return;
-const title=document.getElementById(‘pt_’+id)?document.getElementById(‘pt_’+id).value:item.result.ebayTitle||’’;
-const desc=document.getElementById(‘pd_’+id)?document.getElementById(‘pd_’+id).value:item.result.description||’’;
-const bin=document.getElementById(‘pp_’+id)?document.getElementById(‘pp_’+id).value:item.result.suggestedBIN;
-const txt=‘TITLE:\n’+title+’\n\nBUY IT NOW: $’+bin+’\n\nDESCRIPTION:\n’+desc;
-navigator.clipboard.writeText(txt).then(function(){toast(‘Copied!’);}).catch(function(){
-const ta=document.createElement(‘textarea’);ta.value=txt;
-ta.style.cssText=‘position:fixed;opacity:0’;document.body.appendChild(ta);
-ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);toast(‘Copied!’);
+var pt=document.getElementById(‘pt_’+id),pd=document.getElementById(‘pd_’+id),pp=document.getElementById(‘pp_’+id);
+var txt=‘TITLE:\n’+(pt?pt.value:item.result.ebayTitle||’’)+’\n\nBUY IT NOW: $’+(pp?pp.value:item.result.suggestedBIN)+’\n\nDESCRIPTION:\n’+(pd?pd.value:item.result.description||’’);
+navigator.clipboard.writeText(txt).then(function(){showToast(‘Copied!’);}).catch(function(){
+var ta=document.createElement(‘textarea’);ta.value=txt;ta.style.cssText=‘position:fixed;opacity:0’;
+document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);showToast(‘Copied!’);
 });
 }
+
+function getVal(id,fallback){var el=document.getElementById(id);return el?el.value:(fallback||’’);}
+
 function addExport(id){
-const item=S.queue.find(function(i){return i.id===id;});
+var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
 if(!item||!item.result)return;
-const price=parseFloat(document.getElementById(‘pp_’+id)?document.getElementById(‘pp_’+id).value:item.result.suggestedBIN);
-const d=Object.assign({},item.result,{
-*id:id,acctId:item.acctId||S.activeId,
-ebayTitle:(document.getElementById(’pt*’+id)?document.getElementById(‘pt_’+id).value:item.result.ebayTitle||’’).slice(0,80),
-description:document.getElementById(‘pd_’+id)?document.getElementById(‘pd_’+id).value:item.result.description||’’,
-suggestedBIN:price,
-player:document.getElementById(‘ppl_’+id)?document.getElementById(‘ppl_’+id).value:item.result.player||’’,
-year:document.getElementById(‘pyr_’+id)?document.getElementById(‘pyr_’+id).value:item.result.year||’’,
-set:document.getElementById(‘pst_’+id)?document.getElementById(‘pst_’+id).value:item.result.set||’’,
-cardNumber:document.getElementById(‘pcn_’+id)?document.getElementById(‘pcn_’+id).value:item.result.cardNumber||’’,
-variation:document.getElementById(‘pvr_’+id)?document.getElementById(‘pvr_’+id).value:item.result.variation||’’,
-team:document.getElementById(‘ptm_’+id)?document.getElementById(‘ptm_’+id).value:item.result.team||’’,
-conditionNote:document.getElementById(‘pco_’+id)?document.getElementById(‘pco_’+id).value:item.result.conditionNote||’’,
-useEnvelope:price<S.envCutoff
-});
-const idx=S.exported.findIndex(function(p){return p.*id===id;});
+var price=parseFloat(getVal(‘pp_’+id,item.result.suggestedBIN));
+var d={};
+for(var k in item.result)d[k]=item.result[k];
+d.*id=id;d.acctId=item.acctId||S.activeId;
+d.ebayTitle=getVal(’pt*’+id,item.result.ebayTitle).slice(0,80);
+d.description=getVal(‘pd_’+id,item.result.description);
+d.suggestedBIN=price;
+d.player=getVal(‘ppl_’+id,item.result.player);
+d.year=getVal(‘pyr_’+id,item.result.year);
+d.set=getVal(‘pst_’+id,item.result.set);
+d.cardNumber=getVal(‘pcn_’+id,item.result.cardNumber);
+d.variation=getVal(‘pvr_’+id,item.result.variation);
+d.team=getVal(‘ptm_’+id,item.result.team);
+d.conditionNote=getVal(‘pco_’+id,item.result.conditionNote);
+d.useEnvelope=price<S.envCutoff;
+var idx=-1;for(var j=0;j<S.exported.length;j++){if(S.exported[j]._id===id){idx=j;break;}}
 if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
-addHistory(d);toast(‘Added to export!’);
+addHistory(d);showToast(‘Added to export!’);
 document.getElementById(‘prevArea’).innerHTML=’’;
 renderExport();refreshStats();
 }
+
 function csvEsc(v){
-const s=String(v||’’).replace(/”/g,’””’);
+var s=String(v||’’).replace(/”/g,’””’);
 if(s.indexOf(’,’)>=0||s.indexOf(’”’)>=0||s.indexOf(’\n’)>=0||s.indexOf(’\r’)>=0)return’”’+s+’”’;
 return s;
 }
+
 function buildCSV(acctId){
-const rows=S.exported.filter(function(d){return d.acctId===acctId;});
+var rows=S.exported.filter(function(d){return d.acctId===acctId;});
 if(!rows.length)return’’;
-const cols=[CSV_H,‘Title’,‘Description’,‘Category’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ListingType’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
-const dataRows=rows.map(function(d){
-return[‘Add’,d.ebayTitle,d.description,CAT[d.sport]||‘213’,d.suggestedBIN||9.99,‘1’,
+var cols=[CSV_H,‘Title’,‘Description’,‘Category’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ListingType’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
+var lines=[cols.map(csvEsc).join(’,’)];
+for(var i=0;i<rows.length;i++){
+var d=rows[i];
+var row=[‘Add’,d.ebayTitle,d.description,CAT[d.sport]||‘213’,d.suggestedBIN||9.99,‘1’,
 (d.isGraded&&d.grade)?d.gradingCompany+’ ‘+d.grade:‘USED’,
 d.conditionNote||‘Near Mint or Better’,S.duration,‘FixedPriceItem’,
 S.returns,‘Days_30’,‘MoneyBack’,‘Buyer’,‘USPSFirstClass’,
 d.useEnvelope?‘1.00’:String(S.shipping),
 d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||‘Baseball’];
-});
-return[cols].concat(dataRows).map(function(r){return r.map(csvEsc).join(’,’);}).join(’\r\n’);
+lines.push(row.map(csvEsc).join(’,’));
 }
+return lines.join(’\r\n’);
+}
+
 function dlCSV(acctId){
-const csv=buildCSV(acctId);
-if(!csv){toast(‘No cards’,‘err’);return;}
-const a=S.accounts.find(function(x){return x.id===acctId;});
-const blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
-const url=URL.createObjectURL(blob);
-const el=document.createElement(‘a’);el.href=url;
-el.download=’ebay*’+(a?a.name:‘cards’).replace(/ /g,’*’)+’*’+new Date().toISOString().slice(0,10)+’.csv’;
+var csv=buildCSV(acctId);if(!csv){showToast(‘No cards’,‘err’);return;}
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===acctId){a=S.accounts[i];break;}}
+var blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
+var url=URL.createObjectURL(blob);
+var el=document.createElement(‘a’);el.href=url;
+el.download=‘ebay_’+(a?a.name:‘cards’).replace(/ /g,’*’)+’*’+new Date().toISOString().slice(0,10)+’.csv’;
 document.body.appendChild(el);el.click();document.body.removeChild(el);
-URL.revokeObjectURL(url);toast(‘Downloaded!’);
+URL.revokeObjectURL(url);showToast(‘Downloaded!’);
 }
+
 function renderExport(){
-const el=document.getElementById(‘expBlocks’);
-const emp=document.getElementById(‘expEmpty’);
-const guide=document.getElementById(‘expGuide’);
-const lbl=document.getElementById(‘expLbl’);
-if(lbl)lbl.textContent=S.exported.length+’ ready’;
+var el=document.getElementById(‘expBlocks’),emp=document.getElementById(‘expEmpty’),guide=document.getElementById(‘expGuide’);
+var lbl=document.getElementById(‘expLbl’);if(lbl)lbl.textContent=S.exported.length+’ ready’;
 if(!S.exported.length){el.innerHTML=’’;emp.style.display=‘block’;if(guide)guide.style.display=‘none’;return;}
 emp.style.display=‘none’;if(guide)guide.style.display=‘block’;
-const g={};
-S.exported.forEach(function(d){if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);});
-el.innerHTML=Object.keys(g).map(function(aId){
-const cards=g[aId];
-const a=S.accounts.find(function(x){return x.id===aId;});
-const name=a?a.name:‘Unknown’;const color=a?a.color:’#888’;
-const tot=cards.reduce(function(s,c){return s+(c.suggestedBIN||0);},0);
-const env=cards.filter(function(c){return c.useEnvelope;}).length;
-let html=’<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>’;
+var g={};
+for(var i=0;i<S.exported.length;i++){var d=S.exported[i];if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);}
+var html=’’;
+var keys=Object.keys(g);
+for(var k=0;k<keys.length;k++){
+var aId=keys[k],cards=g[aId];
+var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===aId){a=S.accounts[j];break;}}
+var name=a?a.name:‘Unknown’,color=a?a.color:’#888’;
+var tot=0;for(var m=0;m<cards.length;m++)tot+=cards[m].suggestedBIN||0;
+var env=cards.filter(function(c){return c.useEnvelope;}).length;
+html+=’<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>’;
 html+=’<div><div style="font-size:14px;font-weight:800;color:'+color+'">’+name+’</div>’;
 html+=’<div style="font-size:10px;color:#64748b;margin-top:2px">’+cards.length+’ listings - $’+Math.round(tot)+’ - ‘+env+’ envelope / ‘+(cards.length-env)+’ USPS - All Buy It Now</div></div></div>’;
 html+=’<div class="exp-body"><div style="margin-bottom:10px">’;
-cards.slice(0,6).forEach(function(c){
+var show=Math.min(6,cards.length);
+for(var n=0;n<show;n++){
+var c=cards[n];
 html+=’<div class="exp-row"><div class="exp-name">’+(c.player||‘Card’)+’ ‘+(c.year||’’)+’ ‘+(c.variation||’’)+’</div>’;
 html+=’<div style="font-size:10px;color:#94a3b8;margin:0 4px">’+(c.useEnvelope?‘Env’:‘USPS’)+’</div>’;
 html+=’<div class="exp-price">$’+(c.suggestedBIN||’?’)+’ BIN</div></div>’;
-});
+}
 if(cards.length>6)html+=’<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ ‘+(cards.length-6)+’ more…</div>’;
-html+=’</div>’;
-html+=’<button class="btn bg-y" onclick="dlCSV(\''+aId+'\')">Download CSV for ‘+name+’</button>’;
+html+=’</div><button class="btn bg-y" onclick="dlCSV(\''+aId+'\')">Download CSV for ‘+name+’</button>’;
 html+=’<div style="font-size:11px;color:#64748b;margin-top:10px;line-height:1.7">Sign into <strong>’+name+’</strong> in Safari - Seller Hub - Reports - Upload Template - select this CSV.</div>’;
 html+=’</div></div>’;
-return html;
-}).join(’’);
 }
+el.innerHTML=html;
+}
+
 function addHistory(d){
-const a=S.accounts.find(function(x){return x.id===d.acctId;});
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===d.acctId){a=S.accounts[i];break;}}
 document.getElementById(‘logEmpty’).style.display=‘none’;
-const el=document.createElement(‘div’);el.className=‘log-item’;
-let html=’<div class="log-ck">OK</div><div class="log-info">’;
+var el=document.createElement(‘div’);el.className=‘log-item’;
+var html=’<div class="log-ck">OK</div><div class="log-info">’;
 html+=’<div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’ ‘+(d.variation||’’)+’</div>’;
 html+=’<div class="log-det">’;
 if(a)html+=’<div class="log-dot" style="background:'+a.color+'"></div><span>’+a.name+’</span> - ‘;
@@ -858,39 +853,45 @@ html+=’<span style="color:#16a34a">$’+(d.suggestedBIN||’?’)+’ BIN</spa
 el.innerHTML=html;
 document.getElementById(‘logList’).prepend(el);
 }
+
 function renderHistory(){
-const list=document.getElementById(‘logList’);
-const emp=document.getElementById(‘logEmpty’);
+var list=document.getElementById(‘logList’),emp=document.getElementById(‘logEmpty’);
 if(!S.exported.length){list.innerHTML=’’;emp.style.display=‘block’;return;}
 emp.style.display=‘none’;
-list.innerHTML=S.exported.slice().reverse().map(function(d){
-const a=S.accounts.find(function(x){return x.id===d.acctId;});
-let html=’<div class="log-item"><div class="log-ck">OK</div><div class="log-info">’;
+var html=’’;
+for(var i=S.exported.length-1;i>=0;i–){
+var d=S.exported[i];
+var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
+html+=’<div class="log-item"><div class="log-ck">OK</div><div class="log-info">’;
 html+=’<div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’ ‘+(d.variation||’’)+’</div>’;
 html+=’<div class="log-det">’;
 if(a)html+=’<div class="log-dot" style="background:'+a.color+'"></div><span>’+a.name+’</span> - ‘;
 html+=’<span style="color:#16a34a">$’+(d.suggestedBIN||’?’)+’ BIN</span></div></div></div>’;
-return html;
-}).join(’’);
 }
+list.innerHTML=html;
+}
+
 function exportLog(){
-if(!S.exported.length){toast(‘No cards yet’,‘err’);return;}
-const cols=[‘Account’,‘Player’,‘Year’,‘Set’,‘Card#’,‘Variation’,‘Team’,‘BIN Price’,‘Shipping’,‘Title’];
-const rows=S.exported.map(function(d){
-const a=S.accounts.find(function(x){return x.id===d.acctId;});
-return[a?a.name:’’,d.player,d.year,d.set,d.cardNumber,d.variation,d.team,
+if(!S.exported.length){showToast(‘No cards yet’,‘err’);return;}
+var cols=[‘Account’,‘Player’,‘Year’,‘Set’,‘Card#’,‘Variation’,‘Team’,‘BIN’,‘Shipping’,‘Title’];
+var lines=[cols.join(’,’)];
+for(var i=0;i<S.exported.length;i++){
+var d=S.exported[i];
+var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
+lines.push([a?a.name:’’,d.player,d.year,d.set,d.cardNumber,d.variation,d.team,
 d.suggestedBIN,d.useEnvelope?‘Envelope $1’:‘USPS $’+S.shipping,d.ebayTitle
-].map(function(v){return’”’+(v||’’).toString().replace(/”/g,’””’)+’”’;}).join(’,’);
-});
-const blob=new Blob([[cols.join(’,’)].concat(rows).join(’\n’)],{type:‘text/csv’});
-const url=URL.createObjectURL(blob);
-const a=document.createElement(‘a’);a.href=url;a.download=‘card_log.csv’;a.click();
+].map(function(v){return’”’+(v||’’).toString().replace(/”/g,’””’)+’”’;}).join(’,’));
+}
+var blob=new Blob([lines.join(’\n’)],{type:‘text/csv’});
+var url=URL.createObjectURL(blob);
+var el=document.createElement(‘a’);el.href=url;el.download=‘card_log.csv’;el.click();
 URL.revokeObjectURL(url);
 }
+
 function refreshStats(){
-const tot=S.queue.length;
-const rdy=S.queue.filter(function(i){return i.status===‘ready’;}).length;
-const val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
+var tot=S.queue.length;
+var rdy=S.queue.filter(function(i){return i.status===‘ready’;}).length;
+var val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
 document.getElementById(‘s-tot’).textContent=tot;
 document.getElementById(‘s-rdy’).textContent=rdy;
 document.getElementById(‘s-val’).textContent=’$’+Math.round(val);
@@ -898,17 +899,14 @@ document.getElementById(‘nc-q’).textContent=tot;
 document.getElementById(‘nc-r’).textContent=rdy;
 document.getElementById(‘nc-v’).textContent=val>=1000?’$’+(val/1000).toFixed(1)+‘k’:’$’+Math.round(val);
 }
+
 function showLdr(t,s){document.getElementById(‘ldrT’).textContent=t;document.getElementById(‘ldrS’).textContent=s;document.getElementById(‘ldr’).classList.add(‘on’);}
 function hideLdr(){document.getElementById(‘ldr’).classList.remove(‘on’);}
-function toast(msg,type){
-const el=document.getElementById(‘toast’);el.textContent=msg;
+function showToast(msg,type){
+var el=document.getElementById(‘toast’);el.textContent=msg;
 el.className=‘toast show’+(type===‘err’?’ err’:type===‘warn’?’ warn’:’’);
 clearTimeout(window._tt);window._tt=setTimeout(function(){el.className=‘toast’;},3500);
 }
-function iHtml(cls,msg){
-return ‘<div class="info '+cls+'" style="padding:8px 11px;font-size:11px;margin:0"><span>’+(cls.indexOf(‘g’)>=0?‘OK’:’!’)+’ </span><div>’+msg+’</div></div>’;
-}
-function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
 </script>
 
 </body>
