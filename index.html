@@ -209,14 +209,14 @@ window.addEventListener('DOMContentLoaded',function(){
   </div>
 </nav>
 <div class="tabs">
-  <div class="tab" onclick="goTab('list')" id="t-list">&#x1F4F7; List</div>
+  <div class="tab on" onclick="goTab('list')" id="t-list">&#x1F4F7; List</div>
   <div class="tab" onclick="goTab('accts')" id="t-accts">&#x1F465; Accounts</div>
   <div class="tab" onclick="goTab('export')" id="t-export">&#x1F4E6; Export</div>
   <div class="tab" onclick="goTab('history')" id="t-history">&#x2705; History</div>
   <div class="tab" onclick="goTab('guide')" id="t-guide">&#x1F4D6; Guide</div>
   <div class="tab" onclick="goTab('setup')" id="t-setup">&#x2699; Setup</div>
 </div>
-<div class="screen" id="s-list">
+<div class="screen on" id="s-list">
   <div class="kbar"><div class="kdot" id="kdot"></div><div class="kinfo"><div class="klbl" id="klbl">No API key</div><div class="ksub" id="ksub">Go to Setup to add your free Gemini key</div></div><div class="kact" onclick="goTab('setup')">Setup &rarr;</div></div>
   <div class="abanner"><div class="ab-dot" id="abd"></div><div class="ab-body"><div class="ab-lbl">Listing to account</div><div class="ab-name" id="abn">No account &mdash; add one first</div></div><div class="ab-sw" onclick="goTab('accts')">Switch &rarr;</div></div>
   <div class="sstrip">
