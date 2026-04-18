@@ -779,7 +779,16 @@ Identify league (MLB, NBA, NFL, NHL, MLS).
 Identify ALL features that apply: Serial Numbered, Rookie, 1st Bowman, Refractor, Prizm, Short Print, Auto, Relic, Patch.
 ebayTitle: EXACTLY max 80 chars. Format: YEAR BRAND PLAYER CARDNUM VARIATION CONDITION. Use every character.
 - description: 190-220 words. Include: full card details, condition observations, ships in penny sleeve + rigid top loader + team bag via USPS First Class with tracking, payment within 3 days, all sales final on raw ungraded cards, check photos for condition.
-- suggestedBIN: accurate current eBay market USD price for this specific card, variation, and condition. Research-quality estimate.
+- suggestedBIN: conservative current eBay SOLD listing price in USD. Use realistic comp prices:
+  * Base cards (no serial number, no auto): $1-5
+  * Refractors /250 or higher print run, non-star player: $5-20
+  * Refractors /250 or higher, star player: $10-35
+  * Low numbered /99 or less, non-rookie non-star: $15-40
+  * Low numbered /99 or less, star player: $25-75
+  * Autos non-star: $10-30, star players: $30-100
+  * Rookie cards of current stars: add 20-50% premium
+  * Graded PSA 10: 2-3x raw price
+  * DO NOT overprice — use the LOWER end of recent sold comps, not asking prices.
 - searchTags: 6-8 terms real buyers search for.`;
 
 // ══ AI CALL ════════════════════════════════════════════════════
@@ -1081,9 +1090,16 @@ function htmlEsc(s) {
 function liveShip(id, val) {
   const tag = document.getElementById('shipTag_' + id);
   if (!tag) return;
-  const env = parseFloat(val) < S.envCutoff;
+  const price = parseFloat(val);
+  const env = price < S.envCutoff;
   tag.className = 'ship-tag ' + (env ? 'ship-env' : 'ship-usps');
   tag.textContent = env ? '\uD83D\uDCEC Envelope $1.00' : '\uD83D\uDCE6 USPS $' + S.shipping;
+  // Save price back to card data so it persists when exported
+  const item = S.queue.find(x => x.id === id);
+  if (item && item.result && !isNaN(price) && price > 0) {
+    item.result.suggestedBIN = price;
+    item.result.useEnvelope = env;
+  }
 }
 
 function reassign(cardId, acctId, btn) {
