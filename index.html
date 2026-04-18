@@ -19,9 +19,9 @@ nav{position:sticky;top:0;z-index:90;background:rgba(8,10,15,.95);backdrop-filte
 .nc-n{font-size:13px;font-weight:800;font-family:'Syne Mono',monospace;color:var(--g)}
 .nc-y{color:var(--y)}
 .nc-l{font-size:7px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em;font-family:'Syne Mono',monospace}
-.tabs{background:var(--c1);border-bottom:1px solid var(--bdr);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px}
+.tabs{background:var(--c1);border-bottom:1px solid var(--bdr);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px;position:relative;z-index:100}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:10px 12px;font-size:10px;font-weight:700;color:var(--fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;font-family:'Syne Mono',monospace}
+.tab{padding:10px 12px;font-size:10px;font-weight:700;color:var(--fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;font-family:'Syne Mono',monospace;-webkit-tap-highlight-color:rgba(0,255,136,.2);user-select:none}
 .tab.on{color:var(--g);border-bottom-color:var(--g)}
 .screen{display:none!important;padding:14px;max-width:520px;margin:0 auto}
 .screen.on{display:block!important}
@@ -72,8 +72,8 @@ textarea.inp{resize:vertical;min-height:36px}
 .ship-env{background:rgba(0,255,136,.1);color:var(--g);border:1px solid rgba(0,255,136,.2)}
 .ship-usps{background:rgba(0,136,255,.1);color:var(--b);border:1px solid rgba(0,136,255,.2)}
 .acct-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block}
-.ldr{display:none;position:fixed;inset:0;background:rgba(8,10,15,.9);backdrop-filter:blur(12px);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:14px}
-.ldr.on{display:flex}
+.ldr{display:none;position:fixed;inset:0;background:rgba(8,10,15,.9);backdrop-filter:blur(12px);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:14px;pointer-events:none}
+.ldr.on{display:flex;pointer-events:all}
 .spin{width:46px;height:46px;border:3px solid var(--bdr);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--c3);border:1px solid rgba(0,255,136,.3);color:var(--g);padding:10px 20px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .3s;white-space:nowrap;max-width:88vw;text-align:center;font-family:'Syne Mono',monospace}
