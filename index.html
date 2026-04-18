@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -364,530 +365,548 @@ const ls={
 
 // ── IMAGE COMPRESSION ──────────────────────────────
 function compressImage(dataUrl){
-  return new Promise(function(resolve){
-    const img=new Image();
-    img.onload=function(){
-      const MAX=1024;
-      let w=img.width,h=img.height;
-      if(w>MAX||h>MAX){
-        if(w>h){h=Math.round(h*MAX/w);w=MAX;}
-        else{w=Math.round(w*MAX/h);h=MAX;}
-      }
-      const canvas=document.createElement('canvas');
-      canvas.width=w;canvas.height=h;
-      const ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0,w,h);
-      resolve(canvas.toDataURL('image/jpeg',0.82));
-    };
-    img.onerror=function(){resolve(dataUrl);};
-    img.src=dataUrl;
-  });
+return new Promise(function(resolve){
+const img=new Image();
+img.onload=function(){
+const MAX=1024;
+let w=img.width,h=img.height;
+if(w>MAX||h>MAX){
+if(w>h){h=Math.round(h*MAX/w);w=MAX;}
+else{w=Math.round(w*MAX/h);h=MAX;}
+}
+const canvas=document.createElement(‘canvas’);
+canvas.width=w;canvas.height=h;
+const ctx=canvas.getContext(‘2d’);
+ctx.drawImage(img,0,0,w,h);
+resolve(canvas.toDataURL(‘image/jpeg’,0.82));
+};
+img.onerror=function(){resolve(dataUrl);};
+img.src=dataUrl;
+});
 }
 
 (function init(){
-  S.gemKey=ls.get('gk')||'';
-  S.duration=ls.get('dur')||'GTC';
-  S.returns=ls.get('ret')||'ReturnsAccepted';
-  S.shipping=parseFloat(ls.get('ship')||4.99);
-  S.envCutoff=parseFloat(ls.get('env')||20);
-  S.accounts=ls.get('accts')||[];
-  S.activeId=ls.get('aid')||S.accounts[0]?.id||null;
-  const pin=ls.get('pin');
-  if(pin){
-    const entered=prompt('Enter your Card Lister PIN:');
-    if(String(entered)!==String(pin)){
-      document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:20px;color:#dc2626">Wrong PIN</div>';
-      return;
-    }
-  }
-  // Load key from vault if main key is missing
-  if(!S.gemKey){
-    const vaultKey=ls.get('vault');
-    if(vaultKey){S.gemKey=vaultKey;ls.set('gk',vaultKey);}
-  }
-  if(S.gemKey){
-    document.getElementById('gemIn').value=mask(S.gemKey);
-    document.getElementById('vaultIn').value=S.gemKey;
-  }
-  const savedVault=ls.get('vault');
-  if(savedVault)document.getElementById('vaultIn').value=savedVault;
-  document.getElementById('cfgDur').value=S.duration;
-  document.getElementById('cfgRet').value=S.returns;
-  document.getElementById('cfgShip').value=S.shipping;
-  document.getElementById('cfgEnv').value=S.envCutoff;
-  buildColors();renderAccts();updateBanner();refreshKeyBar();refreshStats();
-  goTab('list');
+S.gemKey=ls.get(‘gk’)||’’;
+S.duration=ls.get(‘dur’)||‘GTC’;
+S.returns=ls.get(‘ret’)||‘ReturnsAccepted’;
+S.shipping=parseFloat(ls.get(‘ship’)||4.99);
+S.envCutoff=parseFloat(ls.get(‘env’)||20);
+S.accounts=ls.get(‘accts’)||[];
+S.activeId=ls.get(‘aid’)||S.accounts[0]?.id||null;
+const pin=ls.get(‘pin’);
+if(pin){
+const entered=prompt(‘Enter your Card Lister PIN:’);
+if(String(entered)!==String(pin)){
+document.body.innerHTML=’<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:20px;color:#dc2626">Wrong PIN</div>’;
+return;
+}
+}
+// Load key from vault if main key is missing
+if(!S.gemKey){
+const vaultKey=ls.get(‘vault’);
+if(vaultKey){S.gemKey=vaultKey;ls.set(‘gk’,vaultKey);}
+}
+if(S.gemKey){
+document.getElementById(‘gemIn’).value=mask(S.gemKey);
+document.getElementById(‘vaultIn’).value=S.gemKey;
+}
+const savedVault=ls.get(‘vault’);
+if(savedVault)document.getElementById(‘vaultIn’).value=savedVault;
+document.getElementById(‘cfgDur’).value=S.duration;
+document.getElementById(‘cfgRet’).value=S.returns;
+document.getElementById(‘cfgShip’).value=S.shipping;
+document.getElementById(‘cfgEnv’).value=S.envCutoff;
+buildColors();renderAccts();updateBanner();refreshKeyBar();refreshStats();
+goTab(‘list’);
 })();
-function mask(v){return v.length<=8?'****':v.slice(0,6)+'****'+v.slice(-4);}
+function mask(v){return v.length<=8?’****’:v.slice(0,6)+’****’+v.slice(-4);}
 function goTab(n){
-  ['list','accts','export','history','guide','setup'].forEach(t=>{
-    document.getElementById('s-'+t).className='screen'+(t===n?' on':'');
-    document.getElementById('t-'+t).className='tab'+(t===n?' on':'');
-  });
-  if(n==='accts')renderAccts();
-  if(n==='export')renderExport();
-  if(n==='history')renderHistory();
+[‘list’,‘accts’,‘export’,‘history’,‘guide’,‘setup’].forEach(t=>{
+document.getElementById(‘s-’+t).className=‘screen’+(t===n?’ on’:’’);
+document.getElementById(‘t-’+t).className=‘tab’+(t===n?’ on’:’’);
+});
+if(n===‘accts’)renderAccts();
+if(n===‘export’)renderExport();
+if(n===‘history’)renderHistory();
 }
 function saveKey(){
-  const raw=document.getElementById('gemIn').value.trim();
-  if(raw.length<10){document.getElementById('gemMsg').innerHTML=iHtml('ir','Key too short - paste the complete key');return;}
-  S.gemKey=raw;ls.set('gk',raw);
-  // Auto-save to vault too
-  ls.set('vault',raw);
-  document.getElementById('vaultIn').value=raw;
-  document.getElementById('gemIn').value=mask(raw);
-  document.getElementById('gemMsg').innerHTML=iHtml('ig','Saved and backed up to vault!');
-  refreshKeyBar();toast('Gemini key saved!');
+const raw=document.getElementById(‘gemIn’).value.trim();
+if(raw.length<10){document.getElementById(‘gemMsg’).innerHTML=iHtml(‘ir’,‘Key too short - paste the complete key’);return;}
+S.gemKey=raw;ls.set(‘gk’,raw);
+// Auto-save to vault too
+ls.set(‘vault’,raw);
+document.getElementById(‘vaultIn’).value=raw;
+document.getElementById(‘gemIn’).value=mask(raw);
+document.getElementById(‘gemMsg’).innerHTML=iHtml(‘ig’,‘Saved and backed up to vault!’);
+refreshKeyBar();toast(‘Gemini key saved!’);
 }
 function clearKey(){
-  if(!confirm('Remove saved key?'))return;
-  S.gemKey='';ls.del('gk');
-  document.getElementById('gemIn').value='';
-  document.getElementById('gemMsg').innerHTML='';
-  refreshKeyBar();toast('Key removed','warn');
+if(!confirm(‘Remove saved key?’))return;
+S.gemKey=’’;ls.del(‘gk’);
+document.getElementById(‘gemIn’).value=’’;
+document.getElementById(‘gemMsg’).innerHTML=’’;
+refreshKeyBar();toast(‘Key removed’,‘warn’);
 }
 function saveVault(){
-  const raw=document.getElementById('vaultIn').value.trim();
-  if(raw.length<10){toast('Key too short','err');return;}
-  ls.set('vault',raw);
-  // Also set as main key
-  S.gemKey=raw;ls.set('gk',raw);
-  document.getElementById('gemIn').value=mask(raw);
-  refreshKeyBar();toast('Vault saved - key will survive app restarts!');
+const raw=document.getElementById(‘vaultIn’).value.trim();
+if(raw.length<10){toast(‘Key too short’,‘err’);return;}
+ls.set(‘vault’,raw);
+// Also set as main key
+S.gemKey=raw;ls.set(‘gk’,raw);
+document.getElementById(‘gemIn’).value=mask(raw);
+refreshKeyBar();toast(‘Vault saved - key will survive app restarts!’);
 }
 function reloadFromVault(){
-  const v=ls.get('vault');
-  if(!v){toast('No vault key saved yet','err');return;}
-  S.gemKey=v;ls.set('gk',v);
-  document.getElementById('gemIn').value=mask(v);
-  refreshKeyBar();toast('Key reloaded from vault!');
+const v=ls.get(‘vault’);
+if(!v){toast(‘No vault key saved yet’,‘err’);return;}
+S.gemKey=v;ls.set(‘gk’,v);
+document.getElementById(‘gemIn’).value=mask(v);
+refreshKeyBar();toast(‘Key reloaded from vault!’);
 }
-function savePIN(){const v=String(document.getElementById('pinIn').value).trim();if(v.length!==4||isNaN(Number(v))){toast('Enter exactly 4 digits','err');return;}ls.set('pin',v);document.getElementById('pinIn').value='';toast('PIN saved!');}
-function clearPIN(){ls.del('pin');toast('PIN removed','warn');}
+function savePIN(){const v=String(document.getElementById(‘pinIn’).value).trim();if(v.length!==4||isNaN(Number(v))){toast(‘Enter exactly 4 digits’,‘err’);return;}ls.set(‘pin’,v);document.getElementById(‘pinIn’).value=’’;toast(‘PIN saved!’);}
+function clearPIN(){ls.del(‘pin’);toast(‘PIN removed’,‘warn’);}
 function refreshKeyBar(){
-  const ok=!!S.gemKey;
-  document.getElementById('kdot').className='kdot'+(ok?' ok':'');
-  document.getElementById('klbl').textContent=ok?'Gemini AI ready - Free key active':'No API key - AI disabled';
-  document.getElementById('ksub').textContent=ok?mask(S.gemKey)+' - tap Setup to change':'Go to Setup and paste your free Gemini key';
+const ok=!!S.gemKey;
+document.getElementById(‘kdot’).className=‘kdot’+(ok?’ ok’:’’);
+document.getElementById(‘klbl’).textContent=ok?‘Gemini AI ready - Free key active’:‘No API key - AI disabled’;
+document.getElementById(‘ksub’).textContent=ok?mask(S.gemKey)+’ - tap Setup to change’:‘Go to Setup and paste your free Gemini key’;
 }
 function saveDefaults(){
-  S.duration=document.getElementById('cfgDur').value;
-  S.returns=document.getElementById('cfgRet').value;
-  S.shipping=parseFloat(document.getElementById('cfgShip').value)||4.99;
-  S.envCutoff=parseFloat(document.getElementById('cfgEnv').value)||20;
-  ls.set('dur',S.duration);ls.set('ret',S.returns);ls.set('ship',S.shipping);ls.set('env',S.envCutoff);
-  toast('Saved!');
+S.duration=document.getElementById(‘cfgDur’).value;
+S.returns=document.getElementById(‘cfgRet’).value;
+S.shipping=parseFloat(document.getElementById(‘cfgShip’).value)||4.99;
+S.envCutoff=parseFloat(document.getElementById(‘cfgEnv’).value)||20;
+ls.set(‘dur’,S.duration);ls.set(‘ret’,S.returns);ls.set(‘ship’,S.shipping);ls.set(‘env’,S.envCutoff);
+toast(‘Saved!’);
 }
 function buildColors(){
-  document.getElementById('cpick').innerHTML=COLORS.map((c,i)=>'<div class="copt'+(i===0?' sel':'')+'" style="background:'+c+'" onclick="pickCol(this,\''+c+'\')"></div>').join('');
+document.getElementById(‘cpick’).innerHTML=COLORS.map((c,i)=>’<div class="copt'+(i===0?' sel':'')+'" style="background:'+c+'" onclick="pickCol(this,\''+c+'\')"></div>’).join(’’);
 }
-function pickCol(el,c){document.querySelectorAll('.copt').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');selColor=c;}
+function pickCol(el,c){document.querySelectorAll(’.copt’).forEach(e=>e.classList.remove(‘sel’));el.classList.add(‘sel’);selColor=c;}
 function addAcct(){
-  const n=document.getElementById('newName').value.trim();
-  if(!n){toast('Enter account name','err');return;}
-  const a={id:'a'+Date.now(),name:n,color:selColor};
-  S.accounts.push(a);ls.set('accts',S.accounts);
-  if(!S.activeId){S.activeId=a.id;ls.set('aid',a.id);}
-  document.getElementById('newName').value='';renderAccts();updateBanner();toast('Account added!');
+const n=document.getElementById(‘newName’).value.trim();
+if(!n){toast(‘Enter account name’,‘err’);return;}
+const a={id:‘a’+Date.now(),name:n,color:selColor};
+S.accounts.push(a);ls.set(‘accts’,S.accounts);
+if(!S.activeId){S.activeId=a.id;ls.set(‘aid’,a.id);}
+document.getElementById(‘newName’).value=’’;renderAccts();updateBanner();toast(‘Account added!’);
 }
-function setActive(id){S.activeId=id;ls.set('aid',id);renderAccts();updateBanner();goTab('list');}
+function setActive(id){S.activeId=id;ls.set(‘aid’,id);renderAccts();updateBanner();goTab(‘list’);}
 function delAcct(id){
-  if(!confirm('Remove?'))return;
-  S.accounts=S.accounts.filter(a=>a.id!==id);ls.set('accts',S.accounts);
-  if(S.activeId===id){S.activeId=S.accounts[0]?.id||null;ls.set('aid',S.activeId||null);}
-  renderAccts();updateBanner();
+if(!confirm(‘Remove?’))return;
+S.accounts=S.accounts.filter(a=>a.id!==id);ls.set(‘accts’,S.accounts);
+if(S.activeId===id){S.activeId=S.accounts[0]?.id||null;ls.set(‘aid’,S.activeId||null);}
+renderAccts();updateBanner();
 }
 function renderAccts(){
-  const el=document.getElementById('acctList');
-  const lbl=document.getElementById('actLbl');
-  if(lbl)lbl.textContent=S.accounts.length+' account'+(S.accounts.length!==1?'s':'');
-  if(!S.accounts.length){el.innerHTML='<div class="empty"><div class="empty-i">No accounts yet.</div></div>';return;}
-  el.innerHTML='<div class="acct-stack">'+S.accounts.map(a=>{
-    const act=a.id===S.activeId;
-    const ct=S.exported.filter(p=>p.acctId===a.id).length;
-    return '<div class="ai'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">'
-      +'<div class="ai-dot" style="background:'+a.color+'"></div>'
-      +'<div class="ai-body"><div class="ai-name">'+a.name+'</div>'
-      +'<div class="ai-det">'+ct+' card'+(ct!==1?'s':'')+' ready'+(act?' - ACTIVE':'')+'</div></div>'
-      +(act?'<div class="ai-badge">ACTIVE</div>':'')
-      +'<button class="ai-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">X</button>'
-      +'</div>';
-  }).join('')+'</div>';
+const el=document.getElementById(‘acctList’);
+const lbl=document.getElementById(‘actLbl’);
+if(lbl)lbl.textContent=S.accounts.length+’ account’+(S.accounts.length!==1?‘s’:’’);
+if(!S.accounts.length){el.innerHTML=’<div class="empty"><div class="empty-i">No accounts yet.</div></div>’;return;}
+el.innerHTML=’<div class="acct-stack">’+S.accounts.map(a=>{
+const act=a.id===S.activeId;
+const ct=S.exported.filter(p=>p.acctId===a.id).length;
+return ‘<div class="ai'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">’
++’<div class="ai-dot" style="background:'+a.color+'"></div>’
++’<div class="ai-body"><div class="ai-name">’+a.name+’</div>’
++’<div class="ai-det">’+ct+’ card’+(ct!==1?‘s’:’’)+’ ready’+(act?’ - ACTIVE’:’’)+’</div></div>’
++(act?’<div class="ai-badge">ACTIVE</div>’:’’)
++’<button class="ai-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">X</button>’
++’</div>’;
+}).join(’’)+’</div>’;
 }
 function updateBanner(){
-  const a=S.accounts.find(x=>x.id===S.activeId);
-  document.getElementById('abd').style.background=a?a.color:'#cbd5e1';
-  document.getElementById('abn').textContent=a?a.name:'No account - add one first';
+const a=S.accounts.find(x=>x.id===S.activeId);
+document.getElementById(‘abd’).style.background=a?a.color:’#cbd5e1’;
+document.getElementById(‘abn’).textContent=a?a.name:‘No account - add one first’;
 }
-function onFiles(e){addToQueue([...e.target.files]);e.target.value='';}
-function doDrag(e,on){e.preventDefault();document.getElementById('dropzone').classList.toggle('drag',!!on);}
+function onFiles(e){addToQueue([…e.target.files]);e.target.value=’’;}
+function doDrag(e,on){e.preventDefault();document.getElementById(‘dropzone’).classList.toggle(‘drag’,!!on);}
 function doDrop(e){
-  e.preventDefault();
-  document.getElementById('dropzone').classList.remove('drag');
-  addToQueue([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));
+e.preventDefault();
+document.getElementById(‘dropzone’).classList.remove(‘drag’);
+addToQueue([…e.dataTransfer.files].filter(f=>f.type.startsWith(‘image/’)));
 }
 function addToQueue(files){
-  if(!S.gemKey){toast('Add Gemini key in Setup first','err');goTab('setup');return;}
-  if(!S.activeId){toast('Add eBay account first','err');goTab('accts');return;}
-  files.forEach(f=>{
-    const id='c'+Date.now()+Math.random().toString(36).slice(2,5);
-    const r=new FileReader();
-    r.onload=ev=>{
-      S.queue.push({id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:'pending',result:null,error:null,acctId:S.activeId});
-      renderQueue();
-      if(files.length===1)analyzeCard(S.queue[S.queue.length-1]);
-    };
-    r.readAsDataURL(f);
-  });
+if(!S.gemKey){toast(‘Add Gemini key in Setup first’,‘err’);goTab(‘setup’);return;}
+if(!S.activeId){toast(‘Add eBay account first’,‘err’);goTab(‘accts’);return;}
+files.forEach(f=>{
+const id=‘c’+Date.now()+Math.random().toString(36).slice(2,5);
+const r=new FileReader();
+r.onload=ev=>{
+S.queue.push({id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:‘pending’,result:null,error:null,acctId:S.activeId});
+renderQueue();
+if(files.length===1)analyzeCard(S.queue[S.queue.length-1]);
+};
+r.readAsDataURL(f);
+});
 }
-const PROMPT='You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface, excellent centering","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}\n\nebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.\ndescription: 190-220 words professional listing. Ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.\nsuggestedBIN: accurate current eBay market USD price.\nsearchTags: 6-8 terms real buyers search.';
+const PROMPT=‘You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{“player”:””,“year”:””,“brand”:””,“set”:””,“cardNumber”:””,“variation”:””,“team”:””,“sport”:“Baseball”,“position”:””,“isRookie”:false,“is1stBowman”:false,“isAuto”:false,“isNumbered”:false,“serialNumber”:null,“serialOf”:null,“isGraded”:false,“gradingCompany”:null,“grade”:null,“condition”:“Near Mint-Mint”,“conditionNote”:“Sharp corners, clean surface, excellent centering”,“ebayTitle”:””,“description”:””,“suggestedBIN”:0,“searchTags”:[]}\n\nebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.\ndescription: 190-220 words professional listing. Ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.\nsuggestedBIN: accurate current eBay market USD price.\nsearchTags: 6-8 terms real buyers search.’;
 
 async function callAI(rawDataUrl){
-  // Compress image before sending
-  const compressed=await compressImage(rawDataUrl);
-  const base64=compressed.includes(',')?compressed.split(',')[1]:compressed;
-  const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
-  const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:'image/jpeg',data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:1500}});
-  let resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':S.gemKey},body});
-  if(resp.status===401||resp.status===403){
-    resp=await fetch(url+'?key='+encodeURIComponent(S.gemKey),{method:'POST',headers:{'Content-Type':'application/json'},body});
-  }
-  if(!resp.ok){
-    const e=await resp.json().catch(()=>({}));
-    const msg=e.error?e.error.message:'Error '+resp.status;
-    if(resp.status===401||resp.status===403)throw new Error('Key rejected - check Setup tab');
-    if(resp.status===429)throw new Error('Rate limit - wait 1 min and retry');
-    throw new Error(msg.slice(0,140));
-  }
-  const d=await resp.json();
-  const txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:'';
-  if(!txt)throw new Error('Empty response - tap AI to retry');
-  const cleaned=txt.replace(/```json/g,'').replace(/```/g,'').trim();
-  return JSON.parse(cleaned);
+// Compress image before sending
+const compressed=await compressImage(rawDataUrl);
+const base64=compressed.includes(’,’)?compressed.split(’,’)[1]:compressed;
+const url=‘https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent’;
+const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:‘image/jpeg’,data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}});
+let resp=await fetch(url,{method:‘POST’,headers:{‘Content-Type’:‘application/json’,‘x-goog-api-key’:S.gemKey},body});
+if(resp.status===401||resp.status===403){
+resp=await fetch(url+’?key=’+encodeURIComponent(S.gemKey),{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body});
 }
-const STEPS=['Compressing image...','Sending to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel...','Assessing condition...','Writing eBay title...','Setting market price...'];
+if(!resp.ok){
+const e=await resp.json().catch(()=>({}));
+const msg=e.error?e.error.message:‘Error ‘+resp.status;
+if(resp.status===401||resp.status===403)throw new Error(‘Key rejected - check Setup tab’);
+if(resp.status===429)throw new Error(‘Rate limit - wait 1 min and retry’);
+throw new Error(msg.slice(0,140));
+}
+const d=await resp.json();
+const txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:’’;
+if(!txt)throw new Error(‘Empty response - tap AI to retry’);
+// Extract JSON even if response is truncated
+let cleaned=txt.replace(/`json/g,'').replace(/`/g,’’).trim();
+// Find the JSON object boundaries
+const start=cleaned.indexOf(’{’);
+if(start<0)throw new Error(‘No JSON in response - tap AI to retry’);
+cleaned=cleaned.slice(start);
+// If truncated, try to close the JSON
+try{
+return JSON.parse(cleaned);
+}catch(e1){
+// Try adding closing brace if truncated
+try{return JSON.parse(cleaned+’}’);}catch(e2){}
+// Try closing with missing fields filled in
+try{
+const partial=cleaned.replace(/,\s*”[^”]*”\s*:\s*[^,}]*$/,’’);
+return JSON.parse(partial+’}’);
+}catch(e3){}
+throw new Error(‘JSON Parse error - tap AI to retry’);
+}
+}
+const STEPS=[‘Compressing image…’,‘Sending to Gemini…’,‘Identifying player…’,‘Reading year and set…’,‘Detecting card number…’,‘Checking parallel…’,‘Assessing condition…’,‘Writing eBay title…’,‘Setting market price…’];
 async function analyzeCard(item){
-  item.status='reading';renderQI(item);
-  let si=0;showLdr('Reading card...',STEPS[0]);
-  const t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById('ldrS').textContent=STEPS[si];},900);
-  try{
-    if(S.stop)throw new Error('Cancelled');
-    const result=await callAI(item.rawData);
-    item.result=result;item.status='ready';
-    item.name=(result.player&&result.year)?result.player+' '+result.year:item.name;
-  }catch(e){
-    item.status='error';item.error=e.message||'Failed';
-    if(e.message!=='Cancelled')toast(item.error,'err');
-  }
-  clearInterval(t);hideLdr();S.stop=false;renderQI(item);refreshStats();
-  if(item.status==='ready')showPreview(item);
+item.status=‘reading’;renderQI(item);
+let si=0;showLdr(‘Reading card…’,STEPS[0]);
+const t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById(‘ldrS’).textContent=STEPS[si];},900);
+try{
+if(S.stop)throw new Error(‘Cancelled’);
+const result=await callAI(item.rawData);
+item.result=result;item.status=‘ready’;
+item.name=(result.player&&result.year)?result.player+’ ‘+result.year:item.name;
+}catch(e){
+item.status=‘error’;item.error=e.message||‘Failed’;
+if(e.message!==‘Cancelled’)toast(item.error,‘err’);
+}
+clearInterval(t);hideLdr();S.stop=false;renderQI(item);refreshStats();
+if(item.status===‘ready’)showPreview(item);
 }
 async function analyzeById(id){const i=S.queue.find(x=>x.id===id);if(i)await analyzeCard(i);}
 async function runBatch(){
-  const pend=S.queue.filter(i=>i.status==='pending'||i.status==='error');
-  if(!pend.length){toast('No pending cards');return;}
-  S.stop=false;
-  const btn=document.getElementById('batchBtn');
-  btn.textContent='Stop';btn.onclick=function(){S.stop=true;};
-  document.getElementById('bprog').style.display='block';
-  let done=0;const tot=pend.length;
-  for(const item of pend){
-    if(S.stop)break;
-    document.getElementById('bst').textContent=(done+1)+'/'+tot+': '+item.name+'...';
-    item.status='reading';renderQI(item);showLdr('Card '+(done+1)+' of '+tot,'Compressing...');
-    try{
-      const result=await callAI(item.rawData);
-      item.result=result;item.status='ready';
-      item.name=(result.player&&result.year)?result.player+' '+result.year:item.name;
-    }catch(e){item.status='error';item.error=e.message.slice(0,80);}
-    hideLdr();done++;
-    document.getElementById('bfill').style.width=Math.round(done/tot*100)+'%';
-    document.getElementById('binfo').textContent=done+'/'+tot+' done';
-    renderQI(item);refreshStats();
-    await sleep(600);
-  }
-  S.stop=false;btn.textContent='AI Read All Cards';btn.onclick=runBatch;
-  document.getElementById('bst').textContent='Done - '+done+'/'+tot+' analyzed';
-  toast(done+' cards analyzed!');
+const pend=S.queue.filter(i=>i.status===‘pending’||i.status===‘error’);
+if(!pend.length){toast(‘No pending cards’);return;}
+S.stop=false;
+const btn=document.getElementById(‘batchBtn’);
+btn.textContent=‘Stop’;btn.onclick=function(){S.stop=true;};
+document.getElementById(‘bprog’).style.display=‘block’;
+let done=0;const tot=pend.length;
+for(const item of pend){
+if(S.stop)break;
+document.getElementById(‘bst’).textContent=(done+1)+’/’+tot+’: ‘+item.name+’…’;
+item.status=‘reading’;renderQI(item);showLdr(’Card ‘+(done+1)+’ of ‘+tot,‘Compressing…’);
+try{
+const result=await callAI(item.rawData);
+item.result=result;item.status=‘ready’;
+item.name=(result.player&&result.year)?result.player+’ ’+result.year:item.name;
+}catch(e){item.status=‘error’;item.error=e.message.slice(0,80);}
+hideLdr();done++;
+document.getElementById(‘bfill’).style.width=Math.round(done/tot*100)+’%’;
+document.getElementById(‘binfo’).textContent=done+’/’+tot+’ done’;
+renderQI(item);refreshStats();
+await sleep(600);
+}
+S.stop=false;btn.textContent=‘AI Read All Cards’;btn.onclick=runBatch;
+document.getElementById(‘bst’).textContent=‘Done - ‘+done+’/’+tot+’ analyzed’;
+toast(done+’ cards analyzed!’);
 }
 function renderQueue(){
-  const ct=S.queue.length;
-  document.getElementById('qct').textContent=ct;
-  document.getElementById('binfo').textContent=ct+' card'+(ct!==1?'s':'');
-  document.getElementById('qwrap').style.display=ct?'block':'none';
-  document.getElementById('qlist').innerHTML=S.queue.map(buildQI).join('');
-  refreshStats();
+const ct=S.queue.length;
+document.getElementById(‘qct’).textContent=ct;
+document.getElementById(‘binfo’).textContent=ct+’ card’+(ct!==1?‘s’:’’);
+document.getElementById(‘qwrap’).style.display=ct?‘block’:‘none’;
+document.getElementById(‘qlist’).innerHTML=S.queue.map(buildQI).join(’’);
+refreshStats();
 }
-function renderQI(item){const el=document.getElementById('qi_'+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
+function renderQI(item){const el=document.getElementById(‘qi_’+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
 function buildQI(item){
-  const sc={pending:'sp',reading:'sr',ready:'sok',error:'se'};
-  const sl={pending:'Pending',reading:'Reading...','ready':'Ready','error':'Error: '+(item.error||'')};
-  const a=S.accounts.find(x=>x.id===item.acctId);
-  const pr=item.result?item.result.suggestedBIN:null;
-  const env=pr&&pr<S.envCutoff;
-  let html='<div class="qi" id="qi_'+item.id+'">';
-  html+=item.thumb?'<img class="qi-img" src="'+item.thumb+'" alt=""/>':'<div class="qi-ph">Card</div>';
-  html+='<div class="qi-body">';
-  html+='<div class="qi-name">'+(item.result?item.result.player:item.name)+'</div>';
-  html+='<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">'+(sl[item.status]||item.status)+'</span></div>';
-  if(a)html+='<div class="qi-acct"><div class="qi-adot" style="background:'+a.color+'"></div><span style="color:#64748b;font-size:10px">'+a.name+'</span></div>';
-  if(pr)html+='<div class="qi-price">$'+pr+' BIN</div>';
-  if(pr)html+='<div class="qi-ship">'+(env?'Envelope $1.00':'USPS $'+S.shipping)+'</div>';
-  if(item.result&&item.result.ebayTitle)html+='<div class="qi-meta">'+item.result.ebayTitle+'</div>';
-  html+='</div>';
-  html+='<div class="qi-side">';
-  if(item.status==='ready')html+='<button class="qib" onclick="showPreview(S.queue.find(function(i){return i.id===\''+item.id+'\'}))">View</button>';
-  if(item.status!=='reading'&&item.status!=='ready')html+='<button class="qib" onclick="analyzeById(\''+item.id+'\')" style="font-size:10px;font-weight:800;color:#1d4ed8">AI</button>';
-  html+='<button class="qib" onclick="rmCard(\''+item.id+'\')">X</button>';
-  html+='</div></div>';
-  return html;
+const sc={pending:‘sp’,reading:‘sr’,ready:‘sok’,error:‘se’};
+const sl={pending:‘Pending’,reading:‘Reading…’,‘ready’:‘Ready’,‘error’:‘Error: ‘+(item.error||’’)};
+const a=S.accounts.find(x=>x.id===item.acctId);
+const pr=item.result?item.result.suggestedBIN:null;
+const env=pr&&pr<S.envCutoff;
+let html=’<div class="qi" id="qi_'+item.id+'">’;
+html+=item.thumb?’<img class="qi-img" src="'+item.thumb+'" alt=""/>’:’<div class="qi-ph">Card</div>’;
+html+=’<div class="qi-body">’;
+html+=’<div class="qi-name">’+(item.result?item.result.player:item.name)+’</div>’;
+html+=’<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">’+(sl[item.status]||item.status)+’</span></div>’;
+if(a)html+=’<div class="qi-acct"><div class="qi-adot" style="background:'+a.color+'"></div><span style="color:#64748b;font-size:10px">’+a.name+’</span></div>’;
+if(pr)html+=’<div class="qi-price">$’+pr+’ BIN</div>’;
+if(pr)html+=’<div class="qi-ship">’+(env?‘Envelope $1.00’:‘USPS $’+S.shipping)+’</div>’;
+if(item.result&&item.result.ebayTitle)html+=’<div class="qi-meta">’+item.result.ebayTitle+’</div>’;
+html+=’</div>’;
+html+=’<div class="qi-side">’;
+if(item.status===‘ready’)html+=’<button class="qib" onclick="showPreview(S.queue.find(function(i){return i.id===\''+item.id+'\'}))">View</button>’;
+if(item.status!==‘reading’&&item.status!==‘ready’)html+=’<button class="qib" onclick="analyzeById(\''+item.id+'\')" style="font-size:10px;font-weight:800;color:#1d4ed8">AI</button>’;
+html+=’<button class="qib" onclick="rmCard(\''+item.id+'\')">X</button>’;
+html+=’</div></div>’;
+return html;
 }
 function rmCard(id){S.queue=S.queue.filter(i=>i.id!==id);renderQueue();}
 function clearQueue(){
-  if(!confirm('Clear all cards?'))return;
-  S.queue=[];
-  document.getElementById('qlist').innerHTML='';
-  document.getElementById('qwrap').style.display='none';
-  document.getElementById('prevArea').innerHTML='';
-  refreshStats();
+if(!confirm(‘Clear all cards?’))return;
+S.queue=[];
+document.getElementById(‘qlist’).innerHTML=’’;
+document.getElementById(‘qwrap’).style.display=‘none’;
+document.getElementById(‘prevArea’).innerHTML=’’;
+refreshStats();
 }
 function showPreview(item){
-  if(!item||!item.result)return;
-  const d=item.result;
-  const pr=d.suggestedBIN||9.99;
-  const env=pr<S.envCutoff;
-  const sec=document.getElementById('prevArea');
-  let asgH='';
-  if(S.accounts.length>1){
-    asgH='<div class="asgn-row"><div class="pf-lbl">Assign to account</div><div class="asgn-grid" id="ag_'+item.id+'">';
-    S.accounts.forEach(function(a){
-      asgH+='<button class="asgn-btn'+(a.id===item.acctId?' sel':'')+'" onclick="reassign(\''+item.id+'\',\''+a.id+'\',this)"><div class="asgn-dot" style="background:'+a.color+'"></div>'+a.name+'</button>';
-    });
-    asgH+='</div></div>';
-  }
-  const titleLen=(d.ebayTitle||'').length;
-  let html='<div class="prev" id="pv_'+item.id+'">';
-  html+='<div class="prev-hdr"><div class="prev-ttl">Listing Ready - Review and Edit</div>';
-  html+='<div style="display:flex;gap:5px">';
-  html+='<button class="btn bg-o bsm" onclick="copyCard(\''+item.id+'\')">Copy</button>';
-  html+='<button class="btn bg-o bsm" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>';
-  html+='</div></div>';
-  html+=asgH;
-  html+='<div class="pf"><div class="pf-lbl">eBay Title (max 80)</div>';
-  html+='<textarea class="pf-inp" id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length+\'/80\'">'+hEsc(d.ebayTitle)+'</textarea>';
-  html+='<div style="font-size:9px;color:#94a3b8;margin-top:2px" id="ptc_'+item.id+'">'+titleLen+'/80</div></div>';
-  html+='<div class="pf"><div class="pf-lbl">Description</div>';
-  html+='<textarea class="pf-inp" id="pd_'+item.id+'" rows="5">'+hEsc(d.description)+'</textarea></div>';
-  html+='<div class="pf"><div class="pf-lbl">Buy It Now Price - Fixed Price Only</div>';
-  html+='<div class="pbox"><div class="pbl">BUY IT NOW</div>';
-  html+='<div class="prow"><span class="pcur">$</span>';
-  html+='<input class="pinp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="liveShip(\''+item.id+'\',this.value)"/>';
-  html+='</div></div></div>';
-  html+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
-  html+='<div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl_'+item.id+'" value="'+hEsc(d.player)+'"/></div>';
-  html+='<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr_'+item.id+'" value="'+hEsc(d.year)+'"/></div></div>';
-  html+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
-  html+='<div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst_'+item.id+'" value="'+hEsc(d.set)+'"/></div>';
-  html+='<div><div class="pf-lbl">Card #</div><input class="pf-inp" id="pcn_'+item.id+'" value="'+hEsc(d.cardNumber)+'"/></div></div>';
-  html+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
-  html+='<div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pvr_'+item.id+'" value="'+hEsc(d.variation)+'"/></div>';
-  html+='<div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm_'+item.id+'" value="'+hEsc(d.team)+'"/></div></div>';
-  html+='<div class="pf"><div class="pf-lbl">Condition Note</div>';
-  html+='<input class="pf-inp" id="pco_'+item.id+'" value="'+hEsc(d.conditionNote)+'"/></div>';
-  html+='<div class="pf" style="display:flex;align-items:center;gap:10px">';
-  html+='<div class="pf-lbl" style="margin:0;flex-shrink:0">Shipping:</div>';
-  html+='<div class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">'+(env?'Envelope $1.00':'USPS $'+S.shipping)+'</div></div>';
-  if(d.searchTags&&d.searchTags.length){
-    html+='<div class="tags-row">';
-    d.searchTags.forEach(function(t){html+='<span class="tag">'+t+'</span>';});
-    html+='</div>';
-  }
-  html+='<div class="prev-btns">';
-  html+='<button class="btn bg-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>';
-  html+='<button class="btn bg-o" onclick="copyCard(\''+item.id+'\')">Copy</button>';
-  html+='</div></div>';
-  sec.innerHTML=html;
-  sec.scrollIntoView({behavior:'smooth',block:'start'});
+if(!item||!item.result)return;
+const d=item.result;
+const pr=d.suggestedBIN||9.99;
+const env=pr<S.envCutoff;
+const sec=document.getElementById(‘prevArea’);
+let asgH=’’;
+if(S.accounts.length>1){
+asgH=’<div class="asgn-row"><div class="pf-lbl">Assign to account</div><div class="asgn-grid" id="ag_'+item.id+'">’;
+S.accounts.forEach(function(a){
+asgH+=’<button class="asgn-btn'+(a.id===item.acctId?' sel':'')+'" onclick="reassign(\''+item.id+'\',\''+a.id+'\',this)"><div class="asgn-dot" style="background:'+a.color+'"></div>’+a.name+’</button>’;
+});
+asgH+=’</div></div>’;
 }
-function hEsc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+const titleLen=(d.ebayTitle||’’).length;
+let html=’<div class="prev" id="pv_'+item.id+'">’;
+html+=’<div class="prev-hdr"><div class="prev-ttl">Listing Ready - Review and Edit</div>’;
+html+=’<div style="display:flex;gap:5px">’;
+html+=’<button class="btn bg-o bsm" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
+html+=’<button class="btn bg-o bsm" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>’;
+html+=’</div></div>’;
+html+=asgH;
+html+=’<div class="pf"><div class="pf-lbl">eBay Title (max 80)</div>’;
+html+=’<textarea class="pf-inp" id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length+\'/80\'">’+hEsc(d.ebayTitle)+’</textarea>’;
+html+=’<div style="font-size:9px;color:#94a3b8;margin-top:2px" id="ptc_'+item.id+'">’+titleLen+’/80</div></div>’;
+html+=’<div class="pf"><div class="pf-lbl">Description</div>’;
+html+=’<textarea class="pf-inp" id="pd_'+item.id+'" rows="5">’+hEsc(d.description)+’</textarea></div>’;
+html+=’<div class="pf"><div class="pf-lbl">Buy It Now Price - Fixed Price Only</div>’;
+html+=’<div class="pbox"><div class="pbl">BUY IT NOW</div>’;
+html+=’<div class="prow"><span class="pcur">$</span>’;
+html+=’<input class="pinp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="liveShip(\''+item.id+'\',this.value)"/>’;
+html+=’</div></div></div>’;
+html+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">’;
+html+=’<div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl_'+item.id+'" value="'+hEsc(d.player)+'"/></div>’;
+html+=’<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr_'+item.id+'" value="'+hEsc(d.year)+'"/></div></div>’;
+html+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">’;
+html+=’<div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst_'+item.id+'" value="'+hEsc(d.set)+'"/></div>’;
+html+=’<div><div class="pf-lbl">Card #</div><input class="pf-inp" id="pcn_'+item.id+'" value="'+hEsc(d.cardNumber)+'"/></div></div>’;
+html+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">’;
+html+=’<div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pvr_'+item.id+'" value="'+hEsc(d.variation)+'"/></div>’;
+html+=’<div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm_'+item.id+'" value="'+hEsc(d.team)+'"/></div></div>’;
+html+=’<div class="pf"><div class="pf-lbl">Condition Note</div>’;
+html+=’<input class="pf-inp" id="pco_'+item.id+'" value="'+hEsc(d.conditionNote)+'"/></div>’;
+html+=’<div class="pf" style="display:flex;align-items:center;gap:10px">’;
+html+=’<div class="pf-lbl" style="margin:0;flex-shrink:0">Shipping:</div>’;
+html+=’<div class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">’+(env?‘Envelope $1.00’:‘USPS $’+S.shipping)+’</div></div>’;
+if(d.searchTags&&d.searchTags.length){
+html+=’<div class="tags-row">’;
+d.searchTags.forEach(function(t){html+=’<span class="tag">’+t+’</span>’;});
+html+=’</div>’;
+}
+html+=’<div class="prev-btns">’;
+html+=’<button class="btn bg-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>’;
+html+=’<button class="btn bg-o" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
+html+=’</div></div>’;
+sec.innerHTML=html;
+sec.scrollIntoView({behavior:‘smooth’,block:‘start’});
+}
+function hEsc(s){return(s||’’).replace(/&/g,’&’).replace(/”/g,’"’).replace(/</g,’<’).replace(/>/g,’>’);}
 function liveShip(id,val){
-  const t=document.getElementById('stag_'+id);
-  if(!t)return;
-  const env=parseFloat(val)<S.envCutoff;
-  t.className='stag '+(env?'senv':'susps');
-  t.textContent=env?'Envelope $1.00':'USPS $'+S.shipping;
+const t=document.getElementById(‘stag_’+id);
+if(!t)return;
+const env=parseFloat(val)<S.envCutoff;
+t.className=‘stag ‘+(env?‘senv’:‘susps’);
+t.textContent=env?‘Envelope $1.00’:‘USPS $’+S.shipping;
 }
 function reassign(cId,aId,btn){
-  const i=S.queue.find(x=>x.id===cId);
-  if(i)i.acctId=aId;
-  renderQI(i);
-  const grid=document.getElementById('ag_'+cId);
-  if(grid)grid.querySelectorAll('.asgn-btn').forEach(function(b){b.classList.remove('sel');});
-  btn.classList.add('sel');
+const i=S.queue.find(x=>x.id===cId);
+if(i)i.acctId=aId;
+renderQI(i);
+const grid=document.getElementById(‘ag_’+cId);
+if(grid)grid.querySelectorAll(’.asgn-btn’).forEach(function(b){b.classList.remove(‘sel’);});
+btn.classList.add(‘sel’);
 }
 function copyCard(id){
-  const item=S.queue.find(function(i){return i.id===id;});
-  if(!item||!item.result)return;
-  const title=document.getElementById('pt_'+id)?document.getElementById('pt_'+id).value:item.result.ebayTitle||'';
-  const desc=document.getElementById('pd_'+id)?document.getElementById('pd_'+id).value:item.result.description||'';
-  const bin=document.getElementById('pp_'+id)?document.getElementById('pp_'+id).value:item.result.suggestedBIN;
-  const txt='TITLE:\n'+title+'\n\nBUY IT NOW: $'+bin+'\n\nDESCRIPTION:\n'+desc;
-  navigator.clipboard.writeText(txt).then(function(){toast('Copied!');}).catch(function(){
-    const ta=document.createElement('textarea');ta.value=txt;
-    ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);
-    ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');
-  });
+const item=S.queue.find(function(i){return i.id===id;});
+if(!item||!item.result)return;
+const title=document.getElementById(‘pt_’+id)?document.getElementById(‘pt_’+id).value:item.result.ebayTitle||’’;
+const desc=document.getElementById(‘pd_’+id)?document.getElementById(‘pd_’+id).value:item.result.description||’’;
+const bin=document.getElementById(‘pp_’+id)?document.getElementById(‘pp_’+id).value:item.result.suggestedBIN;
+const txt=‘TITLE:\n’+title+’\n\nBUY IT NOW: $’+bin+’\n\nDESCRIPTION:\n’+desc;
+navigator.clipboard.writeText(txt).then(function(){toast(‘Copied!’);}).catch(function(){
+const ta=document.createElement(‘textarea’);ta.value=txt;
+ta.style.cssText=‘position:fixed;opacity:0’;document.body.appendChild(ta);
+ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);toast(‘Copied!’);
+});
 }
 function addExport(id){
-  const item=S.queue.find(function(i){return i.id===id;});
-  if(!item||!item.result)return;
-  const price=parseFloat(document.getElementById('pp_'+id)?document.getElementById('pp_'+id).value:item.result.suggestedBIN);
-  const d=Object.assign({},item.result,{
-    _id:id,acctId:item.acctId||S.activeId,
-    ebayTitle:(document.getElementById('pt_'+id)?document.getElementById('pt_'+id).value:item.result.ebayTitle||'').slice(0,80),
-    description:document.getElementById('pd_'+id)?document.getElementById('pd_'+id).value:item.result.description||'',
-    suggestedBIN:price,
-    player:document.getElementById('ppl_'+id)?document.getElementById('ppl_'+id).value:item.result.player||'',
-    year:document.getElementById('pyr_'+id)?document.getElementById('pyr_'+id).value:item.result.year||'',
-    set:document.getElementById('pst_'+id)?document.getElementById('pst_'+id).value:item.result.set||'',
-    cardNumber:document.getElementById('pcn_'+id)?document.getElementById('pcn_'+id).value:item.result.cardNumber||'',
-    variation:document.getElementById('pvr_'+id)?document.getElementById('pvr_'+id).value:item.result.variation||'',
-    team:document.getElementById('ptm_'+id)?document.getElementById('ptm_'+id).value:item.result.team||'',
-    conditionNote:document.getElementById('pco_'+id)?document.getElementById('pco_'+id).value:item.result.conditionNote||'',
-    useEnvelope:price<S.envCutoff
-  });
-  const idx=S.exported.findIndex(function(p){return p._id===id;});
-  if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
-  addHistory(d);toast('Added to export!');
-  document.getElementById('prevArea').innerHTML='';
-  renderExport();refreshStats();
+const item=S.queue.find(function(i){return i.id===id;});
+if(!item||!item.result)return;
+const price=parseFloat(document.getElementById(‘pp_’+id)?document.getElementById(‘pp_’+id).value:item.result.suggestedBIN);
+const d=Object.assign({},item.result,{
+*id:id,acctId:item.acctId||S.activeId,
+ebayTitle:(document.getElementById(’pt*’+id)?document.getElementById(‘pt_’+id).value:item.result.ebayTitle||’’).slice(0,80),
+description:document.getElementById(‘pd_’+id)?document.getElementById(‘pd_’+id).value:item.result.description||’’,
+suggestedBIN:price,
+player:document.getElementById(‘ppl_’+id)?document.getElementById(‘ppl_’+id).value:item.result.player||’’,
+year:document.getElementById(‘pyr_’+id)?document.getElementById(‘pyr_’+id).value:item.result.year||’’,
+set:document.getElementById(‘pst_’+id)?document.getElementById(‘pst_’+id).value:item.result.set||’’,
+cardNumber:document.getElementById(‘pcn_’+id)?document.getElementById(‘pcn_’+id).value:item.result.cardNumber||’’,
+variation:document.getElementById(‘pvr_’+id)?document.getElementById(‘pvr_’+id).value:item.result.variation||’’,
+team:document.getElementById(‘ptm_’+id)?document.getElementById(‘ptm_’+id).value:item.result.team||’’,
+conditionNote:document.getElementById(‘pco_’+id)?document.getElementById(‘pco_’+id).value:item.result.conditionNote||’’,
+useEnvelope:price<S.envCutoff
+});
+const idx=S.exported.findIndex(function(p){return p.*id===id;});
+if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
+addHistory(d);toast(‘Added to export!’);
+document.getElementById(‘prevArea’).innerHTML=’’;
+renderExport();refreshStats();
 }
 function csvEsc(v){
-  const s=String(v||'').replace(/"/g,'""');
-  if(s.indexOf(',')>=0||s.indexOf('"')>=0||s.indexOf('\n')>=0||s.indexOf('\r')>=0)return'"'+s+'"';
-  return s;
+const s=String(v||’’).replace(/”/g,’””’);
+if(s.indexOf(’,’)>=0||s.indexOf(’”’)>=0||s.indexOf(’\n’)>=0||s.indexOf(’\r’)>=0)return’”’+s+’”’;
+return s;
 }
 function buildCSV(acctId){
-  const rows=S.exported.filter(function(d){return d.acctId===acctId;});
-  if(!rows.length)return'';
-  const cols=[CSV_H,'Title','Description','Category','BuyItNowPrice','Quantity','ConditionID','ConditionDescription','ListingDuration','ListingType','ReturnsAcceptedOption','ReturnsWithinOption','RefundOption','ShippingCostPaidByOption','ShippingService-1:Option','ShippingService-1:Cost','C:Player/Athlete','C:Year Manufactured','C:Set','C:Card Number','C:Parallel/Variety','C:Team','C:Sport'];
-  const dataRows=rows.map(function(d){
-    return['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',
-      (d.isGraded&&d.grade)?d.gradingCompany+' '+d.grade:'USED',
-      d.conditionNote||'Near Mint or Better',S.duration,'FixedPriceItem',
-      S.returns,'Days_30','MoneyBack','Buyer','USPSFirstClass',
-      d.useEnvelope?'1.00':String(S.shipping),
-      d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||'Baseball'];
-  });
-  return[cols].concat(dataRows).map(function(r){return r.map(csvEsc).join(',');}).join('\r\n');
+const rows=S.exported.filter(function(d){return d.acctId===acctId;});
+if(!rows.length)return’’;
+const cols=[CSV_H,‘Title’,‘Description’,‘Category’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ListingType’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
+const dataRows=rows.map(function(d){
+return[‘Add’,d.ebayTitle,d.description,CAT[d.sport]||‘213’,d.suggestedBIN||9.99,‘1’,
+(d.isGraded&&d.grade)?d.gradingCompany+’ ‘+d.grade:‘USED’,
+d.conditionNote||‘Near Mint or Better’,S.duration,‘FixedPriceItem’,
+S.returns,‘Days_30’,‘MoneyBack’,‘Buyer’,‘USPSFirstClass’,
+d.useEnvelope?‘1.00’:String(S.shipping),
+d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||‘Baseball’];
+});
+return[cols].concat(dataRows).map(function(r){return r.map(csvEsc).join(’,’);}).join(’\r\n’);
 }
 function dlCSV(acctId){
-  const csv=buildCSV(acctId);
-  if(!csv){toast('No cards','err');return;}
-  const a=S.accounts.find(function(x){return x.id===acctId;});
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const el=document.createElement('a');el.href=url;
-  el.download='ebay_'+(a?a.name:'cards').replace(/ /g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(el);el.click();document.body.removeChild(el);
-  URL.revokeObjectURL(url);toast('Downloaded!');
+const csv=buildCSV(acctId);
+if(!csv){toast(‘No cards’,‘err’);return;}
+const a=S.accounts.find(function(x){return x.id===acctId;});
+const blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
+const url=URL.createObjectURL(blob);
+const el=document.createElement(‘a’);el.href=url;
+el.download=’ebay*’+(a?a.name:‘cards’).replace(/ /g,’*’)+’*’+new Date().toISOString().slice(0,10)+’.csv’;
+document.body.appendChild(el);el.click();document.body.removeChild(el);
+URL.revokeObjectURL(url);toast(‘Downloaded!’);
 }
 function renderExport(){
-  const el=document.getElementById('expBlocks');
-  const emp=document.getElementById('expEmpty');
-  const guide=document.getElementById('expGuide');
-  const lbl=document.getElementById('expLbl');
-  if(lbl)lbl.textContent=S.exported.length+' ready';
-  if(!S.exported.length){el.innerHTML='';emp.style.display='block';if(guide)guide.style.display='none';return;}
-  emp.style.display='none';if(guide)guide.style.display='block';
-  const g={};
-  S.exported.forEach(function(d){if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);});
-  el.innerHTML=Object.keys(g).map(function(aId){
-    const cards=g[aId];
-    const a=S.accounts.find(function(x){return x.id===aId;});
-    const name=a?a.name:'Unknown';const color=a?a.color:'#888';
-    const tot=cards.reduce(function(s,c){return s+(c.suggestedBIN||0);},0);
-    const env=cards.filter(function(c){return c.useEnvelope;}).length;
-    let html='<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>';
-    html+='<div><div style="font-size:14px;font-weight:800;color:'+color+'">'+name+'</div>';
-    html+='<div style="font-size:10px;color:#64748b;margin-top:2px">'+cards.length+' listings - $'+Math.round(tot)+' - '+env+' envelope / '+(cards.length-env)+' USPS - All Buy It Now</div></div></div>';
-    html+='<div class="exp-body"><div style="margin-bottom:10px">';
-    cards.slice(0,6).forEach(function(c){
-      html+='<div class="exp-row"><div class="exp-name">'+(c.player||'Card')+' '+(c.year||'')+' '+(c.variation||'')+'</div>';
-      html+='<div style="font-size:10px;color:#94a3b8;margin:0 4px">'+(c.useEnvelope?'Env':'USPS')+'</div>';
-      html+='<div class="exp-price">$'+(c.suggestedBIN||'?')+' BIN</div></div>';
-    });
-    if(cards.length>6)html+='<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ '+(cards.length-6)+' more...</div>';
-    html+='</div>';
-    html+='<button class="btn bg-y" onclick="dlCSV(\''+aId+'\')">Download CSV for '+name+'</button>';
-    html+='<div style="font-size:11px;color:#64748b;margin-top:10px;line-height:1.7">Sign into <strong>'+name+'</strong> in Safari - Seller Hub - Reports - Upload Template - select this CSV.</div>';
-    html+='</div></div>';
-    return html;
-  }).join('');
+const el=document.getElementById(‘expBlocks’);
+const emp=document.getElementById(‘expEmpty’);
+const guide=document.getElementById(‘expGuide’);
+const lbl=document.getElementById(‘expLbl’);
+if(lbl)lbl.textContent=S.exported.length+’ ready’;
+if(!S.exported.length){el.innerHTML=’’;emp.style.display=‘block’;if(guide)guide.style.display=‘none’;return;}
+emp.style.display=‘none’;if(guide)guide.style.display=‘block’;
+const g={};
+S.exported.forEach(function(d){if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);});
+el.innerHTML=Object.keys(g).map(function(aId){
+const cards=g[aId];
+const a=S.accounts.find(function(x){return x.id===aId;});
+const name=a?a.name:‘Unknown’;const color=a?a.color:’#888’;
+const tot=cards.reduce(function(s,c){return s+(c.suggestedBIN||0);},0);
+const env=cards.filter(function(c){return c.useEnvelope;}).length;
+let html=’<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>’;
+html+=’<div><div style="font-size:14px;font-weight:800;color:'+color+'">’+name+’</div>’;
+html+=’<div style="font-size:10px;color:#64748b;margin-top:2px">’+cards.length+’ listings - $’+Math.round(tot)+’ - ‘+env+’ envelope / ‘+(cards.length-env)+’ USPS - All Buy It Now</div></div></div>’;
+html+=’<div class="exp-body"><div style="margin-bottom:10px">’;
+cards.slice(0,6).forEach(function(c){
+html+=’<div class="exp-row"><div class="exp-name">’+(c.player||‘Card’)+’ ‘+(c.year||’’)+’ ‘+(c.variation||’’)+’</div>’;
+html+=’<div style="font-size:10px;color:#94a3b8;margin:0 4px">’+(c.useEnvelope?‘Env’:‘USPS’)+’</div>’;
+html+=’<div class="exp-price">$’+(c.suggestedBIN||’?’)+’ BIN</div></div>’;
+});
+if(cards.length>6)html+=’<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ ‘+(cards.length-6)+’ more…</div>’;
+html+=’</div>’;
+html+=’<button class="btn bg-y" onclick="dlCSV(\''+aId+'\')">Download CSV for ‘+name+’</button>’;
+html+=’<div style="font-size:11px;color:#64748b;margin-top:10px;line-height:1.7">Sign into <strong>’+name+’</strong> in Safari - Seller Hub - Reports - Upload Template - select this CSV.</div>’;
+html+=’</div></div>’;
+return html;
+}).join(’’);
 }
 function addHistory(d){
-  const a=S.accounts.find(function(x){return x.id===d.acctId;});
-  document.getElementById('logEmpty').style.display='none';
-  const el=document.createElement('div');el.className='log-item';
-  let html='<div class="log-ck">OK</div><div class="log-info">';
-  html+='<div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+' '+(d.variation||'')+'</div>';
-  html+='<div class="log-det">';
-  if(a)html+='<div class="log-dot" style="background:'+a.color+'"></div><span>'+a.name+'</span> - ';
-  html+='<span style="color:#16a34a">$'+(d.suggestedBIN||'?')+' BIN</span></div></div>';
-  el.innerHTML=html;
-  document.getElementById('logList').prepend(el);
+const a=S.accounts.find(function(x){return x.id===d.acctId;});
+document.getElementById(‘logEmpty’).style.display=‘none’;
+const el=document.createElement(‘div’);el.className=‘log-item’;
+let html=’<div class="log-ck">OK</div><div class="log-info">’;
+html+=’<div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’ ‘+(d.variation||’’)+’</div>’;
+html+=’<div class="log-det">’;
+if(a)html+=’<div class="log-dot" style="background:'+a.color+'"></div><span>’+a.name+’</span> - ‘;
+html+=’<span style="color:#16a34a">$’+(d.suggestedBIN||’?’)+’ BIN</span></div></div>’;
+el.innerHTML=html;
+document.getElementById(‘logList’).prepend(el);
 }
 function renderHistory(){
-  const list=document.getElementById('logList');
-  const emp=document.getElementById('logEmpty');
-  if(!S.exported.length){list.innerHTML='';emp.style.display='block';return;}
-  emp.style.display='none';
-  list.innerHTML=S.exported.slice().reverse().map(function(d){
-    const a=S.accounts.find(function(x){return x.id===d.acctId;});
-    let html='<div class="log-item"><div class="log-ck">OK</div><div class="log-info">';
-    html+='<div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+' '+(d.variation||'')+'</div>';
-    html+='<div class="log-det">';
-    if(a)html+='<div class="log-dot" style="background:'+a.color+'"></div><span>'+a.name+'</span> - ';
-    html+='<span style="color:#16a34a">$'+(d.suggestedBIN||'?')+' BIN</span></div></div></div>';
-    return html;
-  }).join('');
+const list=document.getElementById(‘logList’);
+const emp=document.getElementById(‘logEmpty’);
+if(!S.exported.length){list.innerHTML=’’;emp.style.display=‘block’;return;}
+emp.style.display=‘none’;
+list.innerHTML=S.exported.slice().reverse().map(function(d){
+const a=S.accounts.find(function(x){return x.id===d.acctId;});
+let html=’<div class="log-item"><div class="log-ck">OK</div><div class="log-info">’;
+html+=’<div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’ ‘+(d.variation||’’)+’</div>’;
+html+=’<div class="log-det">’;
+if(a)html+=’<div class="log-dot" style="background:'+a.color+'"></div><span>’+a.name+’</span> - ‘;
+html+=’<span style="color:#16a34a">$’+(d.suggestedBIN||’?’)+’ BIN</span></div></div></div>’;
+return html;
+}).join(’’);
 }
 function exportLog(){
-  if(!S.exported.length){toast('No cards yet','err');return;}
-  const cols=['Account','Player','Year','Set','Card#','Variation','Team','BIN Price','Shipping','Title'];
-  const rows=S.exported.map(function(d){
-    const a=S.accounts.find(function(x){return x.id===d.acctId;});
-    return[a?a.name:'',d.player,d.year,d.set,d.cardNumber,d.variation,d.team,
-      d.suggestedBIN,d.useEnvelope?'Envelope $1':'USPS $'+S.shipping,d.ebayTitle
-    ].map(function(v){return'"'+(v||'').toString().replace(/"/g,'""')+'"';}).join(',');
-  });
-  const blob=new Blob([[cols.join(',')].concat(rows).join('\n')],{type:'text/csv'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='card_log.csv';a.click();
-  URL.revokeObjectURL(url);
+if(!S.exported.length){toast(‘No cards yet’,‘err’);return;}
+const cols=[‘Account’,‘Player’,‘Year’,‘Set’,‘Card#’,‘Variation’,‘Team’,‘BIN Price’,‘Shipping’,‘Title’];
+const rows=S.exported.map(function(d){
+const a=S.accounts.find(function(x){return x.id===d.acctId;});
+return[a?a.name:’’,d.player,d.year,d.set,d.cardNumber,d.variation,d.team,
+d.suggestedBIN,d.useEnvelope?‘Envelope $1’:‘USPS $’+S.shipping,d.ebayTitle
+].map(function(v){return’”’+(v||’’).toString().replace(/”/g,’””’)+’”’;}).join(’,’);
+});
+const blob=new Blob([[cols.join(’,’)].concat(rows).join(’\n’)],{type:‘text/csv’});
+const url=URL.createObjectURL(blob);
+const a=document.createElement(‘a’);a.href=url;a.download=‘card_log.csv’;a.click();
+URL.revokeObjectURL(url);
 }
 function refreshStats(){
-  const tot=S.queue.length;
-  const rdy=S.queue.filter(function(i){return i.status==='ready';}).length;
-  const val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
-  document.getElementById('s-tot').textContent=tot;
-  document.getElementById('s-rdy').textContent=rdy;
-  document.getElementById('s-val').textContent='$'+Math.round(val);
-  document.getElementById('nc-q').textContent=tot;
-  document.getElementById('nc-r').textContent=rdy;
-  document.getElementById('nc-v').textContent=val>=1000?'$'+(val/1000).toFixed(1)+'k':'$'+Math.round(val);
+const tot=S.queue.length;
+const rdy=S.queue.filter(function(i){return i.status===‘ready’;}).length;
+const val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
+document.getElementById(‘s-tot’).textContent=tot;
+document.getElementById(‘s-rdy’).textContent=rdy;
+document.getElementById(‘s-val’).textContent=’$’+Math.round(val);
+document.getElementById(‘nc-q’).textContent=tot;
+document.getElementById(‘nc-r’).textContent=rdy;
+document.getElementById(‘nc-v’).textContent=val>=1000?’$’+(val/1000).toFixed(1)+‘k’:’$’+Math.round(val);
 }
-function showLdr(t,s){document.getElementById('ldrT').textContent=t;document.getElementById('ldrS').textContent=s;document.getElementById('ldr').classList.add('on');}
-function hideLdr(){document.getElementById('ldr').classList.remove('on');}
+function showLdr(t,s){document.getElementById(‘ldrT’).textContent=t;document.getElementById(‘ldrS’).textContent=s;document.getElementById(‘ldr’).classList.add(‘on’);}
+function hideLdr(){document.getElementById(‘ldr’).classList.remove(‘on’);}
 function toast(msg,type){
-  const el=document.getElementById('toast');el.textContent=msg;
-  el.className='toast show'+(type==='err'?' err':type==='warn'?' warn':'');
-  clearTimeout(window._tt);window._tt=setTimeout(function(){el.className='toast';},3500);
+const el=document.getElementById(‘toast’);el.textContent=msg;
+el.className=‘toast show’+(type===‘err’?’ err’:type===‘warn’?’ warn’:’’);
+clearTimeout(window._tt);window._tt=setTimeout(function(){el.className=‘toast’;},3500);
 }
 function iHtml(cls,msg){
-  return '<div class="info '+cls+'" style="padding:8px 11px;font-size:11px;margin:0"><span>'+(cls.indexOf('g')>=0?'OK':'!')+' </span><div>'+msg+'</div></div>';
+return ‘<div class="info '+cls+'" style="padding:8px 11px;font-size:11px;margin:0"><span>’+(cls.indexOf(‘g’)>=0?‘OK’:’!’)+’ </span><div>’+msg+’</div></div>’;
 }
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
 </script>
+
 </body>
 </html>
