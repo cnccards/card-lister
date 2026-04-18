@@ -1,193 +1,174 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Card Lister"/>
-<meta name="color-scheme" content="dark"/>
-<meta name="supported-color-schemes" content="dark"/>
 <title>Card Lister Pro</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono&display=swap" rel="stylesheet"/>
 <style>
-/* iOS Safari safe CSS - no z-index stacking, no pseudo elements */
-:root{
-  --bg:#080a0f;--s1:#0e1118;--s2:#151b24;--s3:#1c2430;
-  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.12);--bdr3:rgba(255,255,255,.22);
-  --txt:#e8f0fa;--fog:#5a7090;--dim:#2a3848;
-  --g:#00ff88;--g2:rgba(0,255,136,.08);--g3:rgba(0,255,136,.2);
-  --b:#0088ff;--b2:rgba(0,136,255,.08);--b3:rgba(0,136,255,.2);
-  --y:#ffbb00;--y2:rgba(255,187,0,.08);--y3:rgba(255,187,0,.2);
-  --r:#ff3366;--r2:rgba(255,51,102,.08);--r3:rgba(255,51,102,.2);
-  --p:#aa55ff;--p2:rgba(170,85,255,.08);--p3:rgba(170,85,255,.2);
-  --rad:10px;--rads:6px;--radl:14px;
-}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:#080a0f;color:#e8f0fa;min-height:100vh;font-family:'Syne',sans-serif;color-scheme:dark}
-nav{position:sticky;top:0;background:#0e1118;border-bottom:1px solid rgba(255,255,255,.06);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;z-index:50}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:#00ff88;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.logo-text{font-size:15px;font-weight:800;letter-spacing:-.4px;color:#e8f0fa}
-.logo-sub{font-size:9px;color:#5a7090;font-family:'Syne Mono',monospace;margin-top:1px}
+html,body{background:#f0f4ff;color:#0f1e3a;min-height:100vh;font-family:'Inter',sans-serif}
+nav{position:sticky;top:0;background:#1d4ed8;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;z-index:50}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.7);margin-top:1px;letter-spacing:.05em}
 .ncs{display:flex;gap:6px}
-.nc{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:4px 8px;text-align:center;min-width:38px}
-.nc-n{font-size:13px;font-weight:800;font-family:'Syne Mono',monospace;color:#00ff88;line-height:1}
-.nc-l{font-size:7px;color:#5a7090;text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
-.tabs{background:#0e1118;border-bottom:1px solid rgba(255,255,255,.06);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px;position:relative;z-index:40}
+.nc{background:rgba(255,255,255,.15);border-radius:6px;padding:4px 8px;text-align:center;min-width:38px}
+.nc-n{font-size:13px;font-weight:800;color:#fff;line-height:1;font-family:'Space Mono',monospace}
+.nc-l{font-size:7px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
+.tabs{background:#fff;border-bottom:2px solid #e2e8f0;display:flex;overflow-x:auto;scrollbar-width:none;padding:0 10px}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:10px 11px;font-size:10px;font-weight:700;color:#5a7090;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;font-family:'Syne Mono',monospace}
-.tab.on{color:#00ff88;border-bottom-color:#00ff88}
-.screen{display:none;padding:14px;max-width:520px;margin:0 auto;background:#080a0f;color:#e8f0fa}
-.screen.on{display:block;background:#080a0f;color:#e8f0fa;min-height:50vh}
-.panel{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px;margin-bottom:10px}
-.phd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#5a7090;margin-bottom:10px;display:flex;align-items:center;gap:7px;font-family:'Syne Mono',monospace}
-.bub{width:18px;height:18px;border-radius:50%;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne Mono',monospace}
-.inp{width:100%;background:#0e1118;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:9px 11px;font-size:13px;color:#e8f0fa;font-family:'Syne',sans-serif;outline:none;margin-bottom:8px;-webkit-appearance:none}
-.inp:focus{border-color:#00ff88}
-.inp::placeholder{color:#2a3848}
+.tab{padding:10px 11px;font-size:10px;font-weight:700;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0}
+.tab.on{color:#1d4ed8;border-bottom-color:#1d4ed8}
+.screen{display:none;padding:14px;max-width:520px;margin:0 auto}
+.screen.on{display:block}
+.panel{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:10px}
+.phd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#94a3b8;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.bub{width:18px;height:18px;border-radius:50%;background:#dbeafe;border:1px solid #bfdbfe;color:#1d4ed8;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.inp{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:9px 11px;font-size:13px;color:#0f1e3a;font-family:'Inter',sans-serif;outline:none;margin-bottom:8px;-webkit-appearance:none}
+.inp:focus{border-color:#1d4ed8;background:#fff}
+.inp::placeholder{color:#cbd5e1}
 select.inp{cursor:pointer}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .g2 .inp{margin-bottom:0}
-.lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#5a7090;margin-bottom:4px;font-family:'Syne Mono',monospace}
-.hint{font-size:11px;color:#5a7090;line-height:1.55;margin-top:3px}
-.hint a{color:#0088ff}
-.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 14px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;text-decoration:none;width:100%}
-.btn:active{opacity:.75}
-.bg-g{background:#00ff88;color:#000}
-.bg-o{background:transparent;border:1px solid rgba(255,255,255,.12);color:#e8f0fa}
-.bg-r{background:rgba(255,51,102,.08);color:#ff3366;border:1px solid rgba(255,51,102,.2)}
-.bg-b{background:rgba(0,136,255,.08);color:#0088ff;border:1px solid rgba(0,136,255,.2)}
-.bg-y{background:rgba(255,187,0,.08);color:#ffbb00;border:1px solid rgba(255,187,0,.2)}
+.lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:4px}
+.hint{font-size:11px;color:#64748b;line-height:1.55;margin-top:3px}
+.hint a{color:#1d4ed8}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 14px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;width:100%}
+.btn:active{opacity:.8}
+.bg-g{background:#16a34a;color:#fff}
+.bg-b{background:#1d4ed8;color:#fff}
+.bg-o{background:#fff;border:1px solid #e2e8f0;color:#0f1e3a}
+.bg-r{background:#fee2e2;color:#dc2626;border:1px solid #fecaca}
+.bg-y{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
 .bsm{padding:6px 12px;font-size:11px;width:auto;border-radius:6px}
 .brow{display:flex;gap:8px}
 .brow .btn{flex:1;padding:10px}
-.info{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.55;margin-bottom:10px}
-.ig{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88}
-.iy{background:rgba(255,187,0,.08);border:1px solid rgba(255,187,0,.2);color:#ffbb00}
-.ib{background:rgba(0,136,255,.08);border:1px solid rgba(0,136,255,.2);color:#0088ff}
-.ir{background:rgba(255,51,102,.08);border:1px solid rgba(255,51,102,.2);color:#ff3366}
-.kbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:#151b24;margin-bottom:10px}
-.kdot{width:8px;height:8px;border-radius:50%;background:#ff3366;flex-shrink:0}
-.kdot.ok{background:#00ff88;box-shadow:0 0 10px rgba(0,255,136,.5)}
+.info{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.55;margin-bottom:10px}
+.ig{background:#dcfce7;border:1px solid #bbf7d0;color:#15803d}
+.iy{background:#fef3c7;border:1px solid #fde68a;color:#92400e}
+.ib{background:#dbeafe;border:1px solid #bfdbfe;color:#1e40af}
+.ir{background:#fee2e2;border:1px solid #fecaca;color:#dc2626}
+.kbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;margin-bottom:10px}
+.kdot{width:8px;height:8px;border-radius:50%;background:#dc2626;flex-shrink:0}
+.kdot.ok{background:#16a34a;box-shadow:0 0 8px rgba(22,163,74,.4)}
 .kinfo{flex:1;min-width:0}
-.klbl{font-size:12px;font-weight:700}
-.ksub{font-size:10px;color:#5a7090;margin-top:1px;font-family:'Syne Mono',monospace}
-.kact{font-size:11px;font-weight:700;color:#0088ff;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.abanner{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:#151b24;margin-bottom:10px}
+.klbl{font-size:12px;font-weight:700;color:#0f1e3a}
+.ksub{font-size:10px;color:#64748b;margin-top:1px;font-family:'Space Mono',monospace}
+.kact{font-size:11px;font-weight:700;color:#1d4ed8;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.abanner{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;margin-bottom:10px}
 .ab-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .ab-body{flex:1;min-width:0}
-.ab-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ab-lbl{font-size:9px;color:#5a7090;font-family:'Syne Mono',monospace}
-.ab-sw{font-size:11px;font-weight:700;color:#0088ff;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ab-name{font-size:13px;font-weight:700;color:#0f1e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ab-lbl{font-size:9px;color:#94a3b8}
+.ab-sw{font-size:11px;font-weight:700;color:#1d4ed8;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .sstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-.stat{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px;text-align:center}
-.stat-n{font-size:22px;font-weight:800;font-family:'Syne Mono',monospace;line-height:1}
-.stat-l{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;margin-top:3px;font-family:'Syne Mono',monospace}
-.drop{position:relative;background:#151b24;border:2px dashed rgba(255,255,255,.12);border-radius:14px;padding:28px 16px;text-align:center;cursor:pointer;margin-bottom:10px}
-.drop.drag{border-color:#00ff88;background:rgba(0,255,136,.04)}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px;text-align:center}
+.stat-n{font-size:22px;font-weight:800;line-height:1;font-family:'Space Mono',monospace}
+.stat-l{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-top:3px}
+.drop{position:relative;background:#fff;border:2px dashed #bfdbfe;border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;margin-bottom:10px}
+.drop.drag{border-color:#1d4ed8;background:#eff6ff}
 .drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.drop-ring{width:56px;height:56px;border-radius:50%;background:rgba(0,255,136,.08);border:2px solid rgba(0,255,136,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px}
-.drop-h{font-size:17px;font-weight:800;margin-bottom:5px;letter-spacing:-.3px;color:#e8f0fa}
-.drop-s{font-size:12px;color:#5a7090;line-height:1.5}
-.drop-chip{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;color:#00ff88;padding:3px 11px;border-radius:99px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);font-family:'Syne Mono',monospace}
+.drop-ring{width:56px;height:56px;border-radius:50%;background:#dbeafe;border:2px solid #bfdbfe;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px}
+.drop-h{font-size:17px;font-weight:800;margin-bottom:5px;color:#0f1e3a}
+.drop-s{font-size:12px;color:#64748b;line-height:1.5}
+.drop-chip{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;color:#1d4ed8;padding:3px 11px;border-radius:99px;background:#dbeafe;border:1px solid #bfdbfe}
 .qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.qlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;font-family:'Syne Mono',monospace}
-.qct{font-size:10px;color:#00ff88;padding:2px 8px;background:rgba(0,255,136,.08);border-radius:99px;border:1px solid rgba(0,255,136,.2);font-family:'Syne Mono',monospace}
+.qlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b}
+.qct{font-size:10px;color:#1d4ed8;padding:2px 8px;background:#dbeafe;border-radius:99px;border:1px solid #bfdbfe}
 .qlist{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
-.qi{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;display:flex;align-items:stretch;overflow:hidden}
-.qi-img{width:58px;flex-shrink:0;object-fit:cover;background:#1c2430}
-.qi-ph{width:58px;flex-shrink:0;background:#1c2430;display:flex;align-items:center;justify-content:center;font-size:20px}
+.qi{background:#fff;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:stretch;overflow:hidden}
+.qi-img{width:58px;flex-shrink:0;object-fit:cover;background:#f1f5f9}
+.qi-ph{width:58px;flex-shrink:0;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:20px}
 .qi-body{flex:1;padding:8px 10px;min-width:0}
-.qi-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8f0fa}
-.qi-st{font-size:10px;margin-top:2px;font-family:'Syne Mono',monospace}
-.qi-price{font-size:12px;font-weight:800;color:#00ff88;margin-top:2px;font-family:'Syne Mono',monospace}
-.qi-ship{font-size:9px;color:#5a7090;margin-top:1px;font-family:'Syne Mono',monospace}
-.qi-meta{font-size:10px;color:#5a7090;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.qi-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#0f1e3a}
+.qi-st{font-size:10px;margin-top:2px}
+.qi-price{font-size:12px;font-weight:800;color:#16a34a;margin-top:2px;font-family:'Space Mono',monospace}
+.qi-ship{font-size:9px;color:#64748b;margin-top:1px}
+.qi-meta{font-size:10px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
 .qi-acct{font-size:10px;margin-top:2px;display:flex;align-items:center;gap:4px}
 .qi-adot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.qi-side{display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.06);flex-shrink:0}
-.qib{width:42px;flex:1;border:none;background:transparent;color:#5a7090;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
-.qib.del:active{background:rgba(255,51,102,.08);color:#ff3366}
-.qib.view:active{background:rgba(0,255,136,.08);color:#00ff88}
-.sp{color:#2a3848}.sr{color:#0088ff}.sok{color:#00ff88}.se{color:#ff3366}
-.batch{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px;margin-bottom:10px}
+.qi-side{display:flex;flex-direction:column;border-left:1px solid #f1f5f9;flex-shrink:0}
+.qib{width:42px;flex:1;border:none;background:transparent;color:#94a3b8;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sp{color:#cbd5e1}.sr{color:#3b82f6}.sok{color:#16a34a}.se{color:#dc2626}
+.batch{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px}
 .btop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.prog{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-bottom:5px;display:none}
-.prog-f{height:100%;border-radius:99px;background:#00ff88;transition:width .4s}
-.bst{font-size:10px;color:#5a7090;font-family:'Syne Mono',monospace}
-.prev{background:#151b24;border:1px solid rgba(0,255,136,.2);border-radius:14px;overflow:hidden;margin-bottom:12px}
-.prev-hdr{background:rgba(0,255,136,.06);border-bottom:1px solid rgba(0,255,136,.2);padding:10px 13px;display:flex;align-items:center;justify-content:space-between}
-.prev-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#00ff88;font-family:'Syne Mono',monospace}
-.pf{padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
+.prog{height:4px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-bottom:5px;display:none}
+.prog-f{height:100%;border-radius:99px;background:#1d4ed8;transition:width .4s}
+.bst{font-size:10px;color:#64748b}
+.prev{background:#fff;border:2px solid #16a34a;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.prev-hdr{background:#dcfce7;border-bottom:1px solid #bbf7d0;padding:10px 13px;display:flex;align-items:center;justify-content:space-between}
+.prev-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#15803d}
+.pf{padding:9px 13px;border-bottom:1px solid #f1f5f9}
 .pf:last-child{border-bottom:none}
-.pf-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#2a3848;margin-bottom:3px;font-family:'Syne Mono',monospace}
-.pf-inp{width:100%;background:#1c2430;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 10px;font-size:12px;color:#e8f0fa;font-family:'Syne',sans-serif;outline:none;resize:vertical;min-height:32px;-webkit-appearance:none}
-.pf-inp:focus{border-color:#00ff88}
-.pbox{background:#1c2430;border-radius:6px;padding:10px 12px;border:1px solid rgba(255,255,255,.06)}
-.pbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#5a7090;margin-bottom:3px;font-family:'Syne Mono',monospace}
+.pf-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:3px}
+.pf-inp{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;font-size:12px;color:#0f1e3a;font-family:'Inter',sans-serif;outline:none;resize:vertical;min-height:32px;-webkit-appearance:none}
+.pf-inp:focus{border-color:#1d4ed8}
+.pbox{background:#f8fafc;border-radius:6px;padding:10px 12px;border:1px solid #e2e8f0}
+.pbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:3px}
 .prow{display:flex;align-items:center}
-.pcur{font-size:14px;color:#5a7090;margin-right:2px;font-family:'Syne Mono',monospace}
-.pinp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:#00ff88;outline:none;-webkit-appearance:none;font-family:'Syne Mono',monospace}
-.stag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;font-family:'Syne Mono',monospace}
-.senv{background:rgba(0,255,136,.08);color:#00ff88;border:1px solid rgba(0,255,136,.2)}
-.susps{background:rgba(0,136,255,.08);color:#0088ff;border:1px solid rgba(0,136,255,.2)}
-.tags-row{padding:8px 13px;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid rgba(255,255,255,.06)}
-.tag{font-size:9px;padding:2px 7px;border-radius:99px;background:rgba(170,85,255,.08);color:#aa55ff;border:1px solid rgba(170,85,255,.2);font-family:'Syne Mono',monospace}
+.pcur{font-size:14px;color:#64748b;margin-right:2px;font-family:'Space Mono',monospace}
+.pinp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:#16a34a;outline:none;-webkit-appearance:none;font-family:'Space Mono',monospace}
+.stag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px}
+.senv{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.susps{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.tags-row{padding:8px 13px;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid #f1f5f9}
+.tag{font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff}
 .prev-btns{padding:10px 13px;display:flex;gap:8px}
 .prev-btns .btn{flex:1;padding:10px}
-.asgn-row{padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
+.asgn-row{padding:9px 13px;border-bottom:1px solid #f1f5f9}
 .asgn-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
-.asgn-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid rgba(255,255,255,.06);background:transparent;color:#5a7090;font-size:10px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif}
-.asgn-btn.sel{border-color:rgba(255,255,255,.22);color:#e8f0fa;background:#1c2430}
+.asgn-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.asgn-btn.sel{border-color:#1d4ed8;color:#1d4ed8;background:#eff6ff}
 .asgn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .acct-stack{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.ai{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.ai.active{border-color:#00ff88;background:rgba(0,255,136,.04)}
+.ai{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.ai.active{border-color:#1d4ed8;background:#eff6ff}
 .ai-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
 .ai-body{flex:1;min-width:0}
-.ai-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8f0fa}
-.ai-det{font-size:10px;color:#5a7090;margin-top:2px;font-family:'Syne Mono',monospace}
-.ai-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88;white-space:nowrap;flex-shrink:0;font-family:'Syne Mono',monospace}
-.ai-del{width:28px;height:28px;border:none;background:transparent;color:#2a3848;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:13px;flex-shrink:0}
+.ai-name{font-size:13px;font-weight:700;color:#0f1e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-det{font-size:10px;color:#64748b;margin-top:2px}
+.ai-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;background:#dbeafe;border:1px solid #bfdbfe;color:#1e40af;white-space:nowrap;flex-shrink:0}
+.ai-del{width:28px;height:28px;border:none;background:transparent;color:#cbd5e1;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:13px;flex-shrink:0}
 .cpick{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
 .copt{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0}
-.copt.sel{border-color:#fff}
-.exp-block{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;margin-bottom:10px}
-.exp-hd{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.copt.sel{border-color:#0f1e3a}
+.exp-block{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:10px}
+.exp-hd{padding:12px 14px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px}
 .exp-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
 .exp-body{padding:13px}
-.exp-row{font-size:11px;color:#5a7090;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.exp-row{font-size:11px;color:#64748b;padding:4px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .exp-row:last-child{border-bottom:none}
 .exp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.exp-price{color:#00ff88;font-weight:800;flex-shrink:0;font-family:'Syne Mono',monospace}
+.exp-price{color:#16a34a;font-weight:800;flex-shrink:0;font-family:'Space Mono',monospace}
 .steps{margin-bottom:12px}
-.step{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px;line-height:1.5;color:#5a7090}
+.step{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:12px;line-height:1.5;color:#64748b}
 .step:last-child{border-bottom:none}
-.sn{width:18px;height:18px;border-radius:50%;background:rgba(255,187,0,.08);border:1px solid rgba(255,187,0,.2);color:#ffbb00;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-family:'Syne Mono',monospace}
-.step strong{color:#e8f0fa}
-.log-item{background:#151b24;border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 11px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
-.log-ck{width:18px;height:18px;border-radius:50%;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);display:flex;align-items:center;justify-content:center;color:#00ff88;font-size:10px;flex-shrink:0}
+.sn{width:18px;height:18px;border-radius:50%;background:#fef3c7;border:1px solid #fde68a;color:#92400e;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step strong{color:#0f1e3a}
+.log-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.log-ck{width:18px;height:18px;border-radius:50%;background:#dcfce7;border:1px solid #bbf7d0;display:flex;align-items:center;justify-content:center;color:#15803d;font-size:10px;flex-shrink:0}
 .log-info{flex:1;min-width:0}
-.log-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8f0fa}
-.log-det{font-size:10px;color:#5a7090;margin-top:1px;display:flex;align-items:center;gap:4px;font-family:'Syne Mono',monospace}
+.log-name{font-size:12px;font-weight:700;color:#0f1e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.log-det{font-size:10px;color:#64748b;margin-top:1px;display:flex;align-items:center;gap:4px}
 .log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.ldr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,10,15,.93);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.ldr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,30,58,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .ldr.on{display:flex}
-.spin{width:50px;height:50px;border:2px solid rgba(0,255,136,.2);border-top-color:#00ff88;border-radius:50%;animation:spin .7s linear infinite}
+.spin{width:50px;height:50px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ldr-t{font-size:16px;font-weight:800;color:#e8f0fa}
-.ldr-s{font-size:11px;color:#5a7090;text-align:center;max-width:250px;line-height:1.5;font-family:'Syne Mono',monospace}
-.ldr-cancel{font-size:11px;color:#ff3366;cursor:pointer;padding:6px 14px;border:1px solid rgba(255,51,102,.2);border-radius:6px;background:rgba(255,51,102,.08);font-weight:700}
-.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:#1c2430;border:1px solid rgba(0,255,136,.2);color:#00ff88;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .35s;white-space:nowrap;max-width:88vw;text-align:center;font-family:'Syne Mono',monospace}
+.ldr-t{font-size:16px;font-weight:800;color:#fff}
+.ldr-s{font-size:11px;color:rgba(255,255,255,.7);text-align:center;max-width:250px;line-height:1.5}
+.ldr-cancel{font-size:11px;color:#fca5a5;cursor:pointer;padding:6px 14px;border:1px solid rgba(252,165,165,.4);border-radius:6px;background:rgba(220,38,38,.2);font-weight:700}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:#0f1e3a;color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .35s;white-space:nowrap;max-width:88vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast.err{border-color:rgba(255,51,102,.2);color:#ff3366;background:rgba(255,51,102,.08)}
-.toast.warn{border-color:rgba(255,187,0,.2);color:#ffbb00;background:rgba(255,187,0,.08)}
+.toast.err{background:#dc2626}
+.toast.warn{background:#92400e}
 .row-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
-.row-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;font-family:'Syne Mono',monospace}
-.empty{text-align:center;padding:36px 20px;color:#2a3848;font-size:13px}
+.row-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b}
+.empty{text-align:center;padding:36px 20px;color:#94a3b8;font-size:13px}
 .empty-i{font-size:36px;margin-bottom:10px}
 </style>
 </head>
@@ -202,12 +183,12 @@ select.inp{cursor:pointer}
 <nav>
   <div class="logo">
     <div class="logo-mark">&#x1F0CF;</div>
-    <div><div class="logo-text">Card Lister Pro</div><div class="logo-sub">GEMINI AI &middot; BUY IT NOW &middot; MULTI-ACCOUNT</div></div>
+    <div><div class="logo-text">Card Lister Pro</div><div class="logo-sub">GEMINI AI &middot; BUY IT NOW</div></div>
   </div>
   <div class="ncs">
     <div class="nc"><div class="nc-n" id="nc-q">0</div><div class="nc-l">Queue</div></div>
-    <div class="nc"><div class="nc-n" style="color:#0088ff" id="nc-r">0</div><div class="nc-l">Ready</div></div>
-    <div class="nc"><div class="nc-n" style="color:#ffbb00" id="nc-v">$0</div><div class="nc-l">Value</div></div>
+    <div class="nc"><div class="nc-n" id="nc-r">0</div><div class="nc-l">Ready</div></div>
+    <div class="nc"><div class="nc-n" id="nc-v">$0</div><div class="nc-l">Value</div></div>
   </div>
 </nav>
 <div class="tabs">
@@ -218,16 +199,13 @@ select.inp{cursor:pointer}
   <div class="tab" onclick="goTab('guide')" id="t-guide">&#x1F4D6; Guide</div>
   <div class="tab" onclick="goTab('setup')" id="t-setup">&#x2699; Setup</div>
 </div>
-
-<!-- LIST -->
-
 <div class="screen" id="s-list">
   <div class="kbar"><div class="kdot" id="kdot"></div><div class="kinfo"><div class="klbl" id="klbl">No API key</div><div class="ksub" id="ksub">Go to Setup to add your free Gemini key</div></div><div class="kact" onclick="goTab('setup')">Setup &rarr;</div></div>
   <div class="abanner"><div class="ab-dot" id="abd"></div><div class="ab-body"><div class="ab-lbl">Listing to account</div><div class="ab-name" id="abn">No account &mdash; add one first</div></div><div class="ab-sw" onclick="goTab('accts')">Switch &rarr;</div></div>
   <div class="sstrip">
-    <div class="stat"><div class="stat-n" style="color:#5a7090" id="s-tot">0</div><div class="stat-l">In Queue</div></div>
-    <div class="stat"><div class="stat-n" style="color:#00ff88" id="s-rdy">0</div><div class="stat-l">Ready</div></div>
-    <div class="stat"><div class="stat-n" style="color:#ffbb00" id="s-val">$0</div><div class="stat-l">Value</div></div>
+    <div class="stat"><div class="stat-n" style="color:#64748b" id="s-tot">0</div><div class="stat-l">In Queue</div></div>
+    <div class="stat"><div class="stat-n" style="color:#16a34a" id="s-rdy">0</div><div class="stat-l">Ready</div></div>
+    <div class="stat"><div class="stat-n" style="color:#1d4ed8" id="s-val">$0</div><div class="stat-l">Value</div></div>
   </div>
   <div class="drop" id="dropzone" ondragover="doDrag(event,1)" ondragleave="doDrag(event,0)" ondrop="doDrop(event)">
     <input type="file" id="fileIn" accept="image/*" multiple onchange="onFiles(event)"/>
@@ -241,7 +219,7 @@ select.inp{cursor:pointer}
     <div class="qhdr"><div class="qlbl">Card Queue</div><div class="qct" id="qct">0</div></div>
     <div class="qlist" id="qlist"></div>
     <div class="batch">
-      <div class="btop"><span style="font-size:12px;font-weight:700;color:#e8f0fa">Batch Actions</span><span class="bst" id="binfo">0 cards</span></div>
+      <div class="btop"><span style="font-size:12px;font-weight:700">Batch Actions</span><span class="bst" id="binfo">0 cards</span></div>
       <div class="brow" style="margin-bottom:8px">
         <button class="btn bg-b" id="batchBtn" onclick="runBatch()">&#x1F916; AI Read All Cards</button>
         <button class="btn bg-r bsm" onclick="clearQueue()">Clear</button>
@@ -251,11 +229,8 @@ select.inp{cursor:pointer}
     </div>
   </div>
 </div>
-
-<!-- ACCOUNTS -->
-
 <div class="screen" id="s-accts">
-  <div class="row-hd"><div class="row-ttl">eBay Accounts</div><div style="font-size:10px;color:#5a7090;font-family:'Syne Mono',monospace" id="actLbl"></div></div>
+  <div class="row-hd"><div class="row-ttl">eBay Accounts</div><div style="font-size:10px;color:#64748b" id="actLbl"></div></div>
   <div class="info iy"><span>&#x1F4CB;</span><div><strong>No eBay developer account needed.</strong> Each account gets its own CSV. Sign into that account in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload. All listings are <strong>Buy It Now</strong>.</div></div>
   <div id="acctList"></div>
   <div class="panel">
@@ -267,16 +242,13 @@ select.inp{cursor:pointer}
     <button class="btn bg-g" onclick="addAcct()">Add Account</button>
   </div>
 </div>
-
-<!-- EXPORT -->
-
 <div class="screen" id="s-export">
-  <div class="row-hd"><div class="row-ttl">Download CSVs</div><div style="font-size:10px;color:#5a7090;font-family:'Syne Mono',monospace" id="expLbl">0 ready</div></div>
-  <div id="expEmpty" class="empty"><div class="empty-i">&#x1F4CB;</div>Analyze cards and tap "Add to Export" on each listing.</div>
+  <div class="row-hd"><div class="row-ttl">Download CSVs</div><div style="font-size:10px;color:#64748b" id="expLbl">0 ready</div></div>
+  <div id="expEmpty" class="empty"><div class="empty-i">&#x1F4CB;</div>Analyze cards and tap Add to Export on each listing.</div>
   <div id="expBlocks"></div>
   <div id="expGuide" style="display:none">
     <div class="panel" style="margin-top:4px">
-      <div class="phd"><div class="bub" style="background:rgba(255,187,0,.08);border-color:rgba(255,187,0,.2);color:#ffbb00">?</div>How to upload to eBay</div>
+      <div class="phd"><div class="bub" style="background:#fef3c7;border-color:#fde68a;color:#92400e">?</div>How to upload to eBay</div>
       <div class="steps">
         <div class="step"><div class="sn">1</div><div>Open <strong>Safari</strong> &rarr; sign into your eBay account</div></div>
         <div class="step"><div class="sn">2</div><div>Go to <strong>Seller Hub &rarr; Reports &rarr; Upload</strong></div></div>
@@ -288,54 +260,44 @@ select.inp{cursor:pointer}
     </div>
   </div>
 </div>
-
-<!-- HISTORY -->
-
 <div class="screen" id="s-history">
   <div class="row-hd"><div class="row-ttl">Export History</div><button class="btn bg-o bsm" onclick="exportLog()">Download Log</button></div>
   <div id="logList"></div>
   <div id="logEmpty" class="empty"><div class="empty-i">&#x1F0CF;</div>No cards exported yet.</div>
 </div>
-
-<!-- GUIDE -->
-
 <div class="screen" id="s-guide">
   <div class="panel">
     <div class="phd"><div class="bub">?</div>Condition Guide</div>
-    <div style="display:flex;flex-direction:column;gap:0">
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#00ff88;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">NM-MT</span><div><div style="font-size:11px;color:#e8f0fa">Near perfect. Razor corners, clean surface, 55/45 or better centering.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 8-9 if submitted</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#00ff88;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">NM</span><div><div style="font-size:11px;color:#e8f0fa">Near mint. Tiny corner wear, clean otherwise.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 7-8</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#ffbb00;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">EX-MT</span><div><div style="font-size:11px;color:#e8f0fa">Light corner wear, minor surface touch.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 6-7</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="font-size:11px;font-weight:800;color:#ffbb00;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">EX</span><div><div style="font-size:11px;color:#e8f0fa">Moderate corner rounding, minor creases.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 5-6</div></div></div>
-      <div style="display:flex;gap:10px;padding:8px 0"><span style="font-size:11px;font-weight:800;color:#ff3366;font-family:'Syne Mono',monospace;width:44px;flex-shrink:0">VG/G</span><div><div style="font-size:11px;color:#e8f0fa">Heavy wear, rounded corners, possible creases.</div><div style="font-size:10px;color:#5a7090;margin-top:2px">PSA 1-4</div></div></div>
+    <div style="display:flex;flex-direction:column">
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#16a34a;width:44px;flex-shrink:0">NM-MT</span><div><div style="font-size:11px;color:#0f1e3a">Near perfect. Razor corners, clean surface, 55/45 centering.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 8-9</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#16a34a;width:44px;flex-shrink:0">NM</span><div><div style="font-size:11px;color:#0f1e3a">Near mint. Tiny corner wear, clean otherwise.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 7-8</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#92400e;width:44px;flex-shrink:0">EX-MT</span><div><div style="font-size:11px;color:#0f1e3a">Light corner wear, minor surface touch.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 6-7</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="font-size:11px;font-weight:800;color:#92400e;width:44px;flex-shrink:0">EX</span><div><div style="font-size:11px;color:#0f1e3a">Moderate corner rounding, minor creases.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 5-6</div></div></div>
+      <div style="display:flex;gap:10px;padding:8px 0"><span style="font-size:11px;font-weight:800;color:#dc2626;width:44px;flex-shrink:0">VG/G</span><div><div style="font-size:11px;color:#0f1e3a">Heavy wear, rounded corners, possible creases.</div><div style="font-size:10px;color:#64748b;margin-top:2px">PSA 1-4</div></div></div>
     </div>
   </div>
   <div class="panel">
     <div class="phd"><div class="bub">&#x1F4EC;</div>Shipping Rules</div>
-    <div style="font-size:12px;color:#5a7090;line-height:1.8">
-      <div>Cards under <strong style="color:#e8f0fa">$20</strong> &rarr; <span class="stag senv">&#x1F4EC; Envelope $1.00</span></div>
-      <div style="margin-top:8px">Cards <strong style="color:#e8f0fa">$20+</strong> &rarr; <span class="stag susps">&#x1F4E6; USPS First Class</span></div>
-      <div style="margin-top:10px;font-size:11px;color:#2a3848">Applied automatically. Override per card in the listing preview.</div>
+    <div style="font-size:12px;color:#64748b;line-height:1.8">
+      <div>Cards under <strong style="color:#0f1e3a">$20</strong> &rarr; <span class="stag senv">&#x1F4EC; Envelope $1.00</span></div>
+      <div style="margin-top:8px">Cards <strong style="color:#0f1e3a">$20+</strong> &rarr; <span class="stag susps">&#x1F4E6; USPS First Class</span></div>
     </div>
   </div>
   <div class="panel">
     <div class="phd"><div class="bub">&#x2605;</div>Pro Tips</div>
-    <div style="font-size:12px;color:#5a7090;line-height:1.9">
-      <div>&#x1F4F8; <strong style="color:#e8f0fa">Shoot straight down</strong> on a dark surface. Better photos = better AI reads.</div>
-      <div>&#x1F4B0; <strong style="color:#e8f0fa">Verify prices.</strong> Check eBay sold comps before listing.</div>
-      <div>&#x1F4CB; <strong style="color:#e8f0fa">Batch by account.</strong> Switch accounts before adding a new batch.</div>
-      <div>&#x270F;&#xFE0F; <strong style="color:#e8f0fa">Edit before exporting.</strong> Tap the eye icon to review AI output.</div>
-      <div>&#x1F512; <strong style="color:#e8f0fa">Key saves permanently.</strong> Paste once, never again.</div>
+    <div style="font-size:12px;color:#64748b;line-height:1.9">
+      <div>&#x1F4F8; <strong style="color:#0f1e3a">Shoot straight down</strong> on a dark surface. Better photos = better AI reads.</div>
+      <div>&#x1F4B0; <strong style="color:#0f1e3a">Verify prices.</strong> Check eBay sold comps before listing.</div>
+      <div>&#x1F4CB; <strong style="color:#0f1e3a">Batch by account.</strong> Switch accounts before adding a new batch.</div>
+      <div>&#x270F;&#xFE0F; <strong style="color:#0f1e3a">Edit before exporting.</strong> Tap the eye icon to review AI output.</div>
+      <div>&#x1F512; <strong style="color:#0f1e3a">Key saves permanently.</strong> Paste once, never again.</div>
     </div>
   </div>
 </div>
-
-<!-- SETUP -->
-
 <div class="screen" id="s-setup">
-  <div class="info ig" style="margin-bottom:12px"><span>&#x2713;</span><div><strong>Free Gemini key works here!</strong> 1,500 free card reads per day. No credit card needed.</div></div>
+  <div class="info ig" style="margin-bottom:12px"><span>&#x2713;</span><div><strong>Free Gemini key works on GitHub Pages!</strong> 1,500 free card reads per day. No credit card needed.</div></div>
   <div class="panel">
-    <div class="phd"><div class="bub">A</div>Google Gemini Key <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:rgba(0,255,136,.08);color:#00ff88;border:1px solid rgba(0,255,136,.2);font-family:'Syne Mono',monospace">FREE &mdash; 1,500/DAY</span></div>
+    <div class="phd"><div class="bub">A</div>Google Gemini Key <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:#dcfce7;color:#15803d;border:1px solid #bbf7d0">FREE</span></div>
     <div class="steps" style="margin-bottom:12px">
       <div class="step"><div class="sn">1</div><div>Open Safari &rarr; go to <strong>aistudio.google.com/apikey</strong></div></div>
       <div class="step"><div class="sn">2</div><div>Sign in with Gmail &rarr; tap <strong>Create API key</strong></div></div>
@@ -344,29 +306,28 @@ select.inp{cursor:pointer}
     </div>
     <div class="info iy" style="margin-bottom:10px"><span>&#x1F511;</span><div>Key starts with <strong>AQ</strong> or <strong>AIza</strong> &mdash; both work. Free forever.</div></div>
     <div class="lbl">Paste Your Gemini Key</div>
-    <input class="inp" id="gemIn" type="text" placeholder="Paste full key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-family:'Syne Mono',monospace;font-size:12px"/>
+    <input class="inp" id="gemIn" type="text" placeholder="Paste full key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
     <div id="gemMsg" style="margin-top:4px"></div>
     <button class="btn bg-g" style="margin-top:8px" onclick="saveKey()">Save Gemini Key</button>
     <a class="btn bg-o" style="margin-top:8px" href="https://aistudio.google.com/apikey" target="_blank">Open Google AI Studio &rarr;</a>
   </div>
   <div class="panel">
-    <div class="phd"><div class="bub">B</div>PIN Lock <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:rgba(0,136,255,.08);color:#0088ff;border:1px solid rgba(0,136,255,.2);font-family:'Syne Mono',monospace">OPTIONAL</span></div>
+    <div class="phd"><div class="bub">B</div>PIN Lock <span style="margin-left:8px;font-size:8px;padding:2px 7px;border-radius:4px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe">OPTIONAL</span></div>
     <div class="hint" style="margin-bottom:10px">Set a 4-digit PIN so only you can open the app.</div>
     <div class="lbl">4-Digit PIN</div>
-    <input class="inp" id="pinIn" type="number" placeholder="e.g. 7842" style="font-family:'Syne Mono',monospace;font-size:20px;letter-spacing:.3em"/>
+    <input class="inp" id="pinIn" type="number" placeholder="e.g. 7842"/>
     <div class="brow">
       <button class="btn bg-b" onclick="savePIN()">Save PIN</button>
       <button class="btn bg-r" onclick="clearPIN()">Remove PIN</button>
     </div>
   </div>
   <div class="panel">
-    <div class="phd"><div class="bub" style="background:rgba(255,51,102,.08);border-color:rgba(255,51,102,.2);color:#ff3366">&times;</div>Clear Key</div>
-    <div class="hint" style="margin-bottom:10px">If your key stops working, clear it and paste a fresh one.</div>
+    <div class="phd"><div class="bub" style="background:#fee2e2;border-color:#fecaca;color:#dc2626">&times;</div>Clear Key</div>
     <button class="btn bg-r" onclick="clearKey()">Remove Saved Key</button>
   </div>
   <div class="panel">
     <div class="phd"><div class="bub">C</div>Listing Defaults</div>
-    <div class="info ig" style="margin-bottom:10px"><span>&#x1F4EC;</span><div>Under <strong>$20</strong> &rarr; envelope $1.00. $20+ &rarr; USPS. All listings are <strong>Buy It Now only</strong>.</div></div>
+    <div class="info ig" style="margin-bottom:10px"><span>&#x1F4EC;</span><div>Under <strong>$20</strong> &rarr; envelope $1.00. $20+ &rarr; USPS. All listings <strong>Buy It Now only</strong>.</div></div>
     <div class="g2">
       <div><div class="lbl">Duration</div><select class="inp" id="cfgDur"><option value="GTC">Good Till Cancelled</option><option value="Days_30">30 Days</option><option value="Days_10">10 Days</option><option value="Days_7">7 Days</option></select></div>
       <div><div class="lbl">Returns</div><select class="inp" id="cfgRet"><option value="ReturnsAccepted">30-Day Returns</option><option value="ReturnsNotAccepted">No Returns</option></select></div>
@@ -379,10 +340,9 @@ select.inp{cursor:pointer}
   </div>
   <button class="btn bg-g" onclick="goTab('list')">Start Listing Cards &rarr;</button>
 </div>
-
 <script>
 const S={gemKey:'',duration:'GTC',returns:'ReturnsAccepted',shipping:4.99,envCutoff:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
-const COLORS=['#00ff88','#0088ff','#ffbb00','#ff3366','#aa55ff','#ff8800','#00ccff','#ff44aa','#44ffcc','#ff6644'];
+const COLORS=['#16a34a','#1d4ed8','#d97706','#dc2626','#7c3aed','#ea580c','#0891b2','#db2777','#059669','#9333ea'];
 const CAT={Baseball:'213',Basketball:'261329',Football:'261328',Hockey:'247',Soccer:'261330',Other:'213'};
 const CSV_H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
 let selColor=COLORS[0];
@@ -402,7 +362,7 @@ const ls={
   if(pin){
     const entered=prompt('Enter your Card Lister PIN:');
     if(String(entered)!==String(pin)){
-      document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:20px;color:#ff3366;background:#080a0f">Wrong PIN</div>';
+      document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:20px;color:#dc2626">Wrong PIN</div>';
       return;
     }
   }
@@ -426,24 +386,20 @@ function goTab(n){
 }
 function saveKey(){
   const raw=document.getElementById('gemIn').value.trim();
-  if(raw.length<10){document.getElementById('gemMsg').innerHTML=iHtml('ir','Key too short — paste the complete key');return;}
+  if(raw.length<10){document.getElementById('gemMsg').innerHTML=iHtml('ir','Key too short - paste the complete key');return;}
   S.gemKey=raw;ls.set('gk',raw);
   document.getElementById('gemIn').value=mask(raw);
-  document.getElementById('gemMsg').innerHTML=iHtml('ig','&#x2713; Saved! Starts: '+raw.slice(0,8)+'...');
-  refreshKeyBar();toast('Gemini key saved — ready!');
+  document.getElementById('gemMsg').innerHTML=iHtml('ig','Saved! Starts: '+raw.slice(0,8)+'...');
+  refreshKeyBar();toast('Gemini key saved - ready!');
 }
 function clearKey(){if(!confirm('Remove saved key?'))return;S.gemKey='';ls.set('gk','');document.getElementById('gemIn').value='';document.getElementById('gemMsg').innerHTML='';refreshKeyBar();toast('Key removed','warn');}
-function savePIN(){
-  const v=String(document.getElementById('pinIn').value).trim();
-  if(v.length!==4||isNaN(Number(v))){toast('Enter exactly 4 digits','err');return;}
-  ls.set('pin',v);document.getElementById('pinIn').value='';toast('PIN saved!');
-}
+function savePIN(){const v=String(document.getElementById('pinIn').value).trim();if(v.length!==4||isNaN(Number(v))){toast('Enter exactly 4 digits','err');return;}ls.set('pin',v);document.getElementById('pinIn').value='';toast('PIN saved!');}
 function clearPIN(){ls.set('pin',null);toast('PIN removed','warn');}
 function refreshKeyBar(){
   const ok=!!S.gemKey;
   document.getElementById('kdot').className='kdot'+(ok?' ok':'');
-  document.getElementById('klbl').textContent=ok?'Gemini AI ready — Free key active':'No API key — AI disabled';
-  document.getElementById('ksub').textContent=ok?mask(S.gemKey)+' · tap Setup to change':'Go to Setup → paste your free Gemini key';
+  document.getElementById('klbl').textContent=ok?'Gemini AI ready - Free key active':'No API key - AI disabled';
+  document.getElementById('ksub').textContent=ok?mask(S.gemKey)+' - tap Setup to change':'Go to Setup and paste your free Gemini key';
 }
 function saveDefaults(){
   S.duration=document.getElementById('cfgDur').value;
@@ -454,7 +410,7 @@ function saveDefaults(){
   toast('Saved!');
 }
 function buildColors(){
-  document.getElementById('cpick').innerHTML=COLORS.map((c,i)=>`<div class="copt${i===0?' sel':''}" style="background:${c}" onclick="pickCol(this,'${c}')"></div>`).join('');
+  document.getElementById('cpick').innerHTML=COLORS.map((c,i)=>'<div class="copt'+(i===0?' sel':'')+'" style="background:'+c+'" onclick="pickCol(this,\''+c+'\')"></div>').join('');
 }
 function pickCol(el,c){document.querySelectorAll('.copt').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');selColor=c;}
 function addAcct(){
@@ -473,27 +429,34 @@ function delAcct(id){
   renderAccts();updateBanner();
 }
 function renderAccts(){
-  const el=document.getElementById('acctList'),lbl=document.getElementById('actLbl');
+  const el=document.getElementById('acctList');
+  const lbl=document.getElementById('actLbl');
   if(lbl)lbl.textContent=S.accounts.length+' account'+(S.accounts.length!==1?'s':'');
-  if(!S.accounts.length){el.innerHTML='<div class="empty"><div class="empty-i">&#x1F464;</div>No accounts yet.</div>';return;}
+  if(!S.accounts.length){el.innerHTML='<div class="empty"><div class="empty-i">No accounts yet.</div></div>';return;}
   el.innerHTML='<div class="acct-stack">'+S.accounts.map(a=>{
-    const act=a.id===S.activeId,ct=S.exported.filter(p=>p.acctId===a.id).length;
-    return `<div class="ai${act?' active':''}" onclick="setActive('${a.id}')">
-      <div class="ai-dot" style="background:${a.color}"></div>
-      <div class="ai-body"><div class="ai-name">${a.name}</div><div class="ai-det">${ct} card${ct!==1?'s':''} ready${act?' · ACTIVE':''}</div></div>
-      ${act?'<div class="ai-badge">ACTIVE</div>':''}
-      <button class="ai-del" onclick="event.stopPropagation();delAcct('${a.id}')">&#x00D7;</button>
-    </div>`;
+    const act=a.id===S.activeId;
+    const ct=S.exported.filter(p=>p.acctId===a.id).length;
+    return '<div class="ai'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">'
+      +'<div class="ai-dot" style="background:'+a.color+'"></div>'
+      +'<div class="ai-body"><div class="ai-name">'+a.name+'</div>'
+      +'<div class="ai-det">'+ct+' card'+(ct!==1?'s':'')+' ready'+(act?' - ACTIVE':'')+'</div></div>'
+      +(act?'<div class="ai-badge">ACTIVE</div>':'')
+      +'<button class="ai-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">X</button>'
+      +'</div>';
   }).join('')+'</div>';
 }
 function updateBanner(){
   const a=S.accounts.find(x=>x.id===S.activeId);
-  document.getElementById('abd').style.background=a?.color||'#2a3848';
-  document.getElementById('abn').textContent=a?.name||'No account — add one first';
+  document.getElementById('abd').style.background=a?a.color:'#cbd5e1';
+  document.getElementById('abn').textContent=a?a.name:'No account - add one first';
 }
 function onFiles(e){addToQueue([...e.target.files]);e.target.value='';}
 function doDrag(e,on){e.preventDefault();document.getElementById('dropzone').classList.toggle('drag',!!on);}
-function doDrop(e){e.preventDefault();document.getElementById('dropzone').classList.remove('drag');addToQueue([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));}
+function doDrop(e){
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('drag');
+  addToQueue([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));
+}
 function addToQueue(files){
   if(!S.gemKey){toast('Add Gemini key in Setup first','err');goTab('setup');return;}
   if(!S.activeId){toast('Add eBay account first','err');goTab('accts');return;}
@@ -502,22 +465,13 @@ function addToQueue(files){
     const r=new FileReader();
     r.onload=ev=>{
       S.queue.push({id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:'pending',result:null,error:null,acctId:S.activeId});
-      renderQueue();if(files.length===1)analyzeCard(S.queue[S.queue.length-1]);
-    };r.readAsDataURL(f);
+      renderQueue();
+      if(files.length===1)analyzeCard(S.queue[S.queue.length-1]);
+    };
+    r.readAsDataURL(f);
   });
 }
-const PROMPT=`You are an expert sports card authenticator and eBay power seller. Analyze this card photo with maximum precision.
-
-IDENTIFY: player full name (read jersey/nameplate/caption carefully), year on card, complete set and brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Patch/Numbered/RC/1st Bowman), serial number if numbered (e.g. 42 of 99), team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.
-
-Reply ONLY with valid JSON. No markdown. No backticks:
-{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface, excellent centering","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}
-
-ebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.
-description: 190-220 words professional listing. Card details, condition, ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.
-suggestedBIN: accurate current eBay market USD price.
-searchTags: 6-8 terms real buyers search.`;
-
+const PROMPT='You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface, excellent centering","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}\n\nebayTitle: max 80 chars. Pack with year brand player cardnum variation condition.\ndescription: 190-220 words professional listing. Ships penny sleeve + top loader + team bag USPS First Class with tracking, payment 3 days, all sales final on raw cards.\nsuggestedBIN: accurate current eBay market USD price.\nsearchTags: 6-8 terms real buyers search.';
 async function callAI(rawDataUrl){
   const base64=rawDataUrl.includes(',')?rawDataUrl.split(',')[1]:rawDataUrl;
   const mm=rawDataUrl.match(/data:([^;]+);/);
@@ -526,30 +480,35 @@ async function callAI(rawDataUrl){
   const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
   const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:sm,data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:1500}});
   let resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':S.gemKey},body});
-  if(resp.status===401||resp.status===403)resp=await fetch(url+'?key='+encodeURIComponent(S.gemKey),{method:'POST',headers:{'Content-Type':'application/json'},body});
+  if(resp.status===401||resp.status===403){
+    resp=await fetch(url+'?key='+encodeURIComponent(S.gemKey),{method:'POST',headers:{'Content-Type':'application/json'},body});
+  }
   if(!resp.ok){
     const e=await resp.json().catch(()=>({}));
-    const msg=e.error?.message||'Error '+resp.status;
-    if(resp.status===401||resp.status===403)throw new Error('Key rejected — re-paste in Setup');
-    if(resp.status===429)throw new Error('Rate limit — wait 1 min and retry');
+    const msg=e.error?e.error.message:'Error '+resp.status;
+    if(resp.status===401||resp.status===403)throw new Error('Key rejected - re-paste in Setup');
+    if(resp.status===429)throw new Error('Rate limit - wait 1 min');
     throw new Error(msg.slice(0,140));
   }
   const d=await resp.json();
-  const txt=d.candidates?.[0]?.content?.parts?.[0]?.text||'';
-  if(!txt)throw new Error('Empty response — try again');
+  const txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:'';
+  if(!txt)throw new Error('Empty response - try again');
   return JSON.parse(txt.replace(/```json|```/g,'').trim());
 }
-const STEPS=['Sending to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel/variation...','Assessing condition...','Writing eBay title...','Generating description...','Setting market price...'];
+const STEPS=['Sending to Gemini...','Identifying player...','Reading year and set...','Detecting card number...','Checking parallel...','Assessing condition...','Writing eBay title...','Generating description...','Setting market price...'];
 async function analyzeCard(item){
   item.status='reading';renderQI(item);
   let si=0;showLdr('Reading card...',STEPS[0]);
-  const t=setInterval(()=>{si=(si+1)%STEPS.length;document.getElementById('ldrS').textContent=STEPS[si];},900);
+  const t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById('ldrS').textContent=STEPS[si];},900);
   try{
     if(S.stop)throw new Error('Cancelled');
     const result=await callAI(item.rawData);
     item.result=result;item.status='ready';
-    item.name=result.player&&result.year?result.player+' '+result.year:item.name;
-  }catch(e){item.status='error';item.error=e.message||'Failed';if(e.message!=='Cancelled')toast(item.error,'err');}
+    item.name=(result.player&&result.year)?result.player+' '+result.year:item.name;
+  }catch(e){
+    item.status='error';item.error=e.message||'Failed';
+    if(e.message!=='Cancelled')toast(item.error,'err');
+  }
   clearInterval(t);hideLdr();S.stop=false;renderQI(item);refreshStats();
   if(item.status==='ready')showPreview(item);
 }
@@ -557,23 +516,28 @@ async function analyzeById(id){const i=S.queue.find(x=>x.id===id);if(i)await ana
 async function runBatch(){
   const pend=S.queue.filter(i=>i.status==='pending'||i.status==='error');
   if(!pend.length){toast('No pending cards');return;}
-  S.stop=false;const btn=document.getElementById('batchBtn');
-  btn.textContent='Stop';btn.onclick=()=>{S.stop=true;};
+  S.stop=false;
+  const btn=document.getElementById('batchBtn');
+  btn.textContent='Stop';btn.onclick=function(){S.stop=true;};
   document.getElementById('bprog').style.display='block';
   let done=0;const tot=pend.length;
   for(const item of pend){
     if(S.stop)break;
     document.getElementById('bst').textContent=(done+1)+'/'+tot+': '+item.name+'...';
     item.status='reading';renderQI(item);showLdr('Card '+(done+1)+' of '+tot,'Sending to Gemini...');
-    try{const result=await callAI(item.rawData);item.result=result;item.status='ready';item.name=result.player&&result.year?result.player+' '+result.year:item.name;}
-    catch(e){item.status='error';item.error=e.message.slice(0,80);}
+    try{
+      const result=await callAI(item.rawData);
+      item.result=result;item.status='ready';
+      item.name=(result.player&&result.year)?result.player+' '+result.year:item.name;
+    }catch(e){item.status='error';item.error=e.message.slice(0,80);}
     hideLdr();done++;
     document.getElementById('bfill').style.width=Math.round(done/tot*100)+'%';
     document.getElementById('binfo').textContent=done+'/'+tot+' done';
-    renderQI(item);refreshStats();await sleep(500);
+    renderQI(item);refreshStats();
+    await sleep(500);
   }
-  S.stop=false;btn.textContent='\uD83E\uDD16 AI Read All Cards';btn.onclick=runBatch;
-  document.getElementById('bst').textContent='\u2713 Done \u2014 '+done+'/'+tot+' analyzed';
+  S.stop=false;btn.textContent='AI Read All Cards';btn.onclick=runBatch;
+  document.getElementById('bst').textContent='Done - '+done+'/'+tot+' analyzed';
   toast(done+' cards analyzed!');
 }
 function renderQueue(){
@@ -587,186 +551,275 @@ function renderQueue(){
 function renderQI(item){const el=document.getElementById('qi_'+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
 function buildQI(item){
   const sc={pending:'sp',reading:'sr',ready:'sok',error:'se'};
-  const sl={pending:'Pending',reading:'Reading\u2026',ready:'\u2713 Ready',error:'\u00D7 '+(item.error||'Error')};
+  const sl={pending:'Pending',reading:'Reading...','ready':'Ready','error':'Error: '+(item.error||'')};
   const a=S.accounts.find(x=>x.id===item.acctId);
-  const pr=item.result?.suggestedBIN;const env=pr&&pr<S.envCutoff;
-  return `<div class="qi" id="qi_${item.id}">
-    ${item.thumb?`<img class="qi-img" src="${item.thumb}" alt=""/>`:'<div class="qi-ph">&#x1F0CF;</div>'}
-    <div class="qi-body">
-      <div class="qi-name">${item.result?.player||item.name}</div>
-      <div class="qi-st"><span class="${sc[item.status]||'sp'}">${sl[item.status]||item.status}</span></div>
-      ${a?`<div class="qi-acct"><div class="qi-adot" style="background:${a.color}"></div><span style="color:#5a7090;font-size:10px">${a.name}</span></div>`:''}
-      ${pr?`<div class="qi-price">$${pr} BIN</div>`:''}
-      ${pr?`<div class="qi-ship">${env?'\uD83D\uDCEC Envelope $1.00':'\uD83D\uDCE6 USPS $'+S.shipping}</div>`:''}
-      <div class="qi-meta">${item.result?.ebayTitle||''}</div>
-    </div>
-    <div class="qi-side">
-      ${item.status==='ready'?`<button class="qib view" onclick="showPreview(S.queue.find(i=>i.id==='${item.id}'))">\uD83D\uDC41</button>`:''}
-      ${item.status!=='reading'&&item.status!=='ready'?`<button class="qib retry" onclick="analyzeById('${item.id}')" style="font-size:10px;font-weight:800;color:#ffbb00">AI</button>`:''}
-      <button class="qib del" onclick="rmCard('${item.id}')">&#x00D7;</button>
-    </div>
-  </div>`;
+  const pr=item.result?item.result.suggestedBIN:null;
+  const env=pr&&pr<S.envCutoff;
+  let html='<div class="qi" id="qi_'+item.id+'">';
+  html+=item.thumb?'<img class="qi-img" src="'+item.thumb+'" alt=""/>':'<div class="qi-ph">Card</div>';
+  html+='<div class="qi-body">';
+  html+='<div class="qi-name">'+(item.result?item.result.player:item.name)+'</div>';
+  html+='<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">'+(sl[item.status]||item.status)+'</span></div>';
+  if(a)html+='<div class="qi-acct"><div class="qi-adot" style="background:'+a.color+'"></div><span style="color:#64748b;font-size:10px">'+a.name+'</span></div>';
+  if(pr)html+='<div class="qi-price">$'+pr+' BIN</div>';
+  if(pr)html+='<div class="qi-ship">'+(env?'Envelope $1.00':'USPS $'+S.shipping)+'</div>';
+  if(item.result&&item.result.ebayTitle)html+='<div class="qi-meta">'+item.result.ebayTitle+'</div>';
+  html+='</div>';
+  html+='<div class="qi-side">';
+  if(item.status==='ready')html+='<button class="qib" onclick="showPreview(S.queue.find(function(i){return i.id===\''+item.id+'\'}))">View</button>';
+  if(item.status!=='reading'&&item.status!=='ready')html+='<button class="qib" onclick="analyzeById(\''+item.id+'\')" style="font-size:10px;font-weight:800;color:#1d4ed8">AI</button>';
+  html+='<button class="qib" onclick="rmCard(\''+item.id+'\')">X</button>';
+  html+='</div></div>';
+  return html;
 }
 function rmCard(id){S.queue=S.queue.filter(i=>i.id!==id);renderQueue();}
-function clearQueue(){if(!confirm('Clear all?'))return;S.queue=[];document.getElementById('qlist').innerHTML='';document.getElementById('qwrap').style.display='none';document.getElementById('prevArea').innerHTML='';refreshStats();}
+function clearQueue(){
+  if(!confirm('Clear all cards?'))return;
+  S.queue=[];
+  document.getElementById('qlist').innerHTML='';
+  document.getElementById('qwrap').style.display='none';
+  document.getElementById('prevArea').innerHTML='';
+  refreshStats();
+}
 function showPreview(item){
-  if(!item?.result)return;
-  const d=item.result;const pr=d.suggestedBIN||9.99;const env=pr<S.envCutoff;
+  if(!item||!item.result)return;
+  const d=item.result;
+  const pr=d.suggestedBIN||9.99;
+  const env=pr<S.envCutoff;
   const sec=document.getElementById('prevArea');
-  const asgH=S.accounts.length>1?`<div class="asgn-row"><div class="pf-lbl">Assign to account</div><div class="asgn-grid" id="ag_${item.id}">${S.accounts.map(a=>`<button class="asgn-btn${a.id===item.acctId?' sel':''}" onclick="reassign('${item.id}','${a.id}',this)"><div class="asgn-dot" style="background:${a.color}"></div>${a.name}</button>`).join('')}</div></div>`:'';
-  sec.innerHTML=`<div class="prev" id="pv_${item.id}">
-    <div class="prev-hdr"><div class="prev-ttl">\u2713 Listing Ready \u2014 Review &amp; Edit</div>
-      <div style="display:flex;gap:5px">
-        <button class="btn bg-o bsm" onclick="copyCard('${item.id}')">Copy</button>
-        <button class="btn bg-o bsm" onclick="document.getElementById('prevArea').innerHTML=''">&#x00D7;</button>
-      </div>
-    </div>
-    ${asgH}
-    <div class="pf"><div class="pf-lbl">eBay Title (max 80)</div>
-      <textarea class="pf-inp" id="pt_${item.id}" rows="2" oninput="document.getElementById('ptc_${item.id}').textContent=this.value.length+'/80'">${hEsc(d.ebayTitle)}</textarea>
-
-```
-  <div style="font-size:9px;color:#5a7090;margin-top:2px;font-family:'Syne Mono',monospace" id="ptc_${item.id}">${(d.ebayTitle||'').length}/80</div>
-</div>
-<div class="pf"><div class="pf-lbl">Description</div><textarea class="pf-inp" id="pd_${item.id}" rows="5">${hEsc(d.description)}</textarea></div>
-<div class="pf"><div class="pf-lbl">Buy It Now Price — Fixed Price Only</div>
-  <div class="pbox"><div class="pbl">BUY IT NOW</div>
-    <div class="prow"><span class="pcur">$</span><input class="pinp" id="pp_${item.id}" type="number" value="${pr}" step="0.01" min="0.99" oninput="liveShip('${item.id}',this.value)"/></div>
-  </div>
-</div>
-<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-  <div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl_${item.id}" value="${hEsc(d.player)}"/></div>
-  <div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr_${item.id}" value="${hEsc(d.year)}"/></div>
-</div>
-<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-  <div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst_${item.id}" value="${hEsc(d.set)}"/></div>
-  <div><div class="pf-lbl">Card #</div><input class="pf-inp" id="pcn_${item.id}" value="${hEsc(d.cardNumber)}"/></div>
-</div>
-<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-  <div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pvr_${item.id}" value="${hEsc(d.variation)}"/></div>
-  <div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm_${item.id}" value="${hEsc(d.team)}"/></div>
-</div>
-<div class="pf"><div class="pf-lbl">Condition Note</div><input class="pf-inp" id="pco_${item.id}" value="${hEsc(d.conditionNote)}"/></div>
-<div class="pf" style="display:flex;align-items:center;gap:10px">
-  <div class="pf-lbl" style="margin:0;flex-shrink:0">Shipping:</div>
-  <div class="stag ${env?'senv':'susps'}" id="stag_${item.id}">${env?'\uD83D\uDCEC Envelope $1.00':'\uD83D\uDCE6 USPS $'+S.shipping}</div>
-</div>
-${(d.searchTags||[]).length?`<div class="tags-row">${(d.searchTags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>`:''}
-<div class="prev-btns">
-  <button class="btn bg-g" onclick="addExport('${item.id}')" style="flex:2">&#x2713; Add to Export</button>
-  <button class="btn bg-o" onclick="copyCard('${item.id}')">Copy</button>
-</div>
-```
-
-  </div>`;
+  let asgH='';
+  if(S.accounts.length>1){
+    asgH='<div class="asgn-row"><div class="pf-lbl">Assign to account</div><div class="asgn-grid" id="ag_'+item.id+'">';
+    S.accounts.forEach(function(a){
+      asgH+='<button class="asgn-btn'+(a.id===item.acctId?' sel':'')+'" onclick="reassign(\''+item.id+'\',\''+a.id+'\',this)"><div class="asgn-dot" style="background:'+a.color+'"></div>'+a.name+'</button>';
+    });
+    asgH+='</div></div>';
+  }
+  const titleLen=(d.ebayTitle||'').length;
+  let html='<div class="prev" id="pv_'+item.id+'">';
+  html+='<div class="prev-hdr"><div class="prev-ttl">Listing Ready - Review and Edit</div>';
+  html+='<div style="display:flex;gap:5px">';
+  html+='<button class="btn bg-o bsm" onclick="copyCard(\''+item.id+'\')">Copy</button>';
+  html+='<button class="btn bg-o bsm" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>';
+  html+='</div></div>';
+  html+=asgH;
+  html+='<div class="pf"><div class="pf-lbl">eBay Title (max 80)</div>';
+  html+='<textarea class="pf-inp" id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length+\'/80\'">'+hEsc(d.ebayTitle)+'</textarea>';
+  html+='<div style="font-size:9px;color:#94a3b8;margin-top:2px" id="ptc_'+item.id+'">'+titleLen+'/80</div></div>';
+  html+='<div class="pf"><div class="pf-lbl">Description</div>';
+  html+='<textarea class="pf-inp" id="pd_'+item.id+'" rows="5">'+hEsc(d.description)+'</textarea></div>';
+  html+='<div class="pf"><div class="pf-lbl">Buy It Now Price - Fixed Price Only</div>';
+  html+='<div class="pbox"><div class="pbl">BUY IT NOW</div>';
+  html+='<div class="prow"><span class="pcur">$</span>';
+  html+='<input class="pinp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="liveShip(\''+item.id+'\',this.value)"/>';
+  html+='</div></div></div>';
+  html+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  html+='<div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl_'+item.id+'" value="'+hEsc(d.player)+'"/></div>';
+  html+='<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr_'+item.id+'" value="'+hEsc(d.year)+'"/></div></div>';
+  html+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  html+='<div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst_'+item.id+'" value="'+hEsc(d.set)+'"/></div>';
+  html+='<div><div class="pf-lbl">Card #</div><input class="pf-inp" id="pcn_'+item.id+'" value="'+hEsc(d.cardNumber)+'"/></div></div>';
+  html+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  html+='<div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pvr_'+item.id+'" value="'+hEsc(d.variation)+'"/></div>';
+  html+='<div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm_'+item.id+'" value="'+hEsc(d.team)+'"/></div></div>';
+  html+='<div class="pf"><div class="pf-lbl">Condition Note</div>';
+  html+='<input class="pf-inp" id="pco_'+item.id+'" value="'+hEsc(d.conditionNote)+'"/></div>';
+  html+='<div class="pf" style="display:flex;align-items:center;gap:10px">';
+  html+='<div class="pf-lbl" style="margin:0;flex-shrink:0">Shipping:</div>';
+  html+='<div class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">'+(env?'Envelope $1.00':'USPS $'+S.shipping)+'</div></div>';
+  if(d.searchTags&&d.searchTags.length){
+    html+='<div class="tags-row">';
+    d.searchTags.forEach(function(t){html+='<span class="tag">'+t+'</span>';});
+    html+='</div>';
+  }
+  html+='<div class="prev-btns">';
+  html+='<button class="btn bg-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>';
+  html+='<button class="btn bg-o" onclick="copyCard(\''+item.id+'\')">Copy</button>';
+  html+='</div></div>';
+  sec.innerHTML=html;
   sec.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function hEsc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function liveShip(id,val){const t=document.getElementById('stag_'+id);if(!t)return;const env=parseFloat(val)<S.envCutoff;t.className='stag '+(env?'senv':'susps');t.textContent=env?'\uD83D\uDCEC Envelope $1.00':'\uD83D\uDCE6 USPS $'+S.shipping;}
-function reassign(cId,aId,btn){const i=S.queue.find(x=>x.id===cId);if(i)i.acctId=aId;renderQI(i);document.getElementById('ag_'+cId)?.querySelectorAll('.asgn-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+function liveShip(id,val){
+  const t=document.getElementById('stag_'+id);
+  if(!t)return;
+  const env=parseFloat(val)<S.envCutoff;
+  t.className='stag '+(env?'senv':'susps');
+  t.textContent=env?'Envelope $1.00':'USPS $'+S.shipping;
+}
+function reassign(cId,aId,btn){
+  const i=S.queue.find(x=>x.id===cId);
+  if(i)i.acctId=aId;
+  renderQI(i);
+  const grid=document.getElementById('ag_'+cId);
+  if(grid)grid.querySelectorAll('.asgn-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+}
 function copyCard(id){
-  const item=S.queue.find(i=>i.id===id);if(!item?.result)return;
-  const txt='TITLE:\n'+(document.getElementById('pt_'+id)?.value||item.result.ebayTitle||'')+'\n\nBUY IT NOW: $'+(document.getElementById('pp_'+id)?.value||item.result.suggestedBIN)+'\n\nDESCRIPTION:\n'+(document.getElementById('pd_'+id)?.value||item.result.description||'');
-  navigator.clipboard.writeText(txt).then(()=>toast('Copied!')).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');});
+  const item=S.queue.find(function(i){return i.id===id;});
+  if(!item||!item.result)return;
+  const title=document.getElementById('pt_'+id)?document.getElementById('pt_'+id).value:item.result.ebayTitle||'';
+  const desc=document.getElementById('pd_'+id)?document.getElementById('pd_'+id).value:item.result.description||'';
+  const bin=document.getElementById('pp_'+id)?document.getElementById('pp_'+id).value:item.result.suggestedBIN;
+  const txt='TITLE:\n'+title+'\n\nBUY IT NOW: $'+bin+'\n\nDESCRIPTION:\n'+desc;
+  navigator.clipboard.writeText(txt).then(function(){toast('Copied!');}).catch(function(){
+    const ta=document.createElement('textarea');ta.value=txt;
+    ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);
+    ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');
+  });
 }
 function addExport(id){
-  const item=S.queue.find(i=>i.id===id);if(!item?.result)return;
-  const price=parseFloat(document.getElementById('pp_'+id)?.value||item.result.suggestedBIN);
-  const d={...item.result,_id:id,acctId:item.acctId||S.activeId,
-    ebayTitle:(document.getElementById('pt_'+id)?.value||item.result.ebayTitle||'').slice(0,80),
-    description:document.getElementById('pd_'+id)?.value||item.result.description||'',
+  const item=S.queue.find(function(i){return i.id===id;});
+  if(!item||!item.result)return;
+  const price=parseFloat(document.getElementById('pp_'+id)?document.getElementById('pp_'+id).value:item.result.suggestedBIN);
+  const d=Object.assign({},item.result,{
+    _id:id,acctId:item.acctId||S.activeId,
+    ebayTitle:(document.getElementById('pt_'+id)?document.getElementById('pt_'+id).value:item.result.ebayTitle||'').slice(0,80),
+    description:document.getElementById('pd_'+id)?document.getElementById('pd_'+id).value:item.result.description||'',
     suggestedBIN:price,
-    player:document.getElementById('ppl_'+id)?.value||item.result.player||'',
-    year:document.getElementById('pyr_'+id)?.value||item.result.year||'',
-    set:document.getElementById('pst_'+id)?.value||item.result.set||'',
-    cardNumber:document.getElementById('pcn_'+id)?.value||item.result.cardNumber||'',
-    variation:document.getElementById('pvr_'+id)?.value||item.result.variation||'',
-    team:document.getElementById('ptm_'+id)?.value||item.result.team||'',
-    conditionNote:document.getElementById('pco_'+id)?.value||item.result.conditionNote||'',
-    useEnvelope:price<S.envCutoff};
-  const idx=S.exported.findIndex(p=>p._id===id);
+    player:document.getElementById('ppl_'+id)?document.getElementById('ppl_'+id).value:item.result.player||'',
+    year:document.getElementById('pyr_'+id)?document.getElementById('pyr_'+id).value:item.result.year||'',
+    set:document.getElementById('pst_'+id)?document.getElementById('pst_'+id).value:item.result.set||'',
+    cardNumber:document.getElementById('pcn_'+id)?document.getElementById('pcn_'+id).value:item.result.cardNumber||'',
+    variation:document.getElementById('pvr_'+id)?document.getElementById('pvr_'+id).value:item.result.variation||'',
+    team:document.getElementById('ptm_'+id)?document.getElementById('ptm_'+id).value:item.result.team||'',
+    conditionNote:document.getElementById('pco_'+id)?document.getElementById('pco_'+id).value:item.result.conditionNote||'',
+    useEnvelope:price<S.envCutoff
+  });
+  const idx=S.exported.findIndex(function(p){return p._id===id;});
   if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
-  addHistory(d);toast('Added to export!');document.getElementById('prevArea').innerHTML='';renderExport();refreshStats();
+  addHistory(d);toast('Added to export!');
+  document.getElementById('prevArea').innerHTML='';
+  renderExport();refreshStats();
+}
+function csvEsc(v){
+  const s=String(v||'').replace(/"/g,'""');
+  if(s.indexOf(',')>=0||s.indexOf('"')>=0||s.indexOf('\n')>=0||s.indexOf('\r')>=0)return'"'+s+'"';
+  return s;
 }
 function buildCSV(acctId){
-  const rows=S.exported.filter(d=>d.acctId===acctId);if(!rows.length)return'';
+  const rows=S.exported.filter(function(d){return d.acctId===acctId;});
+  if(!rows.length)return'';
   const cols=[CSV_H,'Title','Description','Category','BuyItNowPrice','Quantity','ConditionID','ConditionDescription','ListingDuration','ListingType','ReturnsAcceptedOption','ReturnsWithinOption','RefundOption','ShippingCostPaidByOption','ShippingService-1:Option','ShippingService-1:Cost','C:Player/Athlete','C:Year Manufactured','C:Set','C:Card Number','C:Parallel/Variety','C:Team','C:Sport'];
-  const esc=v=>{const s=String(v||'').replace(/"/g,'""');return/[,"\n\r]/.test(s)?'"'+s+'"':s;};
-  return[cols,...rows.map(d=>['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',d.isGraded&&d.grade?d.gradingCompany+' '+d.grade:'USED',d.conditionNote||'Near Mint or Better',S.duration,'FixedPriceItem',S.returns,'Days_30','MoneyBack','Buyer','USPSFirstClass',d.useEnvelope?'1.00':String(S.shipping),d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||'Baseball'])].map(r=>r.map(esc).join(',')).join('\r\n');
+  const dataRows=rows.map(function(d){
+    return ['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',
+      (d.isGraded&&d.grade)?d.gradingCompany+' '+d.grade:'USED',
+      d.conditionNote||'Near Mint or Better',S.duration,'FixedPriceItem',
+      S.returns,'Days_30','MoneyBack','Buyer','USPSFirstClass',
+      d.useEnvelope?'1.00':String(S.shipping),
+      d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||'Baseball'];
+  });
+  return[cols].concat(dataRows).map(function(r){return r.map(csvEsc).join(',');}).join('\r\n');
 }
 function dlCSV(acctId){
-  const csv=buildCSV(acctId);if(!csv){toast('No cards','err');return;}
-  const a=S.accounts.find(x=>x.id===acctId);
+  const csv=buildCSV(acctId);
+  if(!csv){toast('No cards','err');return;}
+  const a=S.accounts.find(function(x){return x.id===acctId;});
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);const el=document.createElement('a');el.href=url;
-  el.download='ebay_'+(a?.name||'cards').replace(/\s+/g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(el);el.click();document.body.removeChild(el);URL.revokeObjectURL(url);
-  toast('Downloaded '+S.exported.filter(p=>p.acctId===acctId).length+' listings!');
+  const url=URL.createObjectURL(blob);
+  const el=document.createElement('a');el.href=url;
+  el.download='ebay_'+(a?a.name:'cards').replace(/ /g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(el);el.click();document.body.removeChild(el);
+  URL.revokeObjectURL(url);
+  toast('Downloaded!');
 }
 function renderExport(){
-  const el=document.getElementById('expBlocks'),emp=document.getElementById('expEmpty'),guide=document.getElementById('expGuide');
-  const lbl=document.getElementById('expLbl');if(lbl)lbl.textContent=S.exported.length+' ready';
+  const el=document.getElementById('expBlocks');
+  const emp=document.getElementById('expEmpty');
+  const guide=document.getElementById('expGuide');
+  const lbl=document.getElementById('expLbl');
+  if(lbl)lbl.textContent=S.exported.length+' ready';
   if(!S.exported.length){el.innerHTML='';emp.style.display='block';if(guide)guide.style.display='none';return;}
   emp.style.display='none';if(guide)guide.style.display='block';
-  const g={};S.exported.forEach(d=>{if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);});
-  el.innerHTML=Object.entries(g).map(([aId,cards])=>{
-    const a=S.accounts.find(x=>x.id===aId);const name=a?.name||'Unknown';const color=a?.color||'#888';
-    const tot=cards.reduce((s,c)=>s+(c.suggestedBIN||0),0);const env=cards.filter(c=>c.useEnvelope).length;
-    return `<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:${color}"></div>
-      <div><div style="font-size:14px;font-weight:800;color:${color}">${name}</div>
-        <div style="font-size:10px;color:#5a7090;margin-top:2px;font-family:'Syne Mono',monospace">${cards.length} listings · $${Math.round(tot)} · ${env} envelope / ${cards.length-env} USPS · All Buy It Now</div></div></div>
-      <div class="exp-body">
-        <div style="margin-bottom:10px">${cards.slice(0,6).map(c=>`<div class="exp-row"><div class="exp-name">${c.player||'Card'} ${c.year||''} ${c.variation||''}</div><div style="font-size:10px;color:#5a7090;margin:0 4px">${c.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</div><div class="exp-price">$${c.suggestedBIN||'?'} BIN</div></div>`).join('')}${cards.length>6?`<div style="font-size:11px;color:#2a3848;padding:4px 0">+ ${cards.length-6} more...</div>`:''}</div>
-        <button class="btn bg-y" onclick="dlCSV('${aId}')">&#x2193; Download CSV for ${name}</button>
-        <div style="font-size:11px;color:#5a7090;margin-top:10px;line-height:1.7">Sign into <strong style="color:#e8f0fa">${name}</strong> in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload Template &rarr; select this CSV.</div>
-      </div></div>`;
+  const g={};
+  S.exported.forEach(function(d){if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);});
+  el.innerHTML=Object.keys(g).map(function(aId){
+    const cards=g[aId];
+    const a=S.accounts.find(function(x){return x.id===aId;});
+    const name=a?a.name:'Unknown';const color=a?a.color:'#888';
+    const tot=cards.reduce(function(s,c){return s+(c.suggestedBIN||0);},0);
+    const env=cards.filter(function(c){return c.useEnvelope;}).length;
+    let html='<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>';
+    html+='<div><div style="font-size:14px;font-weight:800;color:'+color+'">'+name+'</div>';
+    html+='<div style="font-size:10px;color:#64748b;margin-top:2px">'+cards.length+' listings - $'+Math.round(tot)+' - '+env+' envelope / '+(cards.length-env)+' USPS - All Buy It Now</div></div></div>';
+    html+='<div class="exp-body"><div style="margin-bottom:10px">';
+    cards.slice(0,6).forEach(function(c){
+      html+='<div class="exp-row"><div class="exp-name">'+(c.player||'Card')+' '+(c.year||'')+' '+(c.variation||'')+'</div>';
+      html+='<div style="font-size:10px;color:#94a3b8;margin:0 4px">'+(c.useEnvelope?'Env':'USPS')+'</div>';
+      html+='<div class="exp-price">$'+(c.suggestedBIN||'?')+' BIN</div></div>';
+    });
+    if(cards.length>6)html+='<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ '+(cards.length-6)+' more...</div>';
+    html+='</div>';
+    html+='<button class="btn bg-y" onclick="dlCSV(\''+aId+'\')">Download CSV for '+name+'</button>';
+    html+='<div style="font-size:11px;color:#64748b;margin-top:10px;line-height:1.7">Sign into <strong>'+name+'</strong> in Safari - Seller Hub - Reports - Upload Template - select this CSV.</div>';
+    html+='</div></div>';
+    return html;
   }).join('');
 }
 function addHistory(d){
-  const a=S.accounts.find(x=>x.id===d.acctId);
+  const a=S.accounts.find(function(x){return x.id===d.acctId;});
   document.getElementById('logEmpty').style.display='none';
   const el=document.createElement('div');el.className='log-item';
-  el.innerHTML=`<div class="log-ck">&#x2713;</div><div class="log-info"><div class="log-name">${d.player||'Card'} ${d.year||''} ${d.variation||''}</div><div class="log-det">${a?`<div class="log-dot" style="background:${a.color}"></div><span>${a.name}</span> · `:''}<span>${d.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</span> <span style="color:#00ff88">$${d.suggestedBIN||'?'} BIN</span></div></div>`;
+  let html='<div class="log-ck">OK</div><div class="log-info">';
+  html+='<div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+' '+(d.variation||'')+'</div>';
+  html+='<div class="log-det">';
+  if(a)html+='<div class="log-dot" style="background:'+a.color+'"></div><span>'+a.name+'</span> - ';
+  html+='<span style="color:#16a34a">$'+(d.suggestedBIN||'?')+' BIN</span></div></div>';
+  el.innerHTML=html;
   document.getElementById('logList').prepend(el);
 }
 function renderHistory(){
-  const list=document.getElementById('logList'),emp=document.getElementById('logEmpty');
+  const list=document.getElementById('logList');
+  const emp=document.getElementById('logEmpty');
   if(!S.exported.length){list.innerHTML='';emp.style.display='block';return;}
   emp.style.display='none';
-  list.innerHTML=[...S.exported].reverse().map(d=>{const a=S.accounts.find(x=>x.id===d.acctId);
-    return `<div class="log-item"><div class="log-ck">&#x2713;</div><div class="log-info"><div class="log-name">${d.player||'Card'} ${d.year||''} ${d.variation||''}</div><div class="log-det">${a?`<div class="log-dot" style="background:${a.color}"></div><span>${a.name}</span> · `:''}<span>${d.useEnvelope?'\uD83D\uDCEC':'\uD83D\uDCE6'}</span> <span style="color:#00ff88">$${d.suggestedBIN||'?'} BIN</span></div></div></div>`;
+  list.innerHTML=S.exported.slice().reverse().map(function(d){
+    const a=S.accounts.find(function(x){return x.id===d.acctId;});
+    let html='<div class="log-item"><div class="log-ck">OK</div><div class="log-info">';
+    html+='<div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+' '+(d.variation||'')+'</div>';
+    html+='<div class="log-det">';
+    if(a)html+='<div class="log-dot" style="background:'+a.color+'"></div><span>'+a.name+'</span> - ';
+    html+='<span style="color:#16a34a">$'+(d.suggestedBIN||'?')+' BIN</span></div></div></div>';
+    return html;
   }).join('');
 }
 function exportLog(){
   if(!S.exported.length){toast('No cards yet','err');return;}
   const cols=['Account','Player','Year','Set','Card#','Variation','Team','BIN Price','Shipping','Title'];
-  const rows=S.exported.map(d=>{const a=S.accounts.find(x=>x.id===d.acctId);
-    return[a?.name||'',d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.suggestedBIN,d.useEnvelope?'Envelope $1':'USPS $'+S.shipping,d.ebayTitle].map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(',');});
-  const blob=new Blob([[cols.join(','),...rows].join('\n')],{type:'text/csv'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='card_log_'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);
+  const rows=S.exported.map(function(d){
+    const a=S.accounts.find(function(x){return x.id===d.acctId;});
+    return[a?a.name:'',d.player,d.year,d.set,d.cardNumber,d.variation,d.team,
+      d.suggestedBIN,d.useEnvelope?'Envelope $1':'USPS $'+S.shipping,d.ebayTitle
+    ].map(function(v){return'"'+(v||'').toString().replace(/"/g,'""')+'"';}).join(',');
+  });
+  const blob=new Blob([[cols.join(',')].concat(rows).join('\n')],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='card_log.csv';a.click();
+  URL.revokeObjectURL(url);
 }
 function refreshStats(){
-  const tot=S.queue.length,rdy=S.queue.filter(i=>i.status==='ready').length;
-  const val=S.exported.reduce((s,d)=>s+(d.suggestedBIN||0),0);
-  document.getElementById('s-tot').textContent=tot;document.getElementById('s-rdy').textContent=rdy;document.getElementById('s-val').textContent='$'+Math.round(val);
-  document.getElementById('nc-q').textContent=tot;document.getElementById('nc-r').textContent=rdy;
+  const tot=S.queue.length;
+  const rdy=S.queue.filter(function(i){return i.status==='ready';}).length;
+  const val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
+  document.getElementById('s-tot').textContent=tot;
+  document.getElementById('s-rdy').textContent=rdy;
+  document.getElementById('s-val').textContent='$'+Math.round(val);
+  document.getElementById('nc-q').textContent=tot;
+  document.getElementById('nc-r').textContent=rdy;
   document.getElementById('nc-v').textContent=val>=1000?'$'+(val/1000).toFixed(1)+'k':'$'+Math.round(val);
 }
 function showLdr(t,s){document.getElementById('ldrT').textContent=t;document.getElementById('ldrS').textContent=s;document.getElementById('ldr').classList.add('on');}
 function hideLdr(){document.getElementById('ldr').classList.remove('on');}
-function toast(msg,type){const el=document.getElementById('toast');el.innerHTML=msg;el.className='toast show'+(type==='err'?' err':type==='warn'?' warn':'');clearTimeout(window._tt);window._tt=setTimeout(()=>{el.className='toast';},3500);}
-function iHtml(cls,msg){return`<div class="info ${cls}" style="padding:8px 11px;font-size:11px;margin:0"><span>${cls.includes('g')?'&#x2713;':'&#x26A0;'}</span><div>${msg}</div></div>`;}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-
-// Failsafe: force list screen visible after 100ms if nothing is showing
-setTimeout(()=>{
-const active = document.querySelector(’.screen.on’);
-if(!active || getComputedStyle(active).display === ‘none’){
-document.getElementById(‘s-list’).className = ‘screen on’;
-document.getElementById(‘t-list’).className = ‘tab on’;
+function toast(msg,type){
+  const el=document.getElementById('toast');el.textContent=msg;
+  el.className='toast show'+(type==='err'?' err':type==='warn'?' warn':'');
+  clearTimeout(window._tt);window._tt=setTimeout(function(){el.className='toast';},3500);
 }
-}, 100);
-</script>
+function iHtml(cls,msg){
+  return '<div class="info '+cls+'" style="padding:8px 11px;font-size:11px;margin:0"><span>'+(cls.indexOf('g')>=0?'OK':'!')+' </span><div>'+msg+'</div></div>';
+}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
 
+</script>
 </body>
 </html>
