@@ -463,42 +463,45 @@ async function loadAll() {
 
 async function buildPlayerList(games) {
   const players = [];
-  // Only process first 8 games to keep it fast
   const gamesToProcess = games.slice(0, 8);
 
   for (const game of gamesToProcess) {
     try {
-      // Use boxscore - gets both teams + stats in ONE call
-      const boxData = await mlbFetch(`/game/${game.gameId}/boxscore`);
-      const teams = boxData.teams;
-      if (!teams) continue;
+      // Fetch both team rosters with season stats in parallel
+      const awayPath = '/teams/' + game.awayTeamId + '/roster?rosterType=active&hydrate=person(stats(type%3Dseason%2Cgroup%3Dhitting))';
+      const homePath = '/teams/' + game.homeTeamId + '/roster?rosterType=active&hydrate=person(stats(type%3Dseason%2Cgroup%3Dhitting))';
+      const [awayRoster, homeRoster] = await Promise.all([
+        mlbFetch(awayPath),
+        mlbFetch(homePath)
+      ]);
 
-      for (const side of ['away', 'home']) {
-        const teamData = teams[side];
-        const pitcherSide = side === 'away' ? 'home' : 'away';
-        const pitcherName = game[side === 'away' ? 'homePitcherName' : 'awayPitcherName'];
-        const pitcherERA = null; // simplified
-        const pitcherHand = 'R';
-        const batterTeam = side === 'away' ? game.awayTeam : game.homeTeam;
-        const pf = getParkFactor(side === 'home' ? game.homeTeam : game.awayTeam);
+      const sides = [
+        { roster: awayRoster, batterTeam: game.awayTeam, pitcherName: game.homePitcherName, pf: getParkFactor(game.homeTeam) },
+        { roster: homeRoster, batterTeam: game.homeTeam, pitcherName: game.awayPitcherName, pf: getParkFactor(game.homeTeam) }
+      ];
 
-        const batters = teamData.batters || [];
-        const playerInfo = teamData.players || {};
+      for (const { roster, batterTeam, pitcherName, pf } of sides) {
+        const rosterPlayers = roster.roster || [];
+        // Filter out pitchers, take top 9 position players
+        const posPlayers = rosterPlayers
+          .filter(p => p.position?.type !== 'Pitcher')
+          .slice(0, 9);
 
-        for (const batterId of batters.slice(0, 9)) {
-          const key = 'ID' + batterId;
-          const player = playerInfo[key];
-          if (!player) continue;
+        for (const p of posPlayers) {
+          const name = p.person?.fullName || '';
+          if (!name) continue;
+          const pos = p.position?.abbreviation || '—';
 
-          const name = player.person?.fullName || '';
-          const pos = player.position?.abbreviation || '—';
-          const stats = player.stats?.batting?.season || {};
-          const seasonAvg = parseFloat(stats.avg || 0);
-          const kRate = stats.strikeOuts && stats.plateAppearances
-            ? Math.round((parseInt(stats.strikeOuts) / parseInt(stats.plateAppearances)) * 100)
+          // Get stats from hydrated person data
+          const statGroups = p.person?.stats || [];
+          const hitStats = statGroups.find(s => s.group?.displayName === 'hitting');
+          const seasonSplit = hitStats?.splits?.[0]?.stat || {};
+          const seasonAvg = parseFloat(seasonSplit.avg || 0.250);
+          const ops = parseFloat(seasonSplit.ops || 0);
+          const kRate = seasonSplit.strikeOuts && seasonSplit.plateAppearances
+            ? Math.round((parseInt(seasonSplit.strikeOuts) / parseInt(seasonSplit.plateAppearances)) * 100)
             : null;
 
-          // Calculate probability from season avg
           const baseProb = 55;
           const avgBoost = (seasonAvg - 0.250) * 120;
           const parkBoost = pf >= 106 ? 3 : pf <= 94 ? -3 : 0;
@@ -506,21 +509,20 @@ async function buildPlayerList(games) {
 
           players.push({
             name,
-            playerId: batterId,
+            playerId: p.person?.id,
             team: batterTeam,
             pos,
             prob,
             yourGuy: YOUR_GUYS.some(yg => name.toLowerCase().includes(yg.toLowerCase().split(' ').pop())),
             avg: seasonAvg,
             vsHandAvg: seasonAvg,
-            vsHandOPS: parseFloat(stats.ops || 0),
+            vsHandOPS: ops,
             careerVsPitcher: null,
             kRate,
-            pitcher: pitcherName,
+            pitcher: pitcherName || 'TBD',
             pitcherERA: null,
-            pitcherHand,
+            pitcherHand: 'R',
             pitcherHR9: '—',
-            pitcherTeam: pitcherSide === 'home' ? game.homeTeam : game.awayTeam,
             parkFactor: pf,
             gameTime: game.gameTime,
             trend: seasonAvg >= 0.300 ? 'hot' : 'neutral'
@@ -528,10 +530,11 @@ async function buildPlayerList(games) {
         }
       }
     } catch(e) {
-      console.warn('Game boxscore error:', game.gameId, e.message);
+      console.warn('Game roster error:', game.gameId, e.message);
     }
   }
 
+  console.log('Total players loaded:', players.length);
   players.sort((a,b) => b.prob - a.prob);
   allPlayers = players;
   renderPlayerList(players);
