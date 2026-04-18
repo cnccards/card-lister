@@ -549,14 +549,16 @@ const compressed=await compressImage(rawDataUrl);
 const base64=compressed.includes(’,’)?compressed.split(’,’)[1]:compressed;
 const url=‘https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent’;
 const body=JSON.stringify({contents:[{parts:[{inline_data:{mime_type:‘image/jpeg’,data:base64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}});
-let resp=await fetch(url,{method:‘POST’,headers:{‘Content-Type’:‘application/json’,‘x-goog-api-key’:S.gemKey},body});
+// Try query param first (works for ALL key types including AIza)
+let resp=await fetch(url+’?key=’+encodeURIComponent(S.gemKey),{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body});
+// Fallback to header auth
 if(resp.status===401||resp.status===403){
-resp=await fetch(url+’?key=’+encodeURIComponent(S.gemKey),{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body});
+resp=await fetch(url,{method:‘POST’,headers:{‘Content-Type’:‘application/json’,‘x-goog-api-key’:S.gemKey},body});
 }
 if(!resp.ok){
 const e=await resp.json().catch(()=>({}));
 const msg=e.error?e.error.message:‘Error ‘+resp.status;
-if(resp.status===401||resp.status===403)throw new Error(‘Key rejected - check Setup tab’);
+if(resp.status===401||resp.status===403)throw new Error(‘Key invalid - go to Setup and re-paste your key’);
 if(resp.status===429)throw new Error(‘Rate limit - wait 1 min and retry’);
 throw new Error(msg.slice(0,140));
 }
