@@ -522,6 +522,12 @@ const ls = {
   S.activeId = ls.get('aid') || S.accounts[0]?.id || null;
 
   S.exported = JSON.parse(ls.get('exported') || '[]');
+  // Auto-load vault key into active key on startup
+  const vaultKey = ls.get('vault');
+  if (vaultKey && vaultKey.startsWith('sk-ant-')) {
+    S.antKey = vaultKey;
+    document.getElementById('vaultKey').value = vaultKey;
+  }
   pickBestKey();
 
   if (S.gemKey) document.getElementById('gemInput').value = maskKey(S.gemKey);
@@ -605,6 +611,7 @@ function saveVault() {
   const v = document.getElementById('vaultKey').value.trim();
   if (!v) { document.getElementById('vaultMsg').textContent = 'Paste your key first'; return; }
   ls.set('vault', v);
+  if (v.startsWith('sk-ant-')) { S.antKey = v; pickBestKey(); }
   document.getElementById('vaultMsg').textContent = '✓ Saved! Your key is stored here permanently.';
   setTimeout(() => { document.getElementById('vaultMsg').textContent = ''; }, 3000);
 }
