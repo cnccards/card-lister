@@ -463,29 +463,77 @@ async function loadAll() {
 
 async function buildPlayerList(games) {
   const players = [];
+  // Only process first 8 games to keep it fast
+  const gamesToProcess = games.slice(0, 8);
 
-  for (const game of games) {
-    // Fetch lineups + stats for both teams
+  for (const game of gamesToProcess) {
     try {
-      // Get rosters/stats for away team (batting vs home pitcher)
-      if (game.homePitcherId) {
-        const awayBatters = await fetchBattersVsPitcher(game.awayTeamId, game.homePitcherId, game.homePitcherName, game.homeTeam, game.awayTeam, game.gameTime);
-        players.push(...awayBatters);
-      }
-      // Get rosters/stats for home team (batting vs away pitcher)
-      if (game.awayPitcherId) {
-        const homeBatters = await fetchBattersVsPitcher(game.homeTeamId, game.awayPitcherId, game.awayPitcherName, game.awayTeam, game.homeTeam, game.gameTime);
-        players.push(...homeBatters);
+      // Use boxscore - gets both teams + stats in ONE call
+      const boxData = await mlbFetch(`/game/${game.gameId}/boxscore`);
+      const teams = boxData.teams;
+      if (!teams) continue;
+
+      for (const side of ['away', 'home']) {
+        const teamData = teams[side];
+        const pitcherSide = side === 'away' ? 'home' : 'away';
+        const pitcherName = game[side === 'away' ? 'homePitcherName' : 'awayPitcherName'];
+        const pitcherERA = null; // simplified
+        const pitcherHand = 'R';
+        const batterTeam = side === 'away' ? game.awayTeam : game.homeTeam;
+        const pf = getParkFactor(side === 'home' ? game.homeTeam : game.awayTeam);
+
+        const batters = teamData.batters || [];
+        const playerInfo = teamData.players || {};
+
+        for (const batterId of batters.slice(0, 9)) {
+          const key = 'ID' + batterId;
+          const player = playerInfo[key];
+          if (!player) continue;
+
+          const name = player.person?.fullName || '';
+          const pos = player.position?.abbreviation || '—';
+          const stats = player.stats?.batting?.season || {};
+          const seasonAvg = parseFloat(stats.avg || 0);
+          const kRate = stats.strikeOuts && stats.plateAppearances
+            ? Math.round((parseInt(stats.strikeOuts) / parseInt(stats.plateAppearances)) * 100)
+            : null;
+
+          // Calculate probability from season avg
+          const baseProb = 55;
+          const avgBoost = (seasonAvg - 0.250) * 120;
+          const parkBoost = pf >= 106 ? 3 : pf <= 94 ? -3 : 0;
+          const prob = Math.round(Math.min(78, Math.max(35, baseProb + avgBoost + parkBoost)));
+
+          players.push({
+            name,
+            playerId: batterId,
+            team: batterTeam,
+            pos,
+            prob,
+            yourGuy: YOUR_GUYS.some(yg => name.toLowerCase().includes(yg.toLowerCase().split(' ').pop())),
+            avg: seasonAvg,
+            vsHandAvg: seasonAvg,
+            vsHandOPS: parseFloat(stats.ops || 0),
+            careerVsPitcher: null,
+            kRate,
+            pitcher: pitcherName,
+            pitcherERA: null,
+            pitcherHand,
+            pitcherHR9: '—',
+            pitcherTeam: pitcherSide === 'home' ? game.homeTeam : game.awayTeam,
+            parkFactor: pf,
+            gameTime: game.gameTime,
+            trend: seasonAvg >= 0.300 ? 'hot' : 'neutral'
+          });
+        }
       }
     } catch(e) {
-      console.warn('Game load error:', e);
+      console.warn('Game boxscore error:', game.gameId, e.message);
     }
   }
 
-  // Sort by hit probability
   players.sort((a,b) => b.prob - a.prob);
   allPlayers = players;
-
   renderPlayerList(players);
   renderYourGuys(players);
   renderHRList(players);
