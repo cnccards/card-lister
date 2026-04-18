@@ -274,30 +274,39 @@ const ls = {
 
 // ══ INIT ═══════════════════════════════════════════════════════
 (function init() {
-  S.accounts = JSON.parse(ls.get('accounts') || '[]');
-  S.activeId = ls.get('activeId') || (S.accounts[0]?.id || null);
-  S.exported = JSON.parse(ls.get('exported') || '[]');
+  try {
+    S.accounts = JSON.parse(ls.get('accounts') || '[]');
+  } catch(e) { S.accounts = []; }
+  try {
+    S.activeId = ls.get('activeId') || (S.accounts[0]?.id || null);
+    S.exported = JSON.parse(ls.get('exported') || '[]');
+  } catch(e) { S.exported = []; }
   S.shipping = parseFloat(ls.get('shipping') || '4.99');
   S.envCutoff = parseFloat(ls.get('envCutoff') || '20');
 
   // Auto-load vault key
-  const vKey = ls.get('vault');
-  if (vKey && vKey.startsWith('sk-ant-')) {
-    S.antKey = vKey;
-    S.activeKey = vKey;
-    document.getElementById('vault-key').value = vKey;
-  }
+  try {
+    const vKey = ls.get('vault');
+    if (vKey && vKey.startsWith('sk-ant-')) {
+      S.antKey = vKey;
+      S.activeKey = vKey;
+      const vkEl = document.getElementById('vault-key');
+      if (vkEl) vkEl.value = vKey;
+    }
+  } catch(e) {}
 
-  buildColors();
-  renderAccounts();
-  updateBanner();
-  updateKeyStatus();
-  updateCounters();
-  renderExport();
-  renderHistory();
+  try { buildColors(); } catch(e) {}
+  try { renderAccounts(); } catch(e) {}
+  try { updateBanner(); } catch(e) {}
+  try { updateKeyStatus(); } catch(e) {}
+  try { updateCounters(); } catch(e) {}
+  try { renderExport(); } catch(e) {}
+  try { renderHistory(); } catch(e) {}
 
-  if (document.getElementById('cfg-ship')) document.getElementById('cfg-ship').value = S.shipping;
-  if (document.getElementById('cfg-env')) document.getElementById('cfg-env').value = S.envCutoff;
+  const shipEl = document.getElementById('cfg-ship');
+  const envEl = document.getElementById('cfg-env');
+  if (shipEl) shipEl.value = S.shipping;
+  if (envEl) envEl.value = S.envCutoff;
 })();
 
 // ══ TABS ════════════════════════════════════════════════════════
