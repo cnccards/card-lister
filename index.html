@@ -17,7 +17,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(0,255,136,.04),transparent 70%);pointer-events:none;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(0,255,136,.04),transparent 70%);pointer-events:none;z-index:0;display:none}
 nav{position:sticky;top:0;z-index:90;background:rgba(8,10,15,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-mark{width:32px;height:32px;border-radius:8px;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 0 20px rgba(0,255,136,.3)}
@@ -31,8 +31,8 @@ nav{position:sticky;top:0;z-index:90;background:rgba(8,10,15,.93);backdrop-filte
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:10px 11px;font-size:10px;font-weight:700;color:var(--fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;transition:all .15s;flex-shrink:0;font-family:'Syne Mono',monospace}
 .tab.on{color:var(--g);border-bottom-color:var(--g)}
-.screen{display:none;padding:14px;max-width:520px;margin:0 auto;position:relative;z-index:1}
-.screen.on{display:block}
+.screen{display:none;padding:14px;max-width:520px;margin:0 auto;position:relative;z-index:1;background:var(--bg)}
+.screen.on{display:block;min-height:200px}
 .panel{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--radl);padding:14px;margin-bottom:10px}
 .phd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--fog);margin-bottom:10px;display:flex;align-items:center;gap:7px;font-family:'Syne Mono',monospace}
 .bub{width:18px;height:18px;border-radius:50%;background:var(--g2);border:1px solid var(--g3);color:var(--g);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne Mono',monospace}
