@@ -415,7 +415,7 @@ async function loadAll() {
   try {
     const today = new Date().toISOString().split('T')[0];
     // Get today's schedule with probable pitchers
-    const schedRes = await mlbFetch(`/schedule?sportId=1&date=${today}&hydrate=probablePitcher,team,linescore`);
+    const schedData = await mlbFetch(`/schedule?sportId=1&date=${today}&hydrate=probablePitcher,team,linescore`);
     const games = (schedData.dates && schedData.dates[0] && schedData.dates[0].games) || [];
     console.log('Games found:', games.length);
 
