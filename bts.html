@@ -301,28 +301,30 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
 // ═══════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════
-// Try direct MLB API first, fall back to CORS proxy
-const MLB_DIRECT = 'https://statsapi.mlb.com/api/v1';
-const MLB_PROXY = 'https://corsproxy.io/?url=https://statsapi.mlb.com/api/v1';
-let MLB = MLB_DIRECT;
+const MLB_BASE = 'https://statsapi.mlb.com/api/v1';
+
+// Multiple proxies to try in order
+const PROXIES = [
+  (path) => `https://api.allorigins.win/raw?url=${encodeURIComponent(MLB_BASE + path)}`,
+  (path) => `https://corsproxy.io/?${encodeURIComponent(MLB_BASE + path)}`,
+  (path) => `https://proxy.cors.sh/${MLB_BASE + path}`,
+];
 
 async function mlbFetch(path) {
-  const url = MLB + path;
+  // Try direct first
   try {
-    const res = await fetch(url, {mode:'cors'});
-    if (!res.ok) throw new Error('HTTP '+res.status);
-    return res.json();
-  } catch(e) {
-    // Try proxy if direct fails
-    if (MLB === MLB_DIRECT) {
-      console.log('Direct failed, trying proxy...');
-      MLB = MLB_PROXY;
-      const res2 = await fetch(MLB_PROXY + path);
-      if (!res2.ok) throw new Error('Proxy also failed');
-      return res2.json();
-    }
-    throw e;
+    const res = await fetch(MLB_BASE + path, {mode:'cors'});
+    if (res.ok) return res.json();
+  } catch(e) {}
+
+  // Try each proxy
+  for (const proxyFn of PROXIES) {
+    try {
+      const res = await fetch(proxyFn(path));
+      if (res.ok) return res.json();
+    } catch(e) { continue; }
   }
+  throw new Error('All MLB API attempts failed');
 }
 
 const YOUR_GUYS = ['Luis Arraez','Bobby Witt Jr.','Freddie Freeman','Trea Turner','Shohei Ohtani','Elly De La Cruz','Aaron Judge','Mike Trout'];
