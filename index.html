@@ -172,22 +172,7 @@ select.inp{cursor:pointer}
 .empty{text-align:center;padding:36px 20px;color:#94a3b8;font-size:13px}
 .empty-i{font-size:36px;margin-bottom:10px}
 </style>
-<script>
-// Inline fallback - forces list screen visible before main JS runs
-window.addEventListener('DOMContentLoaded',function(){
-  setTimeout(function(){
-    var screens=document.querySelectorAll('.screen');
-    var anyOn=false;
-    screens.forEach(function(s){if(s.classList.contains('on'))anyOn=true;});
-    if(!anyOn){
-      var list=document.getElementById('s-list');
-      var tab=document.getElementById('t-list');
-      if(list)list.className='screen on';
-      if(tab)tab.className='tab on';
-    }
-  },300);
-});
-</script>
+
 </head>
 <body>
 <div class="ldr" id="ldr">
