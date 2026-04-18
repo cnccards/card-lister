@@ -1312,16 +1312,16 @@ function renderExport() {
   S.exported.forEach(d => { if (!grouped[d.acctId]) grouped[d.acctId] = []; grouped[d.acctId].push(d); });
   blocks.innerHTML = Object.entries(grouped).map(([acctId, cards]) => {
     const acct = S.accounts.find(x => x.id === acctId);
-    const name = acct?.name || 'Unknown';
-    const color = acct?.color || '#888';
-    const total = cards.reduce((s, c) => s + (c.suggestedBIN || 0), 0);
+    const name = acct?.name || acctId || 'My Account';
+    const color = acct?.color || '#22c55e';
+    const total = cards.reduce((s, c) => s + (parseFloat(c.suggestedBIN) || 0), 0);
     const envCount = cards.filter(c => c.useEnvelope).length;
-    return `<div class="exp-block">
-      <div class="exp-hd">
-        <div class="exp-dot" style="background:${color}"></div>
+    return `<div class="exp-block" style="background:var(--c2);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:12px">
+      <div class="exp-hd" style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:12px;height:12px;border-radius:50%;background:${color};flex-shrink:0"></div>
         <div>
           <div style="font-size:14px;font-weight:800;color:${color}">${name}</div>
-          <div style="font-size:10px;color:var(--fog);margin-top:2px;font-family:'Syne Mono',monospace">${cards.length} listings \u00B7 $${Math.round(total)} total \u00B7 ${envCount} envelope / ${cards.length - envCount} USPS \u00B7 All Buy It Now</div>
+          <div style="font-size:10px;color:var(--fog);margin-top:2px">${cards.length} listings &middot; $${Math.round(total)} total &middot; ${envCount} envelope / ${cards.length - envCount} USPS</div>
         </div>
       </div>
       <div class="exp-body">
@@ -1333,7 +1333,7 @@ function renderExport() {
             <button onclick="delExported('${acctId}',${ci})" style="border:none;background:none;color:var(--r);cursor:pointer;font-size:14px;padding:0 0 0 6px;flex-shrink:0" title="Remove">&#x00D7;</button>
           </div>`).join('')}
         </div>
-        <button class="btn bg-y" onclick="downloadCSV('${acctId}')">&#x2193; Download CSV for ${name}</button>
+        <button onclick="downloadCSV('${acctId}')" style="width:100%;padding:14px;background:#f5c842;color:#000;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;margin-top:8px">&#x2B07; Download CSV for ${name}</button>
         <div style="font-size:11px;color:var(--fog);margin-top:10px;line-height:1.7">
           <strong style="color:var(--txt)">To list these on eBay:</strong> Sign into <strong style="color:${color}">${name}</strong> in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload Template &rarr; select this CSV. eBay creates draft listings &rarr; add photos &rarr; publish.
         </div>
