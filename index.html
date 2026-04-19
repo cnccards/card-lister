@@ -3,748 +3,838 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<title>Card Lister Pro</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Card Lister"/>
+<title>AI Card Lister</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,sans-serif;background:#f0f4ff;color:#0f1e3a}
-#topbar{background:#1d4ed8;padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
-#topbar-left{color:#fff}
-#topbar-title{font-size:15px;font-weight:800}
-#topbar-sub{font-size:9px;opacity:.7;margin-top:1px}
-#tabbar{background:#fff;border-bottom:2px solid #e2e8f0;display:flex}
-#tabbar button{flex:1;padding:10px 4px;font-size:9px;font-weight:700;color:#64748b;border:none;border-bottom:3px solid transparent;background:#fff;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;font-family:inherit}
-#tabbar button.on{color:#1d4ed8;border-bottom-color:#1d4ed8}
-.tab-screen{display:none;padding:14px;max-width:520px;margin:0 auto}
-.tab-screen.on{display:block}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px}
-.card h3{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:10px}
-input,select,textarea{width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;color:#0f1e3a;font-family:inherit;background:#f8fafc;margin-bottom:8px;-webkit-appearance:none;outline:none}
-input:focus,select:focus,textarea:focus{border-color:#1d4ed8}
-textarea{resize:vertical}
-.lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:4px;display:block}
-button.btn{display:block;width:100%;padding:11px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;text-align:center}
-button.btn:last-child{margin-bottom:0}
-.btn-g{background:#16a34a;color:#fff}
-.btn-b{background:#1d4ed8;color:#fff}
-.btn-o{background:#fff;border:1px solid #e2e8f0;color:#0f1e3a}
-.btn-r{background:#fee2e2;color:#dc2626}
-.btn-y{background:#fef3c7;color:#92400e}
-.btn-row{display:flex;gap:8px;margin-bottom:8px}
-.btn-row button{flex:1;margin-bottom:0}
-#keybar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px}
-#keydot{width:10px;height:10px;border-radius:50%;background:#dc2626;flex-shrink:0}
-#keydot.ok{background:#16a34a}
-#keyinfo{flex:1}
-#keylbl{font-size:12px;font-weight:700}
-#keysub{font-size:10px;color:#64748b}
-#acctbar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px}
-#acctdot{width:10px;height:10px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
-#acctname{flex:1;font-size:13px;font-weight:700}
-.sstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.stat{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
-.stat-n{font-size:22px;font-weight:800}
-.stat-l{font-size:8px;text-transform:uppercase;color:#94a3b8;margin-top:3px;letter-spacing:.08em}
-#dropbtn{background:#fff;border:2px dashed #bfdbfe;border-radius:12px;padding:28px;text-align:center;width:100%;margin-bottom:10px;cursor:pointer;font-family:inherit}
-#dropbtn .icon{font-size:36px;margin-bottom:8px}
-#dropbtn .title{font-size:16px;font-weight:800;color:#0f1e3a;margin-bottom:4px}
-#dropbtn .sub{font-size:12px;color:#64748b}
-#fileIn{display:none}
-#qwrap{display:none}
-#qhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-#qlbl{font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.08em}
-#qlist{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.qi{background:#fff;border:1px solid #e2e8f0;border-radius:8px;display:flex;align-items:stretch;overflow:hidden}
-.qi img{width:56px;flex-shrink:0;object-fit:cover}
-.qi-body{flex:1;padding:8px 10px;min-width:0}
-.qi-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.qi-st{font-size:10px;margin-top:2px}
-.qi-price{font-size:12px;font-weight:800;color:#16a34a;margin-top:2px}
-.qi-meta{font-size:10px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
-.qi-side{display:flex;flex-direction:column;border-left:1px solid #f1f5f9}
-.qi-side button{width:40px;flex:1;border:none;background:transparent;color:#94a3b8;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700}
-.sp{color:#cbd5e1}.sr{color:#3b82f6}.sok{color:#16a34a}.se{color:#dc2626}
-#batchbar{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:10px}
-#bprog{height:4px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:8px 0;display:none}
-#bfill{height:100%;background:#1d4ed8;border-radius:99px;transition:width .3s}
-#bst{font-size:10px;color:#64748b;margin-top:4px}
-.prev{background:#fff;border:2px solid #16a34a;border-radius:10px;overflow:hidden;margin-bottom:12px}
-.prev-hdr{background:#dcfce7;padding:10px 13px;display:flex;justify-content:space-between;align-items:center}
-.prev-hdr span{font-size:9px;font-weight:700;text-transform:uppercase;color:#15803d;letter-spacing:.1em}
-.pf{padding:8px 13px;border-bottom:1px solid #f1f5f9}
+:root{
+  --bg:#0d0d14;--s1:#13131d;--s2:#1a1a28;--s3:#222235;
+  --bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.15);
+  --lime:#b8ff6a;--lime2:rgba(184,255,106,.12);--lime3:rgba(184,255,106,.3);
+  --cyan:#6af0ff;--cyan2:rgba(106,240,255,.1);--cyan3:rgba(106,240,255,.25);
+  --gold:#ffd166;--gold2:rgba(255,209,102,.12);--gold3:rgba(255,209,102,.3);
+  --rose:#ff6b8a;--rose2:rgba(255,107,138,.1);--rose3:rgba(255,107,138,.3);
+  --fog:#7a8899;--mist:#4a5568;--snow:#eef0f6;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--snow);min-height:100dvh}
+.nav{background:rgba(13,13,20,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90}
+.nav-logo{width:36px;height:36px;border-radius:11px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.nav-name{font-size:16px;font-weight:800;letter-spacing:-.3px;margin-left:10px}
+.nav-sub{font-size:10px;color:var(--fog);margin-top:1px;margin-left:10px}
+.nav-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;border:1px solid var(--bdr2);background:var(--s2);font-size:11px;font-family:monospace}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--rose);transition:all .3s}
+.sdot.on{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--bdr)}
+.tab{flex:1;padding:11px 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--fog);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;transition:all .15s}
+.tab.on{color:var(--lime);border-bottom-color:var(--lime)}
+.screen{display:none;padding:16px;max-width:540px;margin:0 auto;padding-bottom:60px}
+.screen.on{display:block}
+.panel{background:var(--s2);border:1px solid var(--bdr);border-radius:16px;padding:15px;margin-bottom:12px}
+.panel-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--fog);font-family:monospace;margin-bottom:12px}
+.lbl{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--fog);font-family:monospace;margin-bottom:5px;display:block}
+.inp{width:100%;background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:11px 13px;font-size:14px;color:var(--snow);font-family:-apple-system,sans-serif;outline:none;margin-bottom:10px;-webkit-appearance:none;transition:border-color .2s}
+.inp:focus{border-color:var(--lime)}
+.inp::placeholder{color:var(--mist)}
+select.inp{cursor:pointer}
+textarea.inp{resize:vertical;min-height:40px;font-size:13px}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.inp-row .inp{margin-bottom:0}
+.inp-note{font-size:11px;color:var(--fog);line-height:1.5;margin-top:-6px;margin-bottom:10px}
+.inp-note a{color:var(--cyan);text-decoration:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:13px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:-apple-system,sans-serif;transition:opacity .15s,transform .1s;text-decoration:none}
+.btn:active{opacity:.75;transform:scale(.98)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-lime{background:var(--lime);color:#000}
+.btn-outline{background:transparent;border:1px solid var(--bdr2);color:var(--snow)}
+.btn-cyan{background:var(--cyan2);color:var(--cyan);border:1px solid var(--cyan3)}
+.btn-rose{background:var(--rose2);color:var(--rose);border:1px solid var(--rose3)}
+.btn-gold{background:var(--gold2);color:var(--gold);border:1px solid var(--gold3)}
+.btn-ebay{background:#3665f3;color:#fff}
+.btn-sm{padding:8px 13px;font-size:12px;width:auto;border-radius:9px}
+.btn-row{display:flex;gap:8px;margin-bottom:10px}
+.btn-row .btn{flex:1}
+.alert{display:flex;gap:9px;padding:12px 13px;border-radius:10px;font-size:12px;line-height:1.55;margin-bottom:10px}
+.alert-lime{background:var(--lime2);border:1px solid var(--lime3);color:var(--lime)}
+.alert-gold{background:var(--gold2);border:1px solid var(--gold3);color:var(--gold)}
+.alert-rose{background:var(--rose2);border:1px solid var(--rose3);color:var(--rose)}
+.alert-cyan{background:var(--cyan2);border:1px solid var(--cyan3);color:var(--cyan)}
+.dropzone{position:relative;background:var(--s2);border:2px dashed var(--bdr2);border-radius:18px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.dropzone:hover,.dropzone.drag{border-color:var(--lime);background:var(--lime2)}
+.dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0}
+.dz-ring{width:68px;height:68px;border-radius:50%;background:var(--lime2);border:2px solid var(--lime3);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px}
+.dz-h{font-size:18px;font-weight:800;margin-bottom:5px}
+.dz-s{font-size:13px;color:var(--fog);line-height:1.5}
+.dz-badge{display:inline-block;margin-top:10px;font-size:11px;color:var(--lime);background:var(--lime2);border:1px solid var(--lime3);padding:3px 12px;border-radius:99px;font-family:monospace}
+.qi{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;display:flex;align-items:stretch;margin-bottom:8px;overflow:hidden}
+.qi-img{width:68px;flex-shrink:0;object-fit:cover;background:var(--s3)}
+.qi-ph{width:68px;flex-shrink:0;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:26px}
+.qi-body{flex:1;padding:10px 12px;min-width:0}
+.qi-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px}
+.qi-status{font-size:11px;font-family:monospace}
+.qi-price{font-size:11px;font-family:monospace;color:var(--lime);margin-top:2px}
+.qi-meta{font-size:10px;color:var(--fog);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.qi-side{display:flex;flex-direction:column;border-left:1px solid var(--bdr);flex-shrink:0}
+.qi-btn{width:46px;flex:1;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--fog);transition:background .15s}
+.qi-btn:hover{background:rgba(255,255,255,.05)}
+.qi-btn.del:hover{background:var(--rose2);color:var(--rose)}
+.qi-btn.ok:hover{background:var(--lime2);color:var(--lime)}
+.s-pending{color:var(--fog)}
+.s-reading{color:var(--cyan)}
+.s-ready{color:var(--lime)}
+.s-error{color:var(--rose)}
+.preview{background:var(--s2);border:1px solid var(--lime3);border-radius:16px;overflow:hidden;margin-bottom:12px}
+.preview-hdr{background:var(--lime2);border-bottom:1px solid var(--lime3);padding:12px 15px;display:flex;align-items:center;justify-content:space-between}
+.preview-hdr-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--lime);font-family:monospace}
+.pf{padding:11px 15px;border-bottom:1px solid var(--bdr)}
 .pf:last-child{border-bottom:none}
-.pf-lbl{font-size:8px;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;letter-spacing:.1em}
-.pf input,.pf textarea,.pf select{margin-bottom:0}
-.pbox{background:#f8fafc;border-radius:6px;padding:10px;border:1px solid #e2e8f0}
-.price-lbl{font-size:8px;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;letter-spacing:.1em}
-.price-row{display:flex;align-items:center}
-.price-cur{font-size:14px;color:#64748b;margin-right:2px}
-.price-inp{flex:1;background:none;border:none;font-size:24px;font-weight:800;color:#16a34a;outline:none;-webkit-appearance:none;font-family:inherit;padding:0;width:auto}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.g2 input{margin-bottom:0}
-.prev-btns{padding:10px 13px;display:flex;gap:8px}
-.prev-btns button{flex:1;margin-bottom:0}
-.acct-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:11px 13px;display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.acct-item.active{border-color:#1d4ed8;background:#eff6ff}
-.acct-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.acct-body{flex:1}
-.acct-name{font-size:13px;font-weight:700}
-.acct-det{font-size:10px;color:#64748b;margin-top:2px}
-.acct-del{border:none;background:transparent;color:#cbd5e1;cursor:pointer;font-size:13px;padding:4px}
-.cpick{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.copt{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent}
-.copt.sel{border-color:#0f1e3a}
-.exp-block{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;margin-bottom:10px}
-.exp-hd{padding:12px 14px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px}
-.exp-dot{width:13px;height:13px;border-radius:50%}
-.exp-body{padding:13px}
-.exp-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9;font-size:11px;color:#64748b}
-.exp-row:last-child{border-bottom:none}
-.exp-price{color:#16a34a;font-weight:800}
-.log-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 11px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
-.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#16a34a}
-.log-name{font-size:12px;font-weight:700}
-.log-det{font-size:10px;color:#64748b;margin-top:1px}
-.stag{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px}
-.senv{background:#dcfce7;color:#15803d}
-.susps{background:#dbeafe;color:#1e40af}
-.info{padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.55;margin-bottom:10px;display:flex;gap:8px;align-items:flex-start}
-.ig{background:#dcfce7;border:1px solid #bbf7d0;color:#15803d}
-.iy{background:#fef3c7;border:1px solid #fde68a;color:#92400e}
-.vault-box{background:#fffbeb;border:2px solid #fde68a;border-radius:6px;padding:9px 11px;font-size:11px;font-family:monospace;width:100%;margin-bottom:8px;min-height:60px;resize:none;-webkit-appearance:none;outline:none;color:#0f1e3a}
-.toast-box{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f1e3a;color:#fff;padding:9px 18px;border-radius:99px;font-size:13px;font-weight:700;z-index:50;transition:transform .3s;white-space:nowrap;pointer-events:none}
-.toast-box.show{transform:translateX(-50%) translateY(0)}
-.toast-box.err{background:#dc2626}
-.toast-box.warn{background:#92400e}
-.steps{margin-bottom:12px}
-.step{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:12px;color:#64748b;align-items:flex-start}
-.step:last-child{border-bottom:none}
-.step strong{color:#0f1e3a}
-.sn{width:18px;height:18px;border-radius:50%;background:#fef3c7;border:1px solid #fde68a;color:#92400e;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.empty{text-align:center;padding:30px;color:#94a3b8;font-size:13px}
+.pf-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--fog);font-family:monospace;margin-bottom:4px}
+.pf-inp{width:100%;background:var(--s3);border:1px solid var(--bdr);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--snow);font-family:-apple-system,sans-serif;outline:none;resize:vertical;min-height:36px;transition:border-color .15s}
+.pf-inp:focus{border-color:var(--lime)}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 15px;border-bottom:1px solid var(--bdr)}
+.pbox{background:var(--s3);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px}
+.pbox-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--fog);font-family:monospace;margin-bottom:4px}
+.pbox-inp{width:100%;background:none;border:none;font-size:22px;font-weight:800;font-family:monospace;color:var(--lime);outline:none}
+.pbox-inp.auc{color:var(--gold)}
+.preview-btns{padding:12px 15px;display:flex;gap:8px}
+.preview-btns .btn{flex:1;padding:12px}
+.tags-wrap{padding:10px 15px;border-bottom:1px solid var(--bdr);display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:10px;padding:3px 9px;border-radius:99px;background:var(--cyan2);color:var(--cyan);border:1px solid var(--cyan3);font-family:monospace}
+.bulk-prog{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:12px;display:none}
+.bulk-prog.show{display:block}
+.prog-track{height:6px;background:var(--bdr);border-radius:99px;overflow:hidden;margin:8px 0 5px}
+.prog-fill{height:100%;border-radius:99px;background:var(--lime);box-shadow:0 0 10px var(--lime);transition:width .5s}
+.prog-status{font-size:10px;color:var(--fog);font-family:monospace}
+.csv-panel{background:var(--s2);border:1px solid var(--gold3);border-radius:16px;overflow:hidden;margin-bottom:12px}
+.csv-hdr{background:var(--gold2);border-bottom:1px solid var(--gold3);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.csv-hdr-title{font-size:14px;font-weight:800;color:var(--gold)}
+.csv-hdr-sub{font-size:11px;color:rgba(255,209,102,.6);margin-top:1px}
+.csv-body{padding:16px}
+.csv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.csv-stat{background:var(--s3);border-radius:10px;padding:10px;text-align:center}
+.csv-stat-n{font-size:24px;font-weight:800;font-family:monospace;color:var(--gold);line-height:1}
+.csv-stat-l{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:3px}
+.step-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:12px;line-height:1.5;color:var(--fog)}
+.step-row:last-child{border-bottom:none}
+.step-n{width:20px;height:20px;border-radius:50%;background:var(--gold2);border:1px solid var(--gold3);color:var(--gold);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:monospace}
+.step-row strong{color:var(--snow)}
+.log-item{background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.log-ck{width:22px;height:22px;border-radius:50%;background:var(--lime2);border:1px solid var(--lime3);color:var(--lime);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.log-info{flex:1;min-width:0}
+.log-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.log-detail{font-size:10px;color:var(--fog);font-family:monospace;margin-top:1px}
+.loader{display:none;position:fixed;inset:0;background:rgba(13,13,20,.88);backdrop-filter:blur(10px);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.loader.show{display:flex}
+.spin{width:52px;height:52px;border:3px solid rgba(255,255,255,.08);border-top-color:var(--lime);border-radius:50%;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-txt{font-size:16px;font-weight:700}
+.loader-step{font-size:11px;color:var(--fog);font-family:monospace;text-align:center;max-width:280px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--s3);border:1px solid var(--lime3);color:var(--lime);padding:11px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:300;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:90vw;text-align:center;font-family:monospace}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.err{border-color:var(--rose3);color:var(--rose);background:var(--rose2)}
+.empty{text-align:center;padding:50px 20px;color:var(--fog);font-size:13px}
+.empty-icon{font-size:40px;margin-bottom:12px}
 </style>
 </head>
 <body>
 
-<div id="topbar">
-  <div id="topbar-left">
-    <div id="topbar-title">Card Lister Pro</div>
-    <div id="topbar-sub">GEMINI AI &middot; BUY IT NOW</div>
-  </div>
-  <div style="display:flex;gap:6px">
-    <div style="background:rgba(255,255,255,.2);border-radius:6px;padding:4px 8px;text-align:center;min-width:36px">
-      <div style="font-size:13px;font-weight:800;color:#fff" id="nc-q">0</div>
-      <div style="font-size:7px;color:rgba(255,255,255,.7);text-transform:uppercase">Queue</div>
+<div class="loader" id="loader">
+  <div class="spin"></div>
+  <div class="loader-txt" id="lTxt">Analyzing card...</div>
+  <div class="loader-step" id="lStep">AI is reading your photo</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="nav">
+  <div style="display:flex;align-items:center">
+    <div class="nav-logo">🃏</div>
+    <div>
+      <div class="nav-name" style="margin-left:10px">AI Card Lister</div>
+      <div class="nav-sub">Photo → eBay CSV · No eBay developer account needed</div>
     </div>
-    <div style="background:rgba(255,255,255,.2);border-radius:6px;padding:4px 8px;text-align:center;min-width:36px">
-      <div style="font-size:13px;font-weight:800;color:#fff" id="nc-r">0</div>
-      <div style="font-size:7px;color:rgba(255,255,255,.7);text-transform:uppercase">Ready</div>
-    </div>
   </div>
+  <div class="nav-pill"><div class="sdot" id="sdot"></div><span id="stxt">Setup</span></div>
 </div>
 
-<div id="tabbar">
-  <button class="on" onclick="goTab('list')" id="t-list">&#x1F4F7; List</button>
-  <button onclick="goTab('accts')" id="t-accts">&#x1F465; Accts</button>
-  <button onclick="goTab('export')" id="t-export">&#x1F4E6; Export</button>
-  <button onclick="goTab('history')" id="t-history">&#x2705; History</button>
-  <button onclick="goTab('setup')" id="t-setup">&#x2699; Setup</button>
+<div class="tabs">
+  <button class="tab on" onclick="goTab('setup',this)">⚙️ Setup</button>
+  <button class="tab" onclick="goTab('list',this)">📷 List</button>
+  <button class="tab" onclick="goTab('queue',this)">📋 Queue</button>
+  <button class="tab" onclick="goTab('export',this)">📊 Export</button>
 </div>
 
-<div class="toast-box" id="toast"></div>
+<!-- ═══════════ SETUP ═══════════ -->
 
-<!-- LIST -->
+<div class="screen on" id="scr-setup">
 
-<div class="tab-screen on" id="s-list">
-  <div id="keybar">
-    <div id="keydot"></div>
-    <div id="keyinfo"><div id="keylbl">No API key</div><div id="keysub">Go to Setup tab</div></div>
-    <button class="btn btn-b" style="width:auto;padding:6px 12px;font-size:11px;margin:0" onclick="goTab('setup')">Setup</button>
+  <div class="alert alert-cyan" style="margin-bottom:14px">
+    <div>💡 <strong>How this works:</strong> Paste your Gemini API key below. Take photos of your cards. AI reads each one and writes the eBay listing. Download a CSV file and upload it to eBay Seller Hub. No eBay developer account needed — works with any seller account.</div>
   </div>
-  <div id="acctbar">
-    <div id="acctdot"></div>
-    <div id="acctname">No account</div>
-    <button class="btn btn-o" style="width:auto;padding:6px 12px;font-size:11px;margin:0" onclick="goTab('accts')">Switch</button>
+
+  <div class="panel">
+    <div class="panel-title">🔑 Google Gemini API Key</div>
+
+```
+<!-- KEY TYPE is GEMINI — clearly stated -->
+<div class="alert alert-gold" style="margin-bottom:12px">
+  <div>🔑 This app uses your <strong>Google Gemini key</strong> (starts with <code style="font-family:monospace;background:rgba(255,209,102,.15);padding:1px 5px;border-radius:4px">AIza</code>). Get a free one at <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--cyan)">aistudio.google.com/apikey</a> → Create API Key. Free tier: 1,500 requests/day, no credit card needed.</div>
+</div>
+
+<label class="lbl">Paste your Gemini key here</label>
+<input class="inp" id="keyInp" type="password" autocomplete="off" autocorrect="off"
+       autocapitalize="none" spellcheck="false"
+       placeholder="AIzaSy..."/>
+<div id="keyMsg"></div>
+
+<button class="btn btn-lime" onclick="doSaveKey()" style="margin-top:4px">
+  💾 Save Key &amp; Start Listing →
+</button>
+
+<div style="margin-top:12px;font-size:11px;color:var(--fog);line-height:1.6">
+  Your key is saved in your browser's local storage. It is sent directly and only to Google's Gemini API when analyzing card photos. Never shared anywhere else.
+</div>
+```
+
   </div>
-  <div class="sstrip">
-    <div class="stat"><div class="stat-n" style="color:#64748b" id="s-tot">0</div><div class="stat-l">Queue</div></div>
-    <div class="stat"><div class="stat-n" style="color:#16a34a" id="s-rdy">0</div><div class="stat-l">Ready</div></div>
-    <div class="stat"><div class="stat-n" style="color:#1d4ed8" id="s-val">$0</div><div class="stat-l">Value</div></div>
-  </div>
-  <input type="file" id="fileIn" accept="image/*" multiple onchange="onFiles(event)"/>
-  <button id="dropbtn" onclick="document.getElementById('fileIn').click()">
-    <div class="icon">&#x1F4F8;</div>
-    <div class="title">Photograph your cards</div>
-    <div class="sub">Tap to use camera or photo library</div>
-  </button>
-  <div id="prevArea"></div>
-  <div id="qwrap">
-    <div id="qhdr">
-      <div id="qlbl">Card Queue</div>
-      <span style="font-size:10px;color:#1d4ed8;padding:2px 8px;background:#dbeafe;border-radius:99px" id="qct">0</span>
-    </div>
-    <div id="qlist"></div>
-    <div id="batchbar">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:12px;font-weight:700">Batch Actions</span>
-        <span style="font-size:10px;color:#64748b" id="binfo">0 cards</span>
+
+  <div class="panel">
+    <div class="panel-title">⚙️ Listing Defaults</div>
+    <div class="inp-row">
+      <div>
+        <label class="lbl">Duration</label>
+        <select class="inp" id="cfgDur">
+          <option value="GTC">Good Till Cancelled</option>
+          <option value="Days_30">30 Days</option>
+          <option value="Days_10">10 Days</option>
+          <option value="Days_7">7 Days</option>
+        </select>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-b" id="batchBtn" onclick="runBatch()">&#x1F916; AI Read All</button>
-        <button class="btn btn-r" style="width:auto;padding:10px 14px" onclick="clearQueue()">Clear</button>
+      <div>
+        <label class="lbl">Returns</label>
+        <select class="inp" id="cfgRet">
+          <option value="ReturnsAccepted">30-Day Returns</option>
+          <option value="ReturnsNotAccepted">No Returns</option>
+        </select>
       </div>
-      <div id="bprog"><div id="bfill" style="width:0%"></div></div>
-      <div id="bst"></div>
+    </div>
+    <label class="lbl">Shipping Cost ($)</label>
+    <input class="inp" id="cfgShip" type="number" value="4.99" step="0.01" min="0"/>
+    <button class="btn btn-outline" onclick="saveDefaults()">Save Defaults</button>
+  </div>
+
+</div>
+
+<!-- ═══════════ LIST ═══════════ -->
+
+<div class="screen" id="scr-list">
+
+  <div id="noKeyWarn" style="display:none">
+    <div class="alert alert-rose">
+      <div>⚠️ <strong>No API key saved yet.</strong> Go to the Setup tab, paste your Gemini key (starts with AIza), and tap Save.</div>
+    </div>
+    <button class="btn btn-lime" onclick="goTab('setup',document.querySelector('.tab'))">Go to Setup →</button>
+  </div>
+
+  <div id="listMain" style="display:none">
+    <div class="dropzone" id="dropzone" ondragover="onDrag(event,true)" ondragleave="onDrag(event,false)" ondrop="onDrop(event)">
+      <input type="file" id="fileInp" accept="image/*" multiple onchange="onFiles(event)"/>
+      <div class="dz-ring">📸</div>
+      <div class="dz-h">Photograph your cards</div>
+      <div class="dz-s">Tap to open camera or choose from photos<br>Add multiple cards at once</div>
+      <div class="dz-badge">Gemini AI reads every card automatically</div>
+    </div>
+
+```
+<div id="singlePreview"></div>
+
+<div id="quickStats" style="display:none">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">
+    <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:22px;font-weight:800;font-family:monospace" id="qs-total">0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:3px">Queue</div>
+    </div>
+    <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:22px;font-weight:800;font-family:monospace;color:var(--lime)" id="qs-ready">0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:3px">Ready</div>
+    </div>
+    <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:22px;font-weight:800;font-family:monospace;color:var(--gold)" id="qs-value">$0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:3px">Value</div>
     </div>
   </div>
-</div>
-
-<!-- ACCOUNTS -->
-
-<div class="tab-screen" id="s-accts">
-  <div class="info iy"><span>&#x1F4CB;</span><div>No eBay developer account needed. Each account gets its own CSV. All listings are <strong>Buy It Now</strong>.</div></div>
-  <div id="acctList"></div>
-  <div class="card">
-    <h3>Add Account</h3>
-    <label class="lbl">Username or nickname</label>
-    <input id="newName" placeholder="e.g. cnccards23"/>
-    <label class="lbl">Color</label>
-    <div class="cpick" id="cpick"></div>
-    <button class="btn btn-g" onclick="addAcct()">Add Account</button>
+  <div class="btn-row">
+    <button class="btn btn-cyan" onclick="analyzeAll()" id="analyzeAllBtn">🤖 AI Read All Cards</button>
+    <button class="btn btn-outline btn-sm" onclick="goTab('queue',document.querySelectorAll('.tab')[2])">View Queue</button>
+  </div>
+  <div class="bulk-prog" id="bulkProg">
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+      <span style="font-size:12px;font-weight:700">Processing...</span>
+      <span style="font-size:11px;font-family:monospace;color:var(--fog)" id="progCount">0/0</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-status" id="progStatus"></div>
   </div>
 </div>
+```
 
-<!-- EXPORT -->
-
-<div class="tab-screen" id="s-export">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-    <span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.08em">Download CSVs</span>
-    <span style="font-size:10px;color:#64748b" id="expLbl">0 ready</span>
   </div>
-  <div id="expEmpty" class="empty">Analyze cards and tap Add to Export on each listing.</div>
-  <div id="expBlocks"></div>
-  <div id="expGuide" style="display:none">
-    <div class="card">
-      <h3>How to Upload to eBay</h3>
-      <div class="steps">
-        <div class="step"><div class="sn">1</div><div>Safari &rarr; sign into your eBay account</div></div>
-        <div class="step"><div class="sn">2</div><div><strong>Seller Hub &rarr; Reports &rarr; Upload</strong></div></div>
-        <div class="step"><div class="sn">3</div><div>Tap <strong>Upload Template</strong> &rarr; select CSV</div></div>
-        <div class="step"><div class="sn">4</div><div>Drafts created &rarr; add photos &rarr; publish</div></div>
+
+</div>
+
+<!-- ═══════════ QUEUE ═══════════ -->
+
+<div class="screen" id="scr-queue">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="font-size:14px;font-weight:700" id="queueTitle">Card Queue</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-cyan btn-sm" onclick="analyzeAll()">AI All</button>
+      <button class="btn btn-rose btn-sm" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+  <div id="queueList"></div>
+  <div class="empty" id="queueEmpty"><div class="empty-icon">📭</div>No cards yet. Go to List tab and photograph some cards.</div>
+</div>
+
+<!-- ═══════════ EXPORT ═══════════ -->
+
+<div class="screen" id="scr-export">
+  <div class="empty" id="exportEmpty"><div class="empty-icon">📊</div>No cards ready yet. Analyze cards and tap "Add to Export" on each listing.</div>
+  <div id="exportContent" style="display:none">
+    <div class="csv-panel">
+      <div class="csv-hdr">
+        <div style="font-size:22px">📊</div>
+        <div>
+          <div class="csv-hdr-title">Ready to Upload to eBay</div>
+          <div class="csv-hdr-sub">Download CSV → Upload to Seller Hub → Done</div>
+        </div>
       </div>
-      <a href="https://www.ebay.com/sh/reports/uploads" target="_blank" class="btn btn-b" style="display:block;text-align:center;text-decoration:none">Open eBay Seller Hub</a>
+      <div class="csv-body">
+        <div class="csv-stats">
+          <div class="csv-stat"><div class="csv-stat-n" id="expCount">0</div><div class="csv-stat-l">Cards</div></div>
+          <div class="csv-stat"><div class="csv-stat-n" id="expValue">$0</div><div class="csv-stat-l">Value</div></div>
+          <div class="csv-stat"><div class="csv-stat-n" id="expAvg">$0</div><div class="csv-stat-l">Avg</div></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div class="step-row"><div class="step-n">1</div><div>Download your CSV file below</div></div>
+          <div class="step-row"><div class="step-n">2</div><div>Go to <strong>ebay.com/sh/reports/uploads</strong></div></div>
+          <div class="step-row"><div class="step-n">3</div><div>Click <strong>Upload Template</strong> → select your CSV</div></div>
+          <div class="step-row"><div class="step-n">4</div><div>eBay creates drafts → open Drafts to add photos &amp; publish</div></div>
+        </div>
+        <button class="btn btn-lime" onclick="downloadCSV()" style="margin-bottom:8px">⬇️ Download CSV File</button>
+        <a class="btn btn-ebay" href="https://www.ebay.com/sh/reports/uploads" target="_blank">Open eBay Seller Hub →</a>
+      </div>
     </div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);font-family:monospace;margin-bottom:10px">Cards in Export</div>
+    <div id="expList"></div>
+    <button class="btn btn-outline" onclick="clearExport()" style="margin-top:10px">Clear Export List</button>
   </div>
-</div>
-
-<!-- HISTORY -->
-
-<div class="tab-screen" id="s-history">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-    <span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.08em">History</span>
-    <button class="btn btn-o" style="width:auto;padding:6px 12px;font-size:11px;margin:0" onclick="exportLog()">Download Log</button>
-  </div>
-  <div id="logList"></div>
-  <div id="logEmpty" class="empty">No cards exported yet.</div>
-</div>
-
-<!-- SETUP -->
-
-<div class="tab-screen" id="s-setup">
-  <div class="info ig"><span>&#x2713;</span><div><strong>Free Gemini key works here!</strong> 1,500 free reads/day. Key starts with AIza or AQ &mdash; both work.</div></div>
-  <div class="card">
-    <h3>Gemini API Key</h3>
-    <div class="steps" style="margin-bottom:12px">
-      <div class="step"><div class="sn">1</div><div>Go to <strong>aistudio.google.com/apikey</strong></div></div>
-      <div class="step"><div class="sn">2</div><div>Sign in &rarr; tap <strong>Create API key</strong></div></div>
-      <div class="step"><div class="sn">3</div><div>Copy key &rarr; long-press below &rarr; <strong>Paste</strong></div></div>
-    </div>
-    <label class="lbl">Paste Key Here</label>
-    <input id="gemIn" type="text" placeholder="Paste your Gemini key..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-    <div id="gemMsg" style="margin-bottom:8px"></div>
-    <button class="btn btn-g" onclick="saveKey()">Save Gemini Key</button>
-    <a href="https://aistudio.google.com/apikey" target="_blank" class="btn btn-o" style="display:block;text-align:center;text-decoration:none">Get Free Key</a>
-  </div>
-  <div class="card">
-    <h3>Key Vault &mdash; Survives Restarts</h3>
-    <p style="font-size:11px;color:#64748b;margin-bottom:10px">Paste your full key here. Auto-reloads if app ever forgets it.</p>
-    <label class="lbl">Full Key Backup (visible)</label>
-    <textarea class="vault-box" id="vaultIn" placeholder="Paste your complete key here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-    <div class="btn-row">
-      <button class="btn btn-y" onclick="saveVault()">Save Vault</button>
-      <button class="btn btn-o" onclick="reloadVault()">Reload from Vault</button>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Clear Key</h3>
-    <button class="btn btn-r" onclick="clearKey()">Remove Saved Key</button>
-  </div>
-  <div class="card">
-    <h3>Listing Defaults</h3>
-    <div class="info ig" style="margin-bottom:10px"><span>&#x2713;</span><div>Under $20 = envelope $1. $20+ = USPS. All listings <strong>Buy It Now only</strong>.</div></div>
-    <div class="g2" style="margin-bottom:8px">
-      <div><label class="lbl">Duration</label><select id="cfgDur"><option value="GTC">Good Till Cancelled</option><option value="Days_30">30 Days</option><option value="Days_7">7 Days</option></select></div>
-      <div><label class="lbl">Returns</label><select id="cfgRet"><option value="ReturnsAccepted">30-Day Returns</option><option value="ReturnsNotAccepted">No Returns</option></select></div>
-    </div>
-    <div class="g2" style="margin-bottom:10px">
-      <div><label class="lbl">USPS Cost ($)</label><input id="cfgShip" type="number" value="4.99" step="0.01" min="0"/></div>
-      <div><label class="lbl">Envelope Cutoff ($)</label><input id="cfgEnv" type="number" value="20" step="1" min="0"/></div>
-    </div>
-    <button class="btn btn-o" onclick="saveDefaults()">Save Defaults</button>
-  </div>
-  <button class="btn btn-g" onclick="goTab('list')">Start Listing Cards</button>
 </div>
 
 <script>
-var S={gemKey:'AIzaSyD-3OmZsxNFyHhjDZjSBtq7BQ27wSqUAk8',dur:'GTC',ret:'ReturnsAccepted',ship:4.99,env:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
-var COLORS=['#16a34a','#1d4ed8','#d97706','#dc2626','#7c3aed','#ea580c','#0891b2','#db2777'];
-var CAT={Baseball:'213',Basketball:'261329',Football:'261328',Hockey:'247',Soccer:'261330',Other:'213'};
-var CSV_H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
-var selColor=COLORS[0];
-function lg(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
-function ls(k,v){try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}}
-function ld(k){try{localStorage.removeItem(k);}catch(e){}}
-function compress(dataUrl){
-  return new Promise(function(res){
-    var img=new Image();
-    img.onload=function(){
-      var MAX=1024,w=img.width,h=img.height;
-      if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
-      var c=document.createElement('canvas');
-      c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,0,0,w,h);
-      res(c.toDataURL('image/jpeg',0.82));
+// ════════════════════════════
+// STATE
+// ════════════════════════════
+var KEY = '';
+var DEFAULTS = { dur:'GTC', ret:'ReturnsAccepted', ship:4.99 };
+var QUEUE  = [];
+var EXPORT = [];
+var STOP   = false;
+var CAT    = { Baseball:'213', Basketball:'261329', Football:'261328', Hockey:'247' };
+
+var AI_STEPS = [
+  'Sending image to Gemini AI...',
+  'Identifying player name...',
+  'Reading year and set name...',
+  'Detecting card number...',
+  'Checking for parallel or variation...',
+  'Looking for auto, relic, or serial...',
+  'Assessing condition and centering...',
+  'Writing optimized eBay title...',
+  'Generating description...',
+  'Setting market price...',
+];
+
+// ════════════════════════════
+// BOOT — load saved key
+// ════════════════════════════
+(function boot() {
+  var k = '';
+  try { k = localStorage.getItem('gemini_key') || ''; } catch(e) {}
+
+  if (k && k.length >= 15) {
+    KEY = k;
+    // Mask display
+    document.getElementById('keyInp').value = k.slice(0,4) + '••••••••' + k.slice(-4);
+    setStatus(true);
+    // Go straight to List tab
+    goTab('list', document.querySelectorAll('.tab')[1]);
+  } else {
+    setStatus(false);
+  }
+
+  // Load defaults
+  try {
+    var d = JSON.parse(localStorage.getItem('card_defaults') || '{}');
+    if (d.dur)  { DEFAULTS.dur  = d.dur;  document.getElementById('cfgDur').value  = d.dur; }
+    if (d.ret)  { DEFAULTS.ret  = d.ret;  document.getElementById('cfgRet').value  = d.ret; }
+    if (d.ship) { DEFAULTS.ship = d.ship; document.getElementById('cfgShip').value = d.ship; }
+  } catch(e) {}
+})();
+
+// ════════════════════════════
+// SAVE KEY — accepts ANY key >= 15 chars
+// ════════════════════════════
+function doSaveKey() {
+  var raw = document.getElementById('keyInp').value.trim();
+
+  // If user sees masked value and hasn't changed it, key is already saved
+  if (KEY && (raw.includes('••') || raw === '')) {
+    setStatus(true);
+    showMsg('keyMsg', 'lime', '✓ Key is already saved — you are ready to list!');
+    setTimeout(function() { goTab('list', document.querySelectorAll('.tab')[1]); }, 700);
+    return;
+  }
+
+  // Basic length check only — NO prefix restriction
+  if (raw.length < 15) {
+    showMsg('keyMsg', 'rose', '⚠️ That key looks too short. Paste the full key from aistudio.google.com/apikey');
+    return;
+  }
+
+  // Save it
+  KEY = raw;
+  try { localStorage.setItem('gemini_key', raw); } catch(e) {}
+
+  // Mask display
+  document.getElementById('keyInp').value = raw.slice(0,4) + '••••••••' + raw.slice(-4);
+
+  setStatus(true);
+  showMsg('keyMsg', 'lime', '✓ Gemini key saved! Switching to List tab...');
+  saveDefaults();
+  setTimeout(function() { goTab('list', document.querySelectorAll('.tab')[1]); }, 800);
+}
+
+function saveDefaults() {
+  DEFAULTS.dur  = document.getElementById('cfgDur').value;
+  DEFAULTS.ret  = document.getElementById('cfgRet').value;
+  DEFAULTS.ship = parseFloat(document.getElementById('cfgShip').value) || 4.99;
+  try { localStorage.setItem('card_defaults', JSON.stringify(DEFAULTS)); } catch(e) {}
+  toast('Defaults saved');
+}
+
+// ════════════════════════════
+// TABS
+// ════════════════════════════
+function goTab(name, btn) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('on'); });
+  document.querySelectorAll('.tab').forEach(function(t)    { t.classList.remove('on'); });
+  var scr = document.getElementById('scr-' + name);
+  if (scr) scr.classList.add('on');
+  if (btn) btn.classList.add('on');
+  if (name === 'list')   checkKeyForList();
+  if (name === 'queue')  renderQueue();
+  if (name === 'export') renderExport();
+}
+
+function checkKeyForList() {
+  var warn = document.getElementById('noKeyWarn');
+  var main = document.getElementById('listMain');
+  if (KEY) { warn.style.display='none'; main.style.display='block'; }
+  else      { warn.style.display='block'; main.style.display='none'; }
+}
+
+// ════════════════════════════
+// FILE HANDLING
+// ════════════════════════════
+function onFiles(e) { addFiles(Array.prototype.slice.call(e.target.files)); e.target.value=''; }
+function onDrag(e,on) { e.preventDefault(); document.getElementById('dropzone').classList.toggle('drag',on); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('drag');
+  addFiles(Array.prototype.slice.call(e.dataTransfer.files).filter(function(f){return f.type.startsWith('image/');}));
+}
+
+function addFiles(files) {
+  if (!KEY) { toast('Save your Gemini key in Setup first!','err'); goTab('setup',document.querySelector('.tab')); return; }
+  files.forEach(function(f) {
+    var id = 'c'+Date.now()+Math.random().toString(36).slice(2,5);
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      var item = { id:id, thumb:ev.target.result, imgData:ev.target.result.split(',')[1], name:f.name, status:'pending', result:null, error:null };
+      QUEUE.push(item);
+      updateStats();
+      if (files.length === 1) analyzeItem(item);
+      else renderQueueItem(item);
     };
-    img.onerror=function(){res(dataUrl);};
-    img.src=dataUrl;
+    reader.readAsDataURL(f);
   });
 }
-window.onload=function(){
-  S.gemKey=lg('gk')||'';
-  S.dur=lg('dur')||'GTC';
-  S.ret=lg('ret')||'ReturnsAccepted';
-  S.ship=parseFloat(lg('ship')||4.99);
-  S.env=parseFloat(lg('env')||20);
-  S.accounts=lg('accts')||[];
-  S.activeId=lg('aid')||null;
-  if(!S.activeId&&S.accounts.length)S.activeId=S.accounts[0].id;
-  if(!S.gemKey){var v=lg('vault');if(v){S.gemKey=v;ls('gk',v);}}
-  if(S.gemKey)document.getElementById('gemIn').value=mask(S.gemKey);
-  var sv=lg('vault');if(sv)document.getElementById('vaultIn').value=sv;
-  document.getElementById('cfgDur').value=S.dur;
-  document.getElementById('cfgRet').value=S.ret;
-  document.getElementById('cfgShip').value=S.ship;
-  document.getElementById('cfgEnv').value=S.env;
-  buildColors();renderAccts();updateBanner();refreshKey();refreshStats();
-};
-function mask(v){return v.length<=8?'****':v.slice(0,6)+'****'+v.slice(-4);}
-function goTab(n){
-  var tabs=['list','accts','export','history','setup'];
-  for(var i=0;i<tabs.length;i++){
-    document.getElementById('s-'+tabs[i]).className='tab-screen'+(tabs[i]===n?' on':'');
-    document.getElementById('t-'+tabs[i]).className=(tabs[i]===n?'on':'');
-  }
-  if(n==='accts')renderAccts();
-  if(n==='export')renderExport();
-  if(n==='history')renderHistory();
-}
-function saveKey(){
-  var raw=document.getElementById('gemIn').value.trim();
-  if(raw.length<10){document.getElementById('gemMsg').textContent='Key too short - paste complete key';return;}
-  S.gemKey=raw;ls('gk',raw);ls('vault',raw);
-  document.getElementById('vaultIn').value=raw;
-  document.getElementById('gemIn').value=mask(raw);
-  document.getElementById('gemMsg').textContent='Saved and backed up to vault!';
-  refreshKey();toast('Key saved!');
-}
-function clearKey(){if(!confirm('Remove key?'))return;S.gemKey='';ld('gk');document.getElementById('gemIn').value='';document.getElementById('gemMsg').textContent='';refreshKey();toast('Removed','warn');}
-function saveVault(){var raw=document.getElementById('vaultIn').value.trim();if(raw.length<10){toast('Key too short','err');return;}ls('vault',raw);S.gemKey=raw;ls('gk',raw);document.getElementById('gemIn').value=mask(raw);refreshKey();toast('Vault saved!');}
-function reloadVault(){var v=lg('vault');if(!v){toast('No vault key','err');return;}S.gemKey=v;ls('gk',v);document.getElementById('gemIn').value=mask(v);refreshKey();toast('Reloaded from vault!');}
-function refreshKey(){
-  var ok=!!S.gemKey;
-  document.getElementById('keydot').style.background=ok?'#16a34a':'#dc2626';
-  document.getElementById('keylbl').textContent=ok?'Gemini AI ready':'No API key';
-  document.getElementById('keysub').textContent=ok?mask(S.gemKey):'Go to Setup tab';
-}
-function saveDefaults(){
-  S.dur=document.getElementById('cfgDur').value;S.ret=document.getElementById('cfgRet').value;
-  S.ship=parseFloat(document.getElementById('cfgShip').value)||4.99;
-  S.env=parseFloat(document.getElementById('cfgEnv').value)||20;
-  ls('dur',S.dur);ls('ret',S.ret);ls('ship',S.ship);ls('env',S.env);toast('Saved!');
-}
-function buildColors(){
-  var h='';
-  for(var i=0;i<COLORS.length;i++){
-    h+='<div class="copt'+(i===0?' sel':'')+'" style="background:'+COLORS[i]+'" onclick="pickCol(this,\''+COLORS[i]+'\')"></div>';
-  }
-  document.getElementById('cpick').innerHTML=h;
-}
-function pickCol(el,c){var opts=document.querySelectorAll('.copt');for(var i=0;i<opts.length;i++)opts[i].classList.remove('sel');el.classList.add('sel');selColor=c;}
-function addAcct(){
-  var n=document.getElementById('newName').value.trim();
-  if(!n){toast('Enter name','err');return;}
-  var a={id:'a'+Date.now(),name:n,color:selColor};
-  S.accounts.push(a);ls('accts',S.accounts);
-  if(!S.activeId){S.activeId=a.id;ls('aid',a.id);}
-  document.getElementById('newName').value='';
-  renderAccts();updateBanner();toast('Account added!');
-}
-function setActive(id){S.activeId=id;ls('aid',id);renderAccts();updateBanner();goTab('list');}
-function delAcct(id){
-  if(!confirm('Remove?'))return;
-  S.accounts=S.accounts.filter(function(a){return a.id!==id;});
-  ls('accts',S.accounts);
-  if(S.activeId===id){S.activeId=S.accounts.length?S.accounts[0].id:null;ls('aid',S.activeId);}
-  renderAccts();updateBanner();
-}
-function renderAccts(){
-  var el=document.getElementById('acctList');
-  if(!S.accounts.length){el.innerHTML='<div class="empty">No accounts yet.</div>';return;}
-  var h='';
-  for(var i=0;i<S.accounts.length;i++){
-    var a=S.accounts[i],act=a.id===S.activeId;
-    var ct=S.exported.filter(function(p){return p.acctId===a.id;}).length;
-    h+='<div class="acct-item'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">';
-    h+='<div class="acct-dot" style="background:'+a.color+'"></div>';
-    h+='<div class="acct-body"><div class="acct-name">'+a.name+'</div>';
-    h+='<div class="acct-det">'+ct+' cards'+(act?' - ACTIVE':'')+'</div></div>';
-    h+='<button class="acct-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">X</button>';
-    h+='</div>';
-  }
-  el.innerHTML=h;
-}
-function updateBanner(){
-  var a=null;
-  for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===S.activeId){a=S.accounts[i];break;}}
-  document.getElementById('acctdot').style.background=a?a.color:'#cbd5e1';
-  document.getElementById('acctname').textContent=a?a.name:'No account - add one first';
-}
-function onFiles(e){addToQueue(Array.prototype.slice.call(e.target.files));e.target.value='';}
-function addToQueue(files){
-  if(!S.gemKey){toast('Add Gemini key in Setup first','err');goTab('setup');return;}
-  if(!S.activeId){toast('Add account first','err');goTab('accts');return;}
-  for(var i=0;i<files.length;i++){
-    (function(f){
-      var id='c'+Date.now()+Math.random().toString(36).slice(2,5);
-      var r=new FileReader();
-      r.onload=function(ev){
-        S.queue.push({id:id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:'pending',result:null,error:null,acctId:S.activeId});
-        renderQueue();
-        if(files.length===1)doCard(S.queue[S.queue.length-1]);
-      };
-      r.readAsDataURL(f);
-    })(files[i]);
-  }
-}
-var PROMPT=[
-  'You are an expert sports card authenticator and eBay power seller. Analyze this card photo.',
-  'IDENTIFY: player full name, year, complete set/brand, card number, parallel type',
-  '(Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered,',
-  'team, sport, position. If slabbed: grading company and grade.',
-  'Condition from centering, corners, surface.',
-  'Reply ONLY with valid JSON, no markdown:',
-  '{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"",',
-  '"sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,',
-  '"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,',
-  '"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint",',
-  '"conditionNote":"Sharp corners, clean surface","ebayTitle":"","description":"",',
-  '"suggestedBIN":0,"searchTags":[]}',
-  'ebayTitle: max 80 chars. description: 180-200 words professional listing.',
-  'Ships penny sleeve + top loader + team bag USPS First Class with tracking.',
-  'Payment 3 days. All sales final on raw cards.',
-  'suggestedBIN: real current eBay market price USD.',
-  'searchTags: 5-7 terms buyers search.'
-].join(' ');
-function callAI(rawDataUrl){
-  return compress(rawDataUrl).then(function(comp){
-    var b64=comp.indexOf(',')>=0?comp.split(',')[1]:comp;
-    var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(S.gemKey);
-    return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:'image/jpeg',data:b64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}})
-    });
-  }).then(function(resp){
-    if(!resp.ok)return resp.json().catch(function(){return{};}).then(function(e){
-      var m=e.error?e.error.message:'Error '+resp.status;
-      if(resp.status===400||resp.status===401||resp.status===403)throw new Error('Key invalid - paste fresh key in Setup');
-      if(resp.status===429)throw new Error('Rate limit - wait 1 min then retry');
-      throw new Error(m.slice(0,100));
-    });
-    return resp.json();
-  }).then(function(d){
-    var txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:'';
-    if(!txt)throw new Error('Empty response - tap AI to retry');
-    var c=txt.replace(/```json/g,'').replace(/```/g,'').trim();
-    var si=c.indexOf('{');if(si<0)throw new Error('No JSON - tap AI to retry');
-    c=c.slice(si);
-    try{return JSON.parse(c);}catch(e1){try{return JSON.parse(c+'}');}catch(e2){throw new Error('Parse error - tap AI to retry');}}
-  });
-}
-var STEPS=['Compressing...','Sending to Gemini...','Reading card...','Writing listing...'];
-function doCard(item){
-  item.status='reading';renderQI(item);
-  var si=0;setBst(STEPS[0]);
-  var t=setInterval(function(){si=(si+1)%STEPS.length;setBst(STEPS[si]);},1200);
-  callAI(item.rawData).then(function(result){
-    clearInterval(t);item.result=result;item.status='ready';
-    if(result.player&&result.year)item.name=result.player+' '+result.year;
-    renderQI(item);refreshStats();showPreview(item);setBst('');
-  }).catch(function(e){
-    clearInterval(t);item.status='error';item.error=e.message||'Failed';
-    renderQI(item);refreshStats();toast(item.error,'err');setBst('');
-  });
-}
-function setBst(t){document.getElementById('bst').textContent=t;}
-function doById(id){var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}if(item)doCard(item);}
-function runBatch(){
-  var pend=S.queue.filter(function(i){return i.status==='pending'||i.status==='error';});
-  if(!pend.length){toast('No pending cards');return;}
-  S.stop=false;
-  var btn=document.getElementById('batchBtn');
-  btn.textContent='Stop';
-  btn.onclick=function(){S.stop=true;btn.textContent='AI Read All';btn.onclick=runBatch;};
-  document.getElementById('bprog').style.display='block';
-  var done=0,tot=pend.length;
-  function next(){
-    if(done>=tot||S.stop){
-      btn.textContent='AI Read All';btn.onclick=runBatch;
-      setBst('Done '+done+'/'+tot);return;
+
+// ════════════════════════════
+// GEMINI API CALL
+// ════════════════════════════
+function callGemini(imgData) {
+  var prompt = 'You are an expert sports card grader and eBay power seller. Analyze this card image carefully.\n\nIDENTIFY:\n1. Player full name\n2. Card year\n3. Full set name (e.g. "2024 Bowman Chrome Draft")\n4. Card number\n5. Parallel/variation (Base, Refractor, Gold /50, Prizm, Auto, Relic, numbered, etc.)\n6. If serial numbered: both numbers e.g. 42/99\n7. Team and sport\n8. If PSA/BGS/SGC graded: company and grade\n9. Is it RC, 1st Bowman, prospect, or veteran?\n10. Condition: centering, corners, surface\n\nGenerate a complete eBay listing optimized for search visibility and sales.\n\nRespond ONLY with valid compact JSON and nothing else:\n{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, excellent centering, clean surface","ebayTitle":"","description":"","suggestedBIN":19.99,"suggestedAuction":9.99,"shippingCost":4.99,"searchTags":[]}';
+
+  return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + KEY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{
+        parts: [
+          { inline_data: { mime_type: 'image/jpeg', data: imgData } },
+          { text: prompt }
+        ]
+      }],
+      generationConfig: { temperature: 0.2, maxOutputTokens: 1400 }
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    // Handle Gemini error responses
+    if (d.error) {
+      var msg = d.error.message || 'Gemini API error';
+      if (d.error.code === 400) throw new Error('Invalid API key. Go to Setup tab and re-paste your key from aistudio.google.com/apikey');
+      if (d.error.code === 429) throw new Error('Rate limit hit. Wait a minute and try again (free tier: 15 requests/min)');
+      throw new Error(msg);
     }
-    var item=pend[done];
-    setBst((done+1)+'/'+tot+': '+item.name);
-    item.status='reading';renderQI(item);
-    callAI(item.rawData).then(function(result){
-      item.result=result;item.status='ready';
-      if(result.player&&result.year)item.name=result.player+' '+result.year;
-      done++;
-      document.getElementById('bfill').style.width=Math.round(done/tot*100)+'%';
-      document.getElementById('binfo').textContent=done+'/'+tot+' done';
-      renderQI(item);refreshStats();setTimeout(next,600);
-    }).catch(function(e){
-      item.status='error';item.error=e.message.slice(0,80);
-      done++;renderQI(item);refreshStats();setTimeout(next,600);
+    var txt = '';
+    try { txt = d.candidates[0].content.parts[0].text; } catch(e) { throw new Error('Unexpected Gemini response — try again'); }
+    // Strip markdown fences if any
+    txt = txt.replace(/```json|```/g,'').trim();
+    return JSON.parse(txt);
+  });
+}
+
+// ════════════════════════════
+// ANALYZE SINGLE CARD
+// ════════════════════════════
+function analyzeItem(item) {
+  item.status = 'reading';
+  renderQueueItem(item);
+  showLoader('Reading card...', AI_STEPS[0]);
+
+  var si = 0;
+  var timer = setInterval(function() {
+    si = (si+1) % AI_STEPS.length;
+    document.getElementById('lStep').textContent = AI_STEPS[si];
+  }, 900);
+
+  return callGemini(item.imgData)
+    .then(function(r) {
+      clearInterval(timer);
+      item.result = r;
+      item.status = 'ready';
+      item.name   = r.player && r.year ? r.player+' '+r.year : item.name;
+      hideLoader();
+      renderQueueItem(item);
+      updateStats();
+      showSinglePreview(item);
+      toast((r.player || 'Card') + ' ready!');
+    })
+    .catch(function(e) {
+      clearInterval(timer);
+      item.status = 'error';
+      item.error  = e.message || 'Failed';
+      hideLoader();
+      renderQueueItem(item);
+      toast(e.message || 'Error reading card', 'err');
     });
+}
+
+function analyzeById(id) {
+  var item = QUEUE.find(function(i){return i.id===id;});
+  if (item) analyzeItem(item);
+}
+
+// ════════════════════════════
+// ANALYZE ALL
+// ════════════════════════════
+function analyzeAll() {
+  var pending = QUEUE.filter(function(i){return i.status==='pending'||i.status==='error';});
+  if (!pending.length) { toast('No pending cards to analyze'); return; }
+  if (!KEY) { toast('Save your Gemini key in Setup first!','err'); return; }
+
+  STOP = false;
+  var btn  = document.getElementById('analyzeAllBtn');
+  var prog = document.getElementById('bulkProg');
+  btn.textContent = '⏹ Stop';
+  btn.onclick = function(){ STOP=true; };
+  prog.classList.add('show');
+
+  var done=0, total=pending.length;
+
+  function next(i) {
+    if (i >= pending.length || STOP) {
+      btn.textContent='🤖 AI Read All Cards'; btn.onclick=analyzeAll;
+      document.getElementById('progStatus').textContent='Done! '+done+'/'+total+' analyzed.';
+      hideLoader(); renderQueue(); updateStats();
+      toast(done+' cards analyzed!');
+      return;
+    }
+    var item = pending[i];
+    document.getElementById('progStatus').textContent='Reading '+(i+1)+'/'+total+': '+item.name;
+    document.getElementById('progCount').textContent=(i+1)+'/'+total;
+    document.getElementById('progFill').style.width=Math.round(i/total*100)+'%';
+    item.status='reading'; renderQueueItem(item);
+    showLoader('Card '+(i+1)+' of '+total, AI_STEPS[0]);
+
+    var si=0, timer=setInterval(function(){si=(si+1)%AI_STEPS.length; document.getElementById('lStep').textContent=AI_STEPS[si];},900);
+
+    callGemini(item.imgData)
+      .then(function(r) {
+        clearInterval(timer);
+        item.result=r; item.status='ready';
+        item.name=r.player&&r.year?r.player+' '+r.year:item.name;
+        done++; renderQueueItem(item); updateStats(); hideLoader();
+        setTimeout(function(){next(i+1);}, 500);
+      })
+      .catch(function(e) {
+        clearInterval(timer);
+        item.status='error'; item.error=e.message||'Failed';
+        renderQueueItem(item); hideLoader();
+        setTimeout(function(){next(i+1);}, 500);
+      });
   }
-  next();
+  next(0);
 }
-function renderQueue(){
-  var ct=S.queue.length;
-  document.getElementById('qct').textContent=ct;
-  document.getElementById('binfo').textContent=ct+' card'+(ct!==1?'s':'');
-  document.getElementById('qwrap').style.display=ct?'block':'none';
-  var h='';for(var i=0;i<S.queue.length;i++)h+=buildQI(S.queue[i]);
-  document.getElementById('qlist').innerHTML=h;
-  refreshStats();
-}
-function renderQI(item){var el=document.getElementById('qi_'+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
-function buildQI(item){
-  var sc={pending:'sp',reading:'sr',ready:'sok',error:'se'};
-  var sl={pending:'Pending',reading:'Reading...','ready':'Ready','error':'Error: '+(item.error||'')};
-  var pr=item.result?item.result.suggestedBIN:null,env=pr&&pr<S.env;
-  var h='<div class="qi" id="qi_'+item.id+'">';
-  h+=item.thumb?'<img src="'+item.thumb+'" style="width:56px;flex-shrink:0;object-fit:cover"/>':'<div style="width:56px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:11px;color:#94a3b8">Card</div>';
-  h+='<div class="qi-body">';
-  h+='<div class="qi-name">'+(item.result&&item.result.player?item.result.player:item.name)+'</div>';
-  h+='<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">'+(sl[item.status]||item.status)+'</span></div>';
-  if(pr)h+='<div class="qi-price">$'+pr+' BIN - '+(env?'Envelope $1':'USPS $'+S.ship)+'</div>';
-  if(item.result&&item.result.ebayTitle)h+='<div class="qi-meta">'+item.result.ebayTitle+'</div>';
-  h+='</div><div class="qi-side">';
-  if(item.status==='ready')h+='<button onclick="showById(\''+item.id+'\')">View</button>';
-  if(item.status!=='reading'&&item.status!=='ready')h+='<button onclick="doById(\''+item.id+'\')" style="color:#1d4ed8">AI</button>';
-  h+='<button onclick="rmCard(\''+item.id+'\')">X</button>';
-  h+='</div></div>';
-  return h;
-}
-function rmCard(id){S.queue=S.queue.filter(function(i){return i.id!==id;});renderQueue();}
-function clearQueue(){if(!confirm('Clear all?'))return;S.queue=[];document.getElementById('qlist').innerHTML='';document.getElementById('qwrap').style.display='none';document.getElementById('prevArea').innerHTML='';refreshStats();}
-function showById(id){var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}if(item)showPreview(item);}
-function he(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function gv(id,fb){var el=document.getElementById(id);return el?el.value:(fb||'');}
-function showPreview(item){
-  if(!item||!item.result)return;
-  var d=item.result,pr=d.suggestedBIN||9.99,env=pr<S.env;
-  var tl=(d.ebayTitle||'').length;
-  var sec=document.getElementById('prevArea');
-  var h='<div class="prev">';
-  h+='<div class="prev-hdr">';
-  h+='<span>Listing Ready - Review and Edit</span>';
-  h+='<div style="display:flex;gap:5px">';
-  h+='<button class="btn btn-o" style="width:auto;padding:5px 10px;font-size:11px;margin:0" onclick="copyCard(\''+item.id+'\')">Copy</button>';
-  h+='<button class="btn btn-o" style="width:auto;padding:5px 10px;font-size:11px;margin:0" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>';
-  h+='</div></div>';
-  h+='<div class="pf"><div class="pf-lbl">eBay Title (max 80) - <span id="ptc_'+item.id+'">'+tl+'</span>/80</div>';
-  h+='<textarea id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length">'+he(d.ebayTitle)+'</textarea></div>';
 
-h+=’<div class="pf"><div class="pf-lbl">Description</div>’;
-h+=’<textarea id="pd_'+item.id+'" rows="5">’+he(d.description)+’</textarea></div>’;
-h+=’<div class="pf"><div class="pf-lbl">Buy It Now Price</div>’;
-h+=’<div class="pbox"><div class="price-lbl">BUY IT NOW - FIXED PRICE</div>’;
-h+=’<div class="price-row"><span class="price-cur">$</span>’;
-h+=’<input class="price-inp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="updShip(\''+item.id+'\',this.value)"/>’;
-h+=’</div></div></div>’;
-h+=’<div class="pf"><div class="g2">’;
-h+=’<div><div class="pf-lbl">Player</div><input id="ppl_'+item.id+'" value="'+he(d.player)+'"/></div>’;
-h+=’<div><div class="pf-lbl">Year</div><input id="pyr_'+item.id+'" value="'+he(d.year)+'"/></div>’;
-h+=’</div></div>’;
-h+=’<div class="pf"><div class="g2">’;
-h+=’<div><div class="pf-lbl">Set</div><input id="pst_'+item.id+'" value="'+he(d.set)+'"/></div>’;
-h+=’<div><div class="pf-lbl">Card #</div><input id="pcn_'+item.id+'" value="'+he(d.cardNumber)+'"/></div>’;
-h+=’</div></div>’;
-h+=’<div class="pf"><div class="g2">’;
-h+=’<div><div class="pf-lbl">Variation</div><input id="pvr_'+item.id+'" value="'+he(d.variation)+'"/></div>’;
-h+=’<div><div class="pf-lbl">Team</div><input id="ptm_'+item.id+'" value="'+he(d.team)+'"/></div>’;
-h+=’</div></div>’;
-h+=’<div class="pf"><div class="pf-lbl">Condition Note</div>’;
-h+=’<input id="pco_'+item.id+'" value="'+he(d.conditionNote)+'"/></div>’;
-h+=’<div class="pf" style="display:flex;align-items:center;gap:10px">’;
-h+=’<span style="font-size:8px;text-transform:uppercase;color:#94a3b8;letter-spacing:.1em">Shipping:</span>’;
-h+=’<span class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">’+(env?‘Envelope $1.00’:‘USPS $’+S.ship)+’</span>’;
-h+=’</div>’;
-if(d.searchTags&&d.searchTags.length){
-h+=’<div class="pf" style="display:flex;flex-wrap:wrap;gap:4px">’;
-for(var j=0;j<d.searchTags.length;j++){
-h+=’<span style="font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff">’+d.searchTags[j]+’</span>’;
+// ════════════════════════════
+// QUEUE RENDER
+// ════════════════════════════
+function renderQueue() {
+  var list=document.getElementById('queueList');
+  var empty=document.getElementById('queueEmpty');
+  var title=document.getElementById('queueTitle');
+  if (!QUEUE.length) { list.innerHTML=''; empty.style.display='block'; title.textContent='Card Queue'; return; }
+  empty.style.display='none';
+  title.textContent='Card Queue ('+QUEUE.length+')';
+  list.innerHTML=QUEUE.map(buildQI).join('');
 }
-h+=’</div>’;
+
+function renderQueueItem(item) {
+  var el=document.getElementById('qi_'+item.id);
+  if (el) { el.outerHTML=buildQI(item); }
+  else {
+    var list=document.getElementById('queueList');
+    var empty=document.getElementById('queueEmpty');
+    if (empty) empty.style.display='none';
+    var tmp=document.createElement('div');
+    tmp.innerHTML=buildQI(item);
+    if (list) list.appendChild(tmp.firstChild);
+  }
+  updateStats();
 }
-h+=’<div class="prev-btns">’;
-h+=’<button class="btn btn-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>’;
-h+=’<button class="btn btn-o" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
-h+=’</div></div>’;
-sec.innerHTML=h;
-sec.scrollIntoView({behavior:‘smooth’,block:‘start’});
+
+function buildQI(item) {
+  var sc={pending:'s-pending',reading:'s-reading',ready:'s-ready',error:'s-error'}[item.status]||'s-pending';
+  var sl={pending:'⏳ Pending',reading:'🔍 Reading...',ready:'✓ Ready',error:'✕ Error'}[item.status]||item.status;
+  var price=item.result&&item.result.suggestedBIN?'$'+item.result.suggestedBIN+' BIN':'';
+  var meta=item.result?item.result.ebayTitle||'':(item.error?item.error.slice(0,55):'');
+  return '<div class="qi" id="qi_'+item.id+'">'
+    +(item.thumb?'<img class="qi-img" src="'+item.thumb+'" alt="card"/>'
+                :'<div class="qi-ph">🃏</div>')
+    +'<div class="qi-body">'
+      +'<div class="qi-name">'+esc(item.result&&item.result.player?item.result.player:item.name)+'</div>'
+      +'<div class="qi-status"><span class="'+sc+'">'+sl+'</span></div>'
+      +(price?'<div class="qi-price">'+price+'</div>':'')
+      +(meta?'<div class="qi-meta">'+esc(meta)+'</div>':'')
+    +'</div>'
+    +'<div class="qi-side">'
+      +(item.status==='ready'?'<button class="qi-btn ok" onclick="viewPreview(\''+item.id+'\')">👁</button>':'')
+      +(item.status==='ready'?'<button class="qi-btn ok" onclick="addToExportById(\''+item.id+'\')" style="font-size:11px;font-weight:700;font-family:monospace">+CSV</button>':'')
+      +(item.status==='pending'||item.status==='error'?'<button class="qi-btn ok" onclick="analyzeById(\''+item.id+'\')" style="font-size:11px;font-weight:700;font-family:monospace">AI</button>':'')
+      +'<button class="qi-btn del" onclick="removeCard(\''+item.id+'\')">✕</button>'
+    +'</div>'
+  +'</div>';
 }
-function updShip(id,val){var t=document.getElementById(‘stag_’+id);if(!t)return;var env=parseFloat(val)<S.env;t.className=‘stag ‘+(env?‘senv’:‘susps’);t.textContent=env?‘Envelope $1.00’:‘USPS $’+S.ship;}
-function copyCard(id){
-var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
-if(!item||!item.result)return;
-var NL=String.fromCharCode(10);
-var txt=‘TITLE:’+NL+gv(‘pt_’+id,item.result.ebayTitle)+NL+NL+‘BUY IT NOW: $’+gv(‘pp_’+id,item.result.suggestedBIN)+NL+NL+‘DESCRIPTION:’+NL+gv(‘pd_’+id,item.result.description);
-navigator.clipboard.writeText(txt).then(function(){toast(‘Copied!’);}).catch(function(){
-var ta=document.createElement(‘textarea’);ta.value=txt;ta.style.cssText=‘position:fixed;top:-9999px’;
-document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);toast(‘Copied!’);
+
+function removeCard(id) { QUEUE=QUEUE.filter(function(i){return i.id!==id;}); renderQueue(); updateStats(); }
+function clearAll() { if(!confirm('Clear all cards?')) return; QUEUE=[]; renderQueue(); updateStats(); document.getElementById('singlePreview').innerHTML=''; }
+
+// ════════════════════════════
+// SINGLE PREVIEW
+// ════════════════════════════
+function showSinglePreview(item) {
+  document.getElementById('singlePreview').innerHTML=buildPreview(item);
+  document.getElementById('singlePreview').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function viewPreview(id) {
+  var item=QUEUE.find(function(i){return i.id===id;});
+  if (!item) return;
+  goTab('list',document.querySelectorAll('.tab')[1]);
+  showSinglePreview(item);
+}
+
+function buildPreview(item) {
+  var d=item.result; if(!d) return '';
+  var title=d.ebayTitle||''; var desc=d.description||'';
+  var bin=d.suggestedBIN||9.99; var auc=d.suggestedAuction||0.99;
+  var tags=(d.searchTags||[]).map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join('');
+  return '<div class="preview" id="pv_'+item.id+'">'
+    +'<div class="preview-hdr"><div class="preview-hdr-title">✓ Listing Ready — Review &amp; Edit</div>'
+    +'<div style="display:flex;gap:6px">'
+      +'<button class="btn btn-outline btn-sm" onclick="copyListing(\''+item.id+'\')">Copy</button>'
+      +'<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'singlePreview\').innerHTML=\'\'">✕</button>'
+    +'</div></div>'
+    +'<div class="pf"><div class="pf-lbl">eBay Title <span style="color:var(--fog)">(max 80 chars)</span></div>'
+      +'<textarea class="pf-inp" id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'pc_'+item.id+'\').textContent=this.value.length+\'/80\'">'
+      +esc(title)+'</textarea>'
+
+```
+  +'<div style="font-size:10px;color:var(--fog);font-family:monospace;margin-top:2px" id="pc_'+item.id+'">'+title.length+'/80</div>'
++'</div>'
++'<div class="pf"><div class="pf-lbl">Description</div><textarea class="pf-inp" id="pd_'+item.id+'" rows="5">'+esc(desc)+'</textarea></div>'
++'<div class="price-grid">'
+  +'<div class="pbox"><div class="pbox-lbl">Buy It Now ($)</div><input class="pbox-inp" id="pb_'+item.id+'" type="number" value="'+bin+'" step="0.01" min="0.99"/></div>'
+  +'<div class="pbox"><div class="pbox-lbl">Auction Start ($)</div><input class="pbox-inp auc" id="pa_'+item.id+'" type="number" value="'+auc+'" step="0.01" min="0.99"/></div>'
++'</div>'
++'<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+  +'<div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl_'+item.id+'" value="'+esc(d.player||'')+'"/></div>'
+  +'<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr_'+item.id+'" value="'+esc(d.year||'')+'"/></div>'
++'</div>'
++'<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+  +'<div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst_'+item.id+'" value="'+esc(d.set||'')+'"/></div>'
+  +'<div><div class="pf-lbl">Card #</div><input class="pf-inp" id="pn_'+item.id+'" value="'+esc(d.cardNumber||'')+'"/></div>'
++'</div>'
++'<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+  +'<div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pva_'+item.id+'" value="'+esc(d.variation||'')+'"/></div>'
+  +'<div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm_'+item.id+'" value="'+esc(d.team||'')+'"/></div>'
++'</div>'
++'<div class="pf"><div class="pf-lbl">Condition Note</div><input class="pf-inp" id="pcn_'+item.id+'" value="'+esc(d.conditionNote||d.condition||'')+'"/></div>'
++(tags?'<div class="tags-wrap">'+tags+'</div>':'')
++'<div class="preview-btns">'
+  +'<button class="btn btn-lime" onclick="addToExportById(\''+item.id+'\')" style="flex:2">✓ Add to CSV Export</button>'
+  +'<button class="btn btn-outline" onclick="copyListing(\''+item.id+'\')" style="flex:1">Copy</button>'
++'</div>'
+```
+
++’</div>’;
+}
+
+// ════════════════════════════
+// EXPORT / CSV
+// ════════════════════════════
+function addToExportById(id) {
+var item=QUEUE.find(function(i){return i.id===id;});
+if (!item||!item.result) { toast(‘Analyze this card first’,‘err’); return; }
+var d=Object.assign({},item.result);
+function g(pfx){ var el=document.getElementById(pfx+id); return el?el.value:null; }
+d.ebayTitle      =(g(‘pt_’)||d.ebayTitle||’’).slice(0,80);
+d.description    = g(‘pd_’)||d.description||’’;
+d.suggestedBIN   = parseFloat(g(‘pb_’)||d.suggestedBIN);
+d.suggestedAuction=parseFloat(g(‘pa_’)||d.suggestedAuction);
+d.player         = g(‘ppl_’)||d.player||’’;
+d.year           = g(‘pyr_’)||d.year||’’;
+d.set            = g(‘pst_’)||d.set||’’;
+d.cardNumber     = g(‘pn_’) ||d.cardNumber||’’;
+d.variation      = g(‘pva_’)||d.variation||’’;
+d.team           = g(‘ptm_’)||d.team||’’;
+d.conditionNote  = g(‘pcn_’)||d.conditionNote||’’;
+d._id=id;
+var idx=EXPORT.findIndex(function(e){return e._id===id;});
+if (idx>=0) { EXPORT[idx]=d; toast(‘Updated!’); } else { EXPORT.push(d); toast(‘Added to CSV!’); }
+renderExport();
+document.getElementById(‘singlePreview’).innerHTML=’’;
+}
+
+function buildCSV() {
+var H=‘Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)’;
+var cols=[H,‘Title’,‘Description’,‘Category’,‘StartPrice’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
+var rows=[cols.join(’,’)];
+EXPORT.forEach(function(d) {
+var cat=CAT[d.sport]||‘213’;
+var row=[‘Add’,d.ebayTitle,d.description,cat,d.suggestedAuction||0.99,d.suggestedBIN||9.99,‘1’,‘USED’,d.conditionNote||d.condition||‘Near Mint or Better’,DEFAULTS.dur,DEFAULTS.ret,‘Days_30’,‘MoneyBack’,‘Buyer’,‘USPSFirstClass’,DEFAULTS.ship,d.player||’’,d.year||’’,d.set||’’,d.cardNumber||’’,d.variation||’’,d.team||’’,d.sport||‘Baseball’];
+rows.push(row.map(function(v){var s=String(v===null||v===undefined?’’:v).replace(/”/g,’””’);return /[,”\n\r]/.test(s)?’”’+s+’”’:s;}).join(’,’));
 });
-}
-function addExport(id){
-var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
-if(!item||!item.result)return;
-var price=parseFloat(gv(‘pp_’+id,item.result.suggestedBIN));
-var d={};for(var k in item.result)d[k]=item.result[k];
-d.*id=id;d.acctId=item.acctId||S.activeId;
-d.ebayTitle=gv(’pt*’+id,item.result.ebayTitle).slice(0,80);
-d.description=gv(‘pd_’+id,item.result.description);
-d.suggestedBIN=price;d.player=gv(‘ppl_’+id,item.result.player);
-d.year=gv(‘pyr_’+id,item.result.year);d.set=gv(‘pst_’+id,item.result.set);
-d.cardNumber=gv(‘pcn_’+id,item.result.cardNumber);d.variation=gv(‘pvr_’+id,item.result.variation);
-d.team=gv(‘ptm_’+id,item.result.team);d.conditionNote=gv(‘pco_’+id,item.result.conditionNote);
-d.useEnvelope=price<S.env;d.sport=item.result.sport||‘Baseball’;
-var idx=-1;for(var j=0;j<S.exported.length;j++){if(S.exported[j].*id===id){idx=j;break;}}
-if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
-addHistory(d);toast(‘Added!’);document.getElementById(‘prevArea’).innerHTML=’’;renderExport();refreshStats();
-}
-function ce(v){
-var s=String(v||’’).replace(/”/g,’””’);
-var NL=String.fromCharCode(10),CR=String.fromCharCode(13);
-if(s.indexOf(’,’)>=0||s.indexOf(’”’)>=0||s.indexOf(NL)>=0||s.indexOf(CR)>=0)return’”’+s+’”’;
-return s;
-}
-function buildCSV(acctId){
-var rows=S.exported.filter(function(d){return d.acctId===acctId;});
-if(!rows.length)return’’;
-var cols=[CSV_H,‘Title’,‘Description’,‘Category’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ListingType’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
-var NL=String.fromCharCode(13)+String.fromCharCode(10);
-var lines=[cols.map(ce).join(’,’)];
-for(var i=0;i<rows.length;i++){
-var d=rows[i];
-lines.push([‘Add’,d.ebayTitle,d.description,CAT[d.sport]||‘213’,d.suggestedBIN||9.99,‘1’,
-(d.isGraded&&d.grade)?d.gradingCompany+’ ‘+d.grade:‘USED’,
-d.conditionNote||‘Near Mint’,S.dur,‘FixedPriceItem’,S.ret,‘Days_30’,‘MoneyBack’,
-‘Buyer’,‘USPSFirstClass’,d.useEnvelope?‘1.00’:String(S.ship),
-d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||‘Baseball’
-].map(ce).join(’,’));
-}
-return lines.join(NL);
-}
-function dlCSV(acctId){
-var csv=buildCSV(acctId);if(!csv){toast(‘No cards’,‘err’);return;}
-var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===acctId){a=S.accounts[i];break;}}
-var blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
-var url=URL.createObjectURL(blob);var el=document.createElement(‘a’);el.href=url;
-el.download=’ebay*’+(a?a.name:‘cards’).replace(/ /g,’*’)+’*’+new Date().toISOString().slice(0,10)+’.csv’;
-document.body.appendChild(el);el.click();document.body.removeChild(el);URL.revokeObjectURL(url);toast(‘Downloaded!’);
-}
-function renderExport(){
-var el=document.getElementById(‘expBlocks’),emp=document.getElementById(‘expEmpty’),guide=document.getElementById(‘expGuide’);
-var lbl=document.getElementById(‘expLbl’);if(lbl)lbl.textContent=S.exported.length+’ ready’;
-if(!S.exported.length){el.innerHTML=’’;emp.style.display=‘block’;if(guide)guide.style.display=‘none’;return;}
-emp.style.display=‘none’;if(guide)guide.style.display=‘block’;
-var g={};for(var i=0;i<S.exported.length;i++){var d=S.exported[i];if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);}
-var h=’’;var keys=Object.keys(g);
-for(var k=0;k<keys.length;k++){
-var aId=keys[k],cards=g[aId];
-var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===aId){a=S.accounts[j];break;}}
-var name=a?a.name:‘Unknown’,color=a?a.color:’#888’;
-var tot=0;for(var m=0;m<cards.length;m++)tot+=cards[m].suggestedBIN||0;
-h+=’<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>’;
-h+=’<div><div style="font-size:14px;font-weight:800;color:'+color+'">’+name+’</div>’;
-h+=’<div style="font-size:10px;color:#64748b;margin-top:2px">’+cards.length+’ listings - $’+Math.round(tot)+’ - All Buy It Now</div></div></div>’;
-h+=’<div class="exp-body">’;
-var show=Math.min(5,cards.length);
-for(var n=0;n<show;n++){var c=cards[n];h+=’<div class="exp-row"><span class="exp-name">’+(c.player||‘Card’)+’ ‘+(c.year||’’)+’</span><span class="exp-price">$’+(c.suggestedBIN||’?’)+’ BIN</span></div>’;}
-if(cards.length>5)h+=’<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ ‘+(cards.length-5)+’ more</div>’;
-h+=’<button class="btn btn-y" style="margin-top:10px" onclick="dlCSV(\''+aId+'\')">Download CSV for ‘+name+’</button>’;
-h+=’<p style="font-size:11px;color:#64748b;margin-top:8px;line-height:1.6">Sign into <strong>’+name+’</strong> in Safari - Seller Hub - Reports - Upload Template - select this file.</p>’;
-h+=’</div></div>’;
-}
-el.innerHTML=h;
-}
-function addHistory(d){
-var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===d.acctId){a=S.accounts[i];break;}}
-document.getElementById(‘logEmpty’).style.display=‘none’;
-var el=document.createElement(‘div’);el.className=‘log-item’;
-el.innerHTML=’<div class="log-dot"></div><div><div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’</div><div class="log-det">’+(a?a.name+’ - ‘:’’)+’ $’+(d.suggestedBIN||’?’)+’ BIN</div></div>’;
-document.getElementById(‘logList’).prepend(el);
-}
-function renderHistory(){
-var list=document.getElementById(‘logList’),emp=document.getElementById(‘logEmpty’);
-if(!S.exported.length){list.innerHTML=’’;emp.style.display=‘block’;return;}
-emp.style.display=‘none’;
-var h=’’;
-for(var i=S.exported.length-1;i>=0;i–){
-var d=S.exported[i];var a=null;
-for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
-h+=’<div class="log-item"><div class="log-dot"></div><div><div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’</div><div class="log-det">’+(a?a.name+’ - ‘:’’)+’ $’+(d.suggestedBIN||’?’)+’ BIN</div></div></div>’;
-}
-list.innerHTML=h;
-}
-function exportLog(){
-if(!S.exported.length){toast(‘No cards’,‘err’);return;}
-var NL=String.fromCharCode(10);
-var cols=[‘Account’,‘Player’,‘Year’,‘Set’,‘Card#’,‘Variation’,‘BIN’,‘Title’];
-var lines=[cols.join(’,’)];
-for(var i=0;i<S.exported.length;i++){
-var d=S.exported[i];var a=null;
-for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
-lines.push([a?a.name:’’,d.player,d.year,d.set,d.cardNumber,d.variation,d.suggestedBIN,d.ebayTitle].map(function(v){return’”’+(v||’’).toString().replace(/”/g,’””’)+’”’;}).join(’,’));
-}
-var blob=new Blob([lines.join(NL)],{type:‘text/csv’});
-var url=URL.createObjectURL(blob);var el=document.createElement(‘a’);el.href=url;el.download=‘card_log.csv’;el.click();URL.revokeObjectURL(url);
-}
-function refreshStats(){
-var tot=S.queue.length,rdy=S.queue.filter(function(i){return i.status===‘ready’;}).length;
-var val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
-document.getElementById(‘s-tot’).textContent=tot;
-document.getElementById(‘s-rdy’).textContent=rdy;
-document.getElementById(‘s-val’).textContent=’$’+Math.round(val);
-document.getElementById(‘nc-q’).textContent=tot;
-document.getElementById(‘nc-r’).textContent=rdy;
-}
-function toast(msg,type){
-var el=document.getElementById(‘toast’);el.textContent=msg;
-el.className=‘toast-box show’+(type===‘err’?’ err’:type===‘warn’?’ warn’:’’);
-clearTimeout(window._tt);window._tt=setTimeout(function(){el.className=‘toast-box’;},3000);
+return rows.join(’\r\n’);
 }
 
+function downloadCSV() {
+if (!EXPORT.length) { toast(‘No cards to export yet’,‘err’); return; }
+var blob=new Blob([buildCSV()],{type:‘text/csv;charset=utf-8;’});
+var url=URL.createObjectURL(blob);
+var a=document.createElement(‘a’);
+a.href=url; a.download=‘ebay_cards_’+new Date().toISOString().slice(0,10)+’_’+EXPORT.length+‘cards.csv’;
+document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+toast(‘Downloaded ‘+EXPORT.length+’ listings!’);
+}
+
+function renderExport() {
+var empty=document.getElementById(‘exportEmpty’);
+var content=document.getElementById(‘exportContent’);
+if (!EXPORT.length) { empty.style.display=‘block’; content.style.display=‘none’; return; }
+empty.style.display=‘none’; content.style.display=‘block’;
+var tv=EXPORT.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
+document.getElementById(‘expCount’).textContent=EXPORT.length;
+document.getElementById(‘expValue’).textContent=’$’+Math.round(tv);
+document.getElementById(‘expAvg’).textContent=’$’+Math.round(tv/EXPORT.length);
+document.getElementById(‘expList’).innerHTML=EXPORT.map(function(d,i){
+return ‘<div class="log-item"><div class="log-ck">✓</div><div class="log-info"><div class="log-name">’+esc(d.player||‘Card’)+’ ‘+esc(d.year||’’)+’</div><div class="log-detail">’+esc(d.set||’’)+’ · $’+(d.suggestedBIN||’?’)+’ BIN</div></div><button onclick="removeExport('+i+')" style="background:none;border:none;color:var(--fog);cursor:pointer;font-size:14px;padding:4px 8px">✕</button></div>’;
+}).join(’’);
+}
+
+function removeExport(i) { EXPORT.splice(i,1); renderExport(); toast(‘Removed’); }
+function clearExport() { if(!confirm(‘Clear export list?’)) return; EXPORT=[]; renderExport(); }
+
+// ════════════════════════════
+// HELPERS
+// ════════════════════════════
+function updateStats() {
+var qs=document.getElementById(‘quickStats’);
+if (QUEUE.length) qs.style.display=‘block’; else qs.style.display=‘none’;
+document.getElementById(‘qs-total’).textContent=QUEUE.length;
+var ready=QUEUE.filter(function(i){return i.status===‘ready’;});
+document.getElementById(‘qs-ready’).textContent=ready.length;
+var val=ready.reduce(function(s,i){return s+(i.result&&i.result.suggestedBIN?i.result.suggestedBIN:0);},0);
+document.getElementById(‘qs-value’).textContent=’$’+Math.round(val);
+}
+
+function copyListing(id) {
+var item=QUEUE.find(function(i){return i.id===id;});
+if (!item||!item.result) return;
+var title=(document.getElementById(‘pt_’+id)||{}).value||item.result.ebayTitle||’’;
+var desc=(document.getElementById(‘pd_’+id)||{}).value||item.result.description||’’;
+var bin=(document.getElementById(‘pb_’+id)||{}).value||item.result.suggestedBIN||’’;
+var text=‘TITLE:\n’+title+’\n\nBUY IT NOW: $’+bin+’\n\nDESCRIPTION:\n’+desc;
+if (navigator.clipboard&&navigator.clipboard.writeText) {
+navigator.clipboard.writeText(text).then(function(){toast(‘Copied!’);}).catch(function(){fbCopy(text);});
+} else fbCopy(text);
+}
+function fbCopy(text) {
+var ta=document.createElement(‘textarea’);
+ta.value=text;ta.style.position=‘fixed’;ta.style.opacity=‘0’;
+document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);
+document.body.removeChild(ta);toast(‘Copied!’);
+}
+
+function showLoader(txt,step){ document.getElementById(‘lTxt’).textContent=txt; document.getElementById(‘lStep’).textContent=step; document.getElementById(‘loader’).classList.add(‘show’); }
+function hideLoader(){ document.getElementById(‘loader’).classList.remove(‘show’); }
+
+function toast(msg,type) {
+var el=document.getElementById(‘toast’);
+el.textContent=msg;
+el.className=‘toast show’+(type===‘err’?’ err’:’’);
+clearTimeout(window._tt);
+window._tt=setTimeout(function(){el.className=‘toast’;},3500);
+}
+
+function setStatus(ready) {
+document.getElementById(‘sdot’).className=‘sdot’+(ready?’ on’:’’);
+document.getElementById(‘stxt’).textContent=ready?‘Ready’:‘No key’;
+}
+
+function showMsg(id,type,msg) {
+var el=document.getElementById(id);
+if(!el) return;
+el.innerHTML=’<div class="alert alert-'+type+'" style="margin-top:8px"><div>’+msg+’</div></div>’;
+}
+
+function esc(s){ return String(s||’’).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’); }
 </script>
+
 </body>
 </html>
