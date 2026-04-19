@@ -367,11 +367,12 @@ function loadAll() {
   showLoading('hrWrap', 'Loading HR picks...');
 
   var today = new Date().toISOString().split('T')[0];
+  document.getElementById('todayDate').textContent = today;
   mlbFetch('/schedule?sportId=1&date=' + today + '&hydrate=probablePitcher,team,linescore')
     .then(function(schedData) {
       var games = (schedData.dates && schedData.dates[0] && schedData.dates[0].games) || [];
       if (!games.length) {
-        showError('topListWrap', 'No games scheduled today', 'Check back on a game day');
+        showError('topListWrap', 'No MLB games today (' + today + ')', 'Check back tomorrow or tap Refresh');
         showError('yoursWrap', 'No games today', '');
         showError('hrWrap', 'No games today', '');
         return;
@@ -395,9 +396,10 @@ function loadAll() {
       return buildPlayerList(gameInfo);
     })
     .catch(function(err) {
-      showError('topListWrap', 'Could not load live data', err.message + ' - Tap Refresh');
-      showError('yoursWrap', 'Load failed', err.message);
-      showError('hrWrap', 'Load failed', err.message);
+      var msg = err.message || 'Unknown error';
+      showError('topListWrap', 'Could not load data', msg + ' — Tap Refresh to try again');
+      showError('yoursWrap', 'Load failed', msg);
+      showError('hrWrap', 'Load failed', msg);
     });
 }
 
