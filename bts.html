@@ -368,6 +368,11 @@ function buildPlayerList(events) {
   var pending = events.length;
   if (!pending) { renderAll([]); return; }
 
+  // Safety timeout - render whatever we have after 15 seconds
+  var safetyTimer = setTimeout(function() { renderAll(players); }, 15000);
+  var origRenderAll = renderAll;
+  renderAll = function(p) { clearTimeout(safetyTimer); renderAll = origRenderAll; origRenderAll(p); };
+
   events.forEach(function(ev, ei) {
     var comp = ev.competitions && ev.competitions[0];
     if (!comp) { if (--pending === 0) renderAll(players); return; }
@@ -402,8 +407,8 @@ function buildPlayerList(events) {
     var gameTime = new Date(ev.date).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 
     // Fetch both rosters
-    var awayUrl = ESPN + '/teams/' + awayId + '/roster';
-    var homeUrl = ESPN + '/teams/' + homeId + '/roster';
+    var awayUrl = ESPN + '/teams/' + awayId + '/roster?enable=roster,stats,leaders';
+    var homeUrl = ESPN + '/teams/' + homeId + '/roster?enable=roster,stats,leaders';
 
     showLoading('topListWrap', 'Loading rosters...', 'Game ' + (ei+1) + ' of ' + events.length);
 
