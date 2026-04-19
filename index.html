@@ -1,3 +1,11 @@
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+var tabs=['setup','list','queue','export'];
+tabs.forEach(function(n){var t=document.getElementById('tab-'+n);if(t)t.onclick=function(){goTab(n);};});
+var s=document.getElementById('BTN-SAVEKEY');if(s)s.onclick=doSaveKey;
+var te=document.getElementById('BTN-TESTKEY');if(te)te.onclick=doTestKey;
+});
+</script>
 <!DOCTYPE html>
 
 <html lang="en">
