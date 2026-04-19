@@ -417,6 +417,27 @@ function boot(){
   if(KEY) goTab('list'); else goTab('setup');
 }
 
+function doTestKey(){
+  var raw = document.getElementById('KEYINP').value.trim();
+  if(!raw||raw.length<15||raw.indexOf('....')>=0){
+    if(KEY&&KEY.length>=15){raw=KEY;}
+    else{showMsg('KEYMSG','rose','Paste your key first then tap Test');return;}
+  }
+  showMsg('KEYMSG','cyan','Testing connection to Gemini...');
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+raw,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:'Say READY and nothing else'}]}],generationConfig:{maxOutputTokens:10}})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.error){showMsg('KEYMSG','rose','FAILED: '+(d.error.message||'Error '+d.error.code));}
+    else{
+      var txt='';try{txt=d.candidates[0].content.parts[0].text;}catch(e){}
+      showMsg('KEYMSG','lime','Connection WORKS! Response: "'+txt.trim()+'" - Now tap Save Key');
+    }
+  })
+  .catch(function(e){showMsg('KEYMSG','rose','Network error: '+e.message);});
+}
 function doSaveKey(){
   var raw = document.getElementById('KEYINP').value.trim();
   if(!raw){showMsg('KEYMSG','rose','Please paste your Gemini API key first.');return;}
