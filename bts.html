@@ -40,7 +40,6 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
 @keyframes spin{to{transform:rotate(360deg)}}
 .load-txt{font-size:13px;font-weight:500}
 .load-sub{font-size:11px;color:var(--fog);margin-top:4px}
-.load-prog{font-size:10px;color:var(--blu);margin-top:8px;font-weight:600}
 .err-box{background:#fff;border:1px solid var(--r3);border-radius:var(--rad);padding:16px;text-align:center;margin:12px 0}
 .err-icon{font-size:28px;margin-bottom:8px}
 .err-txt{font-size:13px;color:var(--red);font-weight:600;margin-bottom:4px}
@@ -52,39 +51,40 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
 .live-txt{font-size:11px;font-weight:600;color:var(--grn);display:flex;align-items:center}
 .live-date{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--blu)}
 .refresh-btn{font-size:10px;color:var(--blu);cursor:pointer;padding:4px 9px;border:1px solid var(--b3);border-radius:5px;background:var(--b2);font-weight:600}
-.pc{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);overflow:hidden;margin-bottom:8px}
-.pc.gold{border-color:var(--g3);background:linear-gradient(135deg,#fff 0%,rgba(184,120,0,.04) 100%)}
-.pc.blue{border-color:var(--b3)}
-.pc-top{display:flex;align-items:flex-start;padding:11px 13px;gap:10px}
-.rank{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
-.r1{background:var(--gold);color:#fff}.r2{background:#64748b;color:#fff}.r3{background:#92400e;color:#fff}.rn{background:var(--s3);color:var(--fog);border:1px solid var(--bdr)}
-.pc-info{flex:1;min-width:0}
-.name-row{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-bottom:3px}
-.pc-name{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;line-height:1.1}
-.avg-badge{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--org);background:rgba(196,80,0,.1);border:1.5px solid rgba(196,80,0,.3);border-radius:5px;padding:1px 7px;white-space:nowrap}
-.pc-meta{font-size:9px;color:var(--fog);display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
-.tag{background:var(--s3);border:1px solid var(--bdr);border-radius:3px;padding:1px 5px;font-size:8px}
-.tag-hot{background:rgba(196,80,0,.1);border-color:rgba(196,80,0,.3);color:var(--org)}
-.tag-you{background:var(--b2);border-color:var(--b3);color:var(--blu)}
-.pitcher-pill{font-size:10px;color:var(--fog);padding:5px 8px;background:var(--s2);border-radius:5px;border-left:3px solid var(--blu);line-height:1.5}
-.info-pill{font-size:11px;color:var(--txt);padding:6px 9px;background:var(--b2);border-radius:5px;border-left:3px solid var(--blu);line-height:1.5;margin:0 13px 8px;font-weight:600}
-.prob-block{text-align:right;flex-shrink:0}
-.prob-pct{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;line-height:1}
-.prob-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.gcard{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);overflow:hidden;margin-bottom:10px}
+.gcard.hot{border-color:var(--g3);background:linear-gradient(135deg,#fff 0%,rgba(184,120,0,.04) 100%)}
+.gcard.good{border-color:var(--b3)}
+.ghdr{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid var(--bdr)}
+.gteams{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700}
+.gtime{font-size:10px;color:var(--fog);font-family:monospace;margin-top:2px}
+.gscore-box{text-align:right}
+.gscore{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;line-height:1}
+.gscore-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.08em}
 .ph{color:var(--grn)}.pm{color:var(--gold)}.pl{color:var(--red)}
-.pbar-w{padding:0 13px 10px}
-.pbar-bg{height:5px;background:var(--dim);border-radius:99px;overflow:hidden}
-.pbar-f{height:100%;border-radius:99px}
-.fh{background:var(--grn)}.fm{background:var(--gold)}.fl{background:var(--red)}
-.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:0 13px 10px}
-.sc{background:var(--s2);border-radius:5px;padding:6px 4px;text-align:center}
-.sv{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;line-height:1}
-.sk{font-size:7px;color:var(--fog);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
-.era-good{color:var(--grn)}.era-ok{color:var(--gold)}.era-bad{color:var(--red)}
-.exp-btn{width:100%;padding:7px 13px;background:none;border:none;border-top:1px solid var(--bdr);color:var(--fog);font-size:9px;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;font-family:inherit}
-.exp-body{display:none}
-.exp-body.open{display:block}
-.exp-actions{padding:9px 13px;display:flex;gap:7px}
+.gbody{padding:11px 13px}
+.gpitcher{display:flex;gap:10px;margin-bottom:8px}
+.gpill{flex:1;background:var(--s2);border-radius:7px;padding:8px 10px;border-left:3px solid var(--blu)}
+.gpill.away{border-left-color:var(--red)}
+.gpill-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);font-family:monospace;margin-bottom:3px}
+.gpill-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gpill-era{font-size:11px;font-family:monospace;margin-top:1px}
+.gstats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.gstat{background:var(--s2);border-radius:6px;padding:7px;text-align:center}
+.gstat-v{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;line-height:1}
+.gstat-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+.gbtn-row{display:flex;gap:7px;margin-top:9px}
+.gbtn{flex:1;padding:8px;border-radius:7px;border:1px solid var(--bdr);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center}
+.gbtn.p1{background:var(--grn2);border-color:var(--grn3);color:var(--grn)}
+.gbtn.p2{background:var(--b2);border-color:var(--b3);color:var(--blu)}
+.gtip{font-size:11px;color:var(--txt);background:var(--s2);border-radius:7px;padding:8px 10px;margin-top:8px;line-height:1.5}
+.park-tbl{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);overflow:hidden;margin-bottom:10px}
+.park-hd{display:grid;grid-template-columns:1fr 50px 50px 50px;padding:7px 12px;background:var(--s2);border-bottom:1px solid var(--bdr);font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em}
+.park-row{display:grid;grid-template-columns:1fr 50px 50px 50px;padding:8px 12px;border-bottom:1px solid var(--bdr);align-items:center}
+.park-row:last-child{border-bottom:none}
+.park-nm{font-size:11px;font-weight:600}
+.park-tm{font-size:9px;color:var(--fog);margin-top:1px}
+.psc{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;text-align:center}
+.sg2{color:var(--grn)}.sy{color:var(--gold)}.sn{color:var(--fog)}.sr{color:var(--red)}
 .streak-disp{text-align:center;padding:18px;background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);margin-bottom:10px}
 .snum{font-family:'Oswald',sans-serif;font-size:70px;font-weight:700;color:var(--blu);line-height:1}
 .slbl{font-size:10px;color:var(--fog);text-transform:uppercase;letter-spacing:.15em;margin-top:4px}
@@ -120,14 +120,6 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
 .hit-dot{background:var(--grn)}.miss-dot{background:var(--red)}
 .hit-res{color:var(--grn);font-family:'Oswald',sans-serif;font-size:12px;font-weight:700}
 .miss-res{color:var(--red);font-family:'Oswald',sans-serif;font-size:12px;font-weight:700}
-.park-tbl{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);overflow:hidden;margin-bottom:10px}
-.park-hd{display:grid;grid-template-columns:1fr 50px 50px 50px;padding:7px 12px;background:var(--s2);border-bottom:1px solid var(--bdr);font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em}
-.park-row{display:grid;grid-template-columns:1fr 50px 50px 50px;padding:8px 12px;border-bottom:1px solid var(--bdr);align-items:center}
-.park-row:last-child{border-bottom:none}
-.park-nm{font-size:11px;font-weight:600}
-.park-tm{font-size:9px;color:var(--fog);margin-top:1px}
-.psc{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;text-align:center}
-.sg2{color:var(--grn)}.sy{color:var(--gold)}.sn{color:var(--fog)}.sr{color:var(--red)}
 .ibox{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:11px 13px;margin-bottom:10px;font-size:11px;color:var(--fog);line-height:1.7}
 .ibox strong{color:var(--txt)}
 .ibox.gold{border-left:3px solid var(--gold)}
@@ -150,9 +142,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
   <div class="prize-box"><div class="prize-amt">$5.6M</div><div class="prize-l">57-game prize</div></div>
 </header>
 <div class="tabs">
-  <div class="tab on" id="t-picks">&#x1F3AF; Hit %</div>
-  <div class="tab" id="t-yours">&#x2B50; Your Guys</div>
-  <div class="tab" id="t-hrs">&#x1F4A3; Home Runs</div>
+  <div class="tab on" id="t-picks">&#x1F3AF; Today's Games</div>
   <div class="tab" id="t-parks">&#x1F3DF; Ballparks</div>
   <div class="tab" id="t-streak">&#x1F525; My Streak</div>
   <div class="tab" id="t-guide">&#x1F4D6; Strategy</div>
@@ -164,18 +154,11 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
     <div class="live-date" id="todayDate">Loading...</div>
     <div class="refresh-btn" id="refreshBtn">&#x21BB; Refresh</div>
   </div>
-  <div id="topListWrap">
+  <div id="gameWrap">
     <div class="loading"><div class="spin"></div><div class="load-txt">Fetching today's games...</div><div class="load-sub">Connecting to ESPN</div></div>
   </div>
 </div>
-<div class="screen" id="s-yours">
-  <div class="ibox blu" style="margin-bottom:11px">Your personal watchlist - shows their real stats and today's matchup.</div>
-  <div id="yoursWrap"><div class="loading"><div class="spin"></div><div class="load-txt">Loading your guys...</div></div></div>
-</div>
-<div class="screen" id="s-hrs">
-  <div class="ibox red" style="margin-bottom:11px"><strong>Best HR spots today</strong> - ranked by park factor, pitcher ERA, and batter power.</div>
-  <div id="hrWrap"><div class="loading"><div class="spin"></div><div class="load-txt">Loading HR picks...</div></div></div>
-</div>
+
 <div class="screen" id="s-parks">
   <div class="ibox grn" style="margin-bottom:11px"><strong>Park factors vs league avg.</strong> 100 = average. Over 106 = hitter friendly. Under 94 = pitcher's park.</div>
   <div class="sh">MLB Ballpark Factors</div>
@@ -184,6 +167,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
     <div id="parkRows"></div>
   </div>
 </div>
+
 <div class="screen" id="s-streak">
   <div class="streak-disp">
     <div class="snum" id="streakNum">0</div>
@@ -194,7 +178,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
   <div class="picks-box">
     <div class="pick-slot">
       <div class="pick-n">P1</div>
-      <div class="pick-player"><div class="pick-nm" id="p1name">-- No pick --</div><div class="pick-d" id="p1det">Go to Hit % tab and tap a player</div></div>
+      <div class="pick-player"><div class="pick-nm" id="p1name">-- No pick --</div><div class="pick-d" id="p1det">Go to Today's Games tab and tap Pick 1</div></div>
       <div class="pick-p" id="p1prob">--</div>
       <button class="pick-x" id="clrPick1">&#x2715;</button>
     </div>
@@ -224,7 +208,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
   </div>
   <div class="sh">Add Manual Pick</div>
   <div class="manual-pick-box">
-    <div style="font-size:11px;color:var(--fog);margin-bottom:8px">Player not in the list? Add manually:</div>
+    <div style="font-size:11px;color:var(--fog);margin-bottom:8px">Add a pick manually:</div>
     <input id="manPickName" placeholder="Player name (e.g. Manny Machado)"/>
     <input id="manPickTeam" placeholder="Team (e.g. San Diego)"/>
     <div style="display:flex;gap:7px">
@@ -235,6 +219,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
   <div class="sh">History</div>
   <div class="park-tbl"><div id="histList" style="padding:4px 0"></div></div>
 </div>
+
 <div class="screen" id="s-guide">
   <div class="sh">The Winning Formula</div>
   <div class="ibox gold"><strong>Contact over power.</strong> Luis Arraez hits .308 and puts almost every ball in play. Aaron Judge gets walked and pitched around. For BTS, contact rate beats power every time.</div>
@@ -245,11 +230,6 @@ header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdr
 </div>
 
 <script>
-// ESPN API - no proxy needed, CORS enabled
-var ESPN = 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb';
-
-var YOUR_GUYS = ['Luis Arraez','Bobby Witt Jr.','Freddie Freeman','Trea Turner','Shohei Ohtani','Elly De La Cruz','Aaron Judge','Mike Trout'];
-
 var PARKS = [
   {name:'Coors Field',team:'Colorado Rockies',hit:117,hr:126,rating:'great'},
   {name:'Fenway Park',team:'Boston Red Sox',hit:110,hr:108,rating:'great'},
@@ -304,7 +284,6 @@ var ls = {
 var streak = ls.get('bts_streak') || 0;
 var history = ls.get('bts_history') || [];
 var picks = ls.get('bts_picks') || [null,null];
-var allPlayers = [];
 
 function init() {
   var today = new Date();
@@ -314,17 +293,15 @@ function init() {
   renderHistory();
   wireButtons();
   goTab('picks');
-  loadAll();
+  loadGames();
 }
 
 function wireButtons() {
   document.getElementById('t-picks').addEventListener('click', function() { goTab('picks'); });
-  document.getElementById('t-yours').addEventListener('click', function() { goTab('yours'); });
-  document.getElementById('t-hrs').addEventListener('click', function() { goTab('hrs'); });
   document.getElementById('t-parks').addEventListener('click', function() { goTab('parks'); });
   document.getElementById('t-streak').addEventListener('click', function() { goTab('streak'); });
   document.getElementById('t-guide').addEventListener('click', function() { goTab('guide'); });
-  document.getElementById('refreshBtn').addEventListener('click', loadAll);
+  document.getElementById('refreshBtn').addEventListener('click', loadGames);
   document.getElementById('clrPick1').addEventListener('click', function() { clearPick(1); });
   document.getElementById('clrPick2').addEventListener('click', function() { clearPick(2); });
   document.getElementById('btnHit').addEventListener('click', function() { recordResult('hit'); });
@@ -334,267 +311,156 @@ function wireButtons() {
   document.getElementById('manPick2').addEventListener('click', function() { setManualPick(2); });
 }
 
-function loadAll() {
-  showLoading('topListWrap', "Fetching today's games...", 'Connecting to ESPN');
-  showLoading('yoursWrap', 'Loading...');
-  showLoading('hrWrap', 'Loading...');
+function loadGames() {
+  document.getElementById('gameWrap').innerHTML = '<div class="loading"><div class="spin"></div><div class="load-txt">Fetching today\'s games...</div><div class="load-sub">Connecting to ESPN</div></div>';
 
   var today = new Date();
-  var dateStr = today.getFullYear() + ''
-    + String(today.getMonth()+1).padStart(2,'0')
-    + String(today.getDate()).padStart(2,'0');
+  var dateStr = today.getFullYear() + '' + String(today.getMonth()+1).padStart(2,'0') + String(today.getDate()).padStart(2,'0');
+  var url = 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=' + dateStr + '&limit=20';
 
-  fetch(ESPN + '/scoreboard?dates=' + dateStr + '&limit=20')
-    .then(function(r) { return r.json(); })
+  fetch(url)
+    .then(function(r) {
+      if (!r.ok) throw new Error('ESPN returned ' + r.status);
+      return r.json();
+    })
     .then(function(data) {
       var events = data.events || [];
       if (!events.length) {
-        showError('topListWrap', 'No MLB games today', 'Check back on a game day');
-        showError('yoursWrap', 'No games today', '');
-        showError('hrWrap', 'No games today', '');
+        document.getElementById('gameWrap').innerHTML = '<div class="err-box"><div class="err-icon">&#x26BE;</div><div class="err-txt">No games today</div><div class="err-sub">Check back on a game day or tap Refresh</div></div>';
         return;
       }
-      buildPlayerList(events);
+      renderGames(events);
     })
     .catch(function(err) {
-      showError('topListWrap', 'Could not load ESPN data', err.message + ' - Tap Refresh');
-      showError('yoursWrap', 'Load failed', err.message);
-      showError('hrWrap', 'Load failed', err.message);
+      document.getElementById('gameWrap').innerHTML = '<div class="err-box"><div class="err-icon">&#x26A0;&#xFE0F;</div><div class="err-txt">Could not load games</div><div class="err-sub">' + (err.message || 'Network error') + '<br>Tap Refresh to try again</div><button class="retry-btn" id="retryBtn">&#x21BB; Refresh</button></div>';
+      var b = document.getElementById('retryBtn');
+      if (b) b.addEventListener('click', loadGames);
     });
 }
 
-function buildPlayerList(events) {
-  var players = [];
-  var pending = events.length;
-  if (!pending) { renderAll([]); return; }
+function getERA(statistics) {
+  if (!statistics) return null;
+  for (var i = 0; i < statistics.length; i++) {
+    var s = statistics[i];
+    if (s.abbreviation === 'ERA' || s.name === 'ERA') return parseFloat(s.displayValue || s.value || 0);
+  }
+  return null;
+}
 
-  // Safety timeout - render whatever we have after 15 seconds
-  var safetyTimer = setTimeout(function() { renderAll(players); }, 15000);
-  var origRenderAll = renderAll;
-  renderAll = function(p) { clearTimeout(safetyTimer); renderAll = origRenderAll; origRenderAll(p); };
+function renderGames(events) {
+  var games = [];
 
-  events.forEach(function(ev, ei) {
+  events.forEach(function(ev) {
     var comp = ev.competitions && ev.competitions[0];
-    if (!comp) { if (--pending === 0) renderAll(players); return; }
+    if (!comp) return;
 
-    var awayComp = null, homeComp = null;
+    var awayC = null, homeC = null;
     (comp.competitors || []).forEach(function(c) {
-      if (c.homeAway === 'away') awayComp = c;
-      if (c.homeAway === 'home') homeComp = c;
+      if (c.homeAway === 'away') awayC = c;
+      if (c.homeAway === 'home') homeC = c;
     });
-    if (!awayComp || !homeComp) { if (--pending === 0) renderAll(players); return; }
+    if (!awayC || !homeC) return;
 
-    var awayTeam = (awayComp.team && awayComp.team.displayName) || '';
-    var homeTeam = (homeComp.team && homeComp.team.displayName) || '';
-    var awayId = awayComp.team && awayComp.team.id;
-    var homeId = homeComp.team && homeComp.team.id;
-    var pf = getParkFactor(homeTeam);
+    var awayName = (awayC.team && awayC.team.displayName) || 'Away';
+    var homeName = (homeC.team && homeC.team.displayName) || 'Home';
+    var awayAbbr = (awayC.team && awayC.team.abbreviation) || '';
+    var homeAbbr = (homeC.team && homeC.team.abbreviation) || '';
+    var pf = getParkFactor(homeName);
+    var venue = (comp.venue && comp.venue.fullName) || '';
 
-    // Get probable pitchers
-    var awayPitcherName = 'TBD', homePitcherName = 'TBD';
+    var awayPitcher = 'TBD', homePitcher = 'TBD';
     var awayERA = null, homeERA = null;
     var probables = comp.probables || [];
     probables.forEach(function(pr) {
       var nm = (pr.athlete && pr.athlete.displayName) || 'TBD';
-      var era = null;
-      (pr.statistics || []).forEach(function(s) {
-        if (s.abbreviation === 'ERA' || s.name === 'ERA') era = parseFloat(s.displayValue || s.value || 0);
-      });
-      if (pr.homeAway === 'away') { awayPitcherName = nm; awayERA = era; }
-      if (pr.homeAway === 'home') { homePitcherName = nm; homeERA = era; }
+      var era = getERA(pr.statistics);
+      if (pr.homeAway === 'away') { awayPitcher = nm; awayERA = era; }
+      if (pr.homeAway === 'home') { homePitcher = nm; homeERA = era; }
     });
 
-    var gameTime = new Date(ev.date).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+    var gameTime = '';
+    try { gameTime = new Date(ev.date).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'}); } catch(e) {}
 
-    // Fetch both rosters
-    var awayUrl = ESPN + '/teams/' + awayId + '/roster?enable=roster,stats,leaders';
-    var homeUrl = ESPN + '/teams/' + homeId + '/roster?enable=roster,stats,leaders';
+    // Score = hitter friendliness
+    // Higher ERA pitchers + better park = better BTS spot
+    var awayScore = ((awayERA || 4.0) / 4.0) * (pf / 100) * 50;
+    var homeScore = ((homeERA || 4.0) / 4.0) * (pf / 100) * 50;
+    var gameScore = Math.round((awayScore + homeScore) / 2);
 
-    showLoading('topListWrap', 'Loading rosters...', 'Game ' + (ei+1) + ' of ' + events.length);
+    var awayEraC = awayERA == null ? '' : awayERA >= 4.5 ? 'color:var(--grn)' : awayERA >= 3.5 ? 'color:var(--gold)' : 'color:var(--red)';
+    var homeEraC = homeERA == null ? '' : homeERA >= 4.5 ? 'color:var(--grn)' : homeERA >= 3.5 ? 'color:var(--gold)' : 'color:var(--red)';
 
-    Promise.all([fetch(awayUrl).then(function(r){return r.json();}), fetch(homeUrl).then(function(r){return r.json();})])
-      .then(function(rosters) {
-        var sides = [
-          {roster:rosters[0], team:awayTeam, pitcherName:homePitcherName, era:homeERA, pf:pf},
-          {roster:rosters[1], team:homeTeam, pitcherName:awayPitcherName, era:awayERA, pf:pf}
-        ];
-        sides.forEach(function(side) {
-          var groups = side.roster.athletes || [];
-          groups.forEach(function(group) {
-            var items = group.items || [];
-            items.forEach(function(p) {
-              var pos = (p.position && p.position.abbreviation) || '';
-              if (pos === 'SP' || pos === 'RP' || pos === 'P') return;
-              var name = p.displayName || p.fullName;
-              if (!name) return;
+    // BTS tip
+    var tip = '';
+    var avgERA = ((awayERA || 4.0) + (homeERA || 4.0)) / 2;
+    if (pf >= 106 && avgERA >= 4.0) tip = '&#x1F525; Strong BTS game - hitter-friendly park + weak pitching';
+    else if (pf >= 103 && avgERA >= 3.75) tip = '&#x1F7E1; Good BTS spot - above average conditions';
+    else if (pf <= 94 || avgERA < 3.0) tip = '&#x1F976; Tough day - avoid unless you have a hot bat';
+    else tip = '&#x26AA; Average conditions - look for contact hitters';
 
-              // Parse stats from ESPN athlete object
-              var stats = {};
-              (p.statistics || []).forEach(function(s) {
-                stats[s.abbreviation || s.name] = s.displayValue || s.value;
-              });
-              var avg = parseFloat(stats['AVG'] || stats['BA'] || 0);
-              var hits = parseInt(stats['H'] || 0);
-              var ab = parseInt(stats['AB'] || 0);
-              var hr = parseInt(stats['HR'] || 0);
-              var so = parseInt(stats['SO'] || stats['K'] || 0);
-              var pa = parseInt(stats['PA'] || 0);
-              if (!avg && ab > 0) avg = hits / ab;
-              var kRate = pa > 0 ? Math.round(so / pa * 100) : null;
-
-              var era = side.era;
-              var baseProb = 55;
-              var avgBoost = (avg - 0.250) * 120;
-              var eraBoost = era != null ? (era >= 4.5 ? 6 : era >= 3.75 ? 2 : era >= 3.0 ? -2 : -8) : 0;
-              var parkBoost = side.pf >= 106 ? 3 : side.pf <= 94 ? -3 : 0;
-              var kPenalty = kRate && kRate >= 25 ? -3 : (kRate && kRate <= 15 ? 2 : 0);
-              var prob = Math.round(Math.min(80, Math.max(35, baseProb + avgBoost + eraBoost + parkBoost + kPenalty)));
-
-              players.push({
-                name: name,
-                playerId: p.id || (name + ei),
-                team: side.team,
-                pos: pos || '--',
-                prob: prob,
-                yourGuy: YOUR_GUYS.some(function(yg) { return name.toLowerCase().indexOf(yg.toLowerCase().split(' ').pop()) >= 0; }),
-                avg: avg,
-                hits: hits,
-                ab: ab,
-                hr: hr,
-                kRate: kRate,
-                pitcher: side.pitcherName,
-                pitcherERA: era,
-                parkFactor: side.pf,
-                gameTime: gameTime,
-                trend: avg >= 0.300 ? 'hot' : 'neutral'
-              });
-            });
-          });
-        });
-        if (--pending === 0) renderAll(players);
-      })
-      .catch(function() {
-        if (--pending === 0) renderAll(players);
-      });
+    games.push({
+      id: ev.id,
+      awayName: awayName, homeName: homeName,
+      awayAbbr: awayAbbr, homeAbbr: homeAbbr,
+      awayPitcher: awayPitcher, homePitcher: homePitcher,
+      awayERA: awayERA, homeERA: homeERA,
+      awayEraC: awayEraC, homeEraC: homeEraC,
+      pf: pf, venue: venue, gameTime: gameTime,
+      gameScore: gameScore, tip: tip,
+      status: (comp.status && comp.status.type && comp.status.type.description) || ''
+    });
   });
-}
 
-function renderAll(players) {
-  players.sort(function(a,b) { return b.prob - a.prob; });
-  allPlayers = players;
-  renderPlayerList(players);
-  renderYourGuys(players);
-  renderHRList(players);
-}
+  // Sort by game score - best BTS games first
+  games.sort(function(a,b) { return b.gameScore - a.gameScore; });
 
-function renderPlayerList(players) {
-  if (!players.length) { showError('topListWrap', 'No player data found', 'Lineups may not be posted yet - try again later'); return; }
-  var html = players.slice(0,30).map(function(p,i) { return buildCard(p, i+1); }).join('');
+  var html = '';
+  if (!games.length) {
+    html = '<div class="err-box"><div class="err-icon">&#x26BE;</div><div class="err-txt">No game data available</div><div class="err-sub">Lineups and pitchers may not be posted yet. Try again closer to game time.</div></div>';
+  } else {
+    html = '<div class="ibox blu" style="margin-bottom:11px">Games ranked best to worst for BTS. Green ERA = weak pitcher = easier to get a hit.</div>';
+    games.forEach(function(g, i) {
+      var cls = i === 0 ? 'gcard hot' : i <= 2 ? 'gcard good' : 'gcard';
+      var scoreC = g.gameScore >= 55 ? 'ph' : g.gameScore >= 45 ? 'pm' : 'pl';
+      var awayEraDisp = g.awayERA != null ? g.awayERA.toFixed(2) : 'TBD';
+      var homeEraDisp = g.homeERA != null ? g.homeERA.toFixed(2) : 'TBD';
+      var pfC = g.pf >= 106 ? 'color:var(--grn)' : g.pf <= 94 ? 'color:var(--red)' : 'color:var(--fog)';
 
-  // High avg leaders
-  var highAvg = players.filter(function(p) { return p.avg >= 0.300 && p.ab >= 20; });
-  highAvg.sort(function(a,b) { return b.avg - a.avg; });
-  if (highAvg.length) {
-    html += '<div style="height:14px"></div><div class="sh">&#x1F525; HOT BATS - .300+ AVG this season</div>';
-    html += '<div class="park-tbl">' + highAvg.slice(0,10).map(function(p,i) {
-      var avgStr = p.avg > 0 ? p.avg.toFixed(3).replace('0.','.') : '--';
-      var rc = i===0?'background:var(--gold);color:#fff':i===1?'background:#64748b;color:#fff':i===2?'background:#92400e;color:#fff':'background:var(--s3);color:var(--fog)';
-      return '<div style="display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid var(--bdr)">' +
-        '<div style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Oswald,sans-serif;font-size:11px;font-weight:700;flex-shrink:0;' + rc + '">' + (i+1) + '</div>' +
-        '<div style="flex:1;min-width:0"><div style="font-family:Oswald,sans-serif;font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + p.name + ' <span style="font-size:9px;color:var(--fog);font-weight:400">' + p.team + '</span></div>' +
-        '<div style="font-size:9px;color:var(--fog);margin-top:2px">vs <strong>' + p.pitcher + '</strong> &middot; ' + p.hits + '-' + p.ab + '</div></div>' +
-        '<div style="font-family:Oswald,sans-serif;font-size:20px;font-weight:700;color:var(--grn)">' + avgStr + '</div></div>';
-    }).join('') + '</div>';
-  }
-
-  document.getElementById('topListWrap').innerHTML = html;
-  wirePlayerButtons();
-}
-
-function renderYourGuys(players) {
-  var yours = players.filter(function(p) {
-    return YOUR_GUYS.some(function(yg) { return p.name.toLowerCase().indexOf(yg.toLowerCase().split(' ').pop()) >= 0; });
-  });
-  if (!yours.length) { document.getElementById('yoursWrap').innerHTML = '<div class="ibox">Your guys may not be playing today or lineups are not posted yet.</div>'; return; }
-  yours.sort(function(a,b) { return b.prob - a.prob; });
-  document.getElementById('yoursWrap').innerHTML = yours.map(function(p,i) { return buildCard(p, i+1, true); }).join('');
-  wirePlayerButtons();
-}
-
-function renderHRList(players) {
-  var hrSorted = players.filter(function(p) { return p.hr >= 0; })
-    .sort(function(a,b) {
-      var sA = (a.hr || 0) * (a.parkFactor/100);
-      var sB = (b.hr || 0) * (b.parkFactor/100);
-      return sB - sA;
-    }).slice(0, 12);
-  if (!hrSorted.length) { document.getElementById('hrWrap').innerHTML = '<div class="ibox">HR data unavailable.</div>'; return; }
-  document.getElementById('hrWrap').innerHTML = hrSorted.map(function(p,i) {
-    var hrScore = Math.round(Math.min(35, Math.max(5, (p.hr||0) / 10 * (p.parkFactor/100) * 25)));
-    var rc = i===0?'background:var(--gold);color:#fff':i===1?'background:#64748b;color:#fff':i===2?'background:#92400e;color:#fff':'background:var(--s3);color:var(--fog)';
-    return '<div class="pc' + (i<3?' gold':'') + '"><div class="pc-top"><div class="rank" style="' + rc + '">' + (i+1) + '</div><div class="pc-info"><div class="name-row"><div class="pc-name">' + p.name + '</div></div><div class="pc-meta"><span>' + p.team + '</span><span class="tag">' + p.pos + '</span></div><div class="pitcher-pill">vs <strong>' + p.pitcher + '</strong> &middot; Park: ' + p.parkFactor + ' &middot; ' + (p.hr||0) + ' HR this season</div></div><div class="prob-block"><div class="prob-pct ' + (hrScore>=20?'ph':hrScore>=12?'pm':'pl') + '">' + hrScore + '%</div><div class="prob-l">HR Prob</div></div></div></div>';
-  }).join('');
-}
-
-function buildCard(p, rank, isYours) {
-  var pc = p.prob >= 68 ? 'ph' : p.prob >= 60 ? 'pm' : 'pl';
-  var fc = p.prob >= 68 ? 'fh' : p.prob >= 60 ? 'fm' : 'fl';
-  var rc = rank===1?'r1':rank===2?'r2':rank===3?'r3':'rn';
-  var cls = rank<=2 ? 'pc gold' : isYours ? 'pc blue' : 'pc';
-  var eraC = (p.pitcherERA||4) >= 4.5 ? 'era-good' : (p.pitcherERA||4) >= 3.5 ? 'era-ok' : 'era-bad';
-  var eraDisp = p.pitcherERA != null ? p.pitcherERA.toFixed(2) : 'N/A';
-  var eraEmoji = (p.pitcherERA||4) >= 4.5 ? '&#x1F7E2;' : (p.pitcherERA||4) >= 3.5 ? '&#x1F7E1;' : '&#x1F534;';
-  var avgDisp = p.avg > 0 ? p.avg.toFixed(3).replace('0.','.') : '--';
-  var id = 'card' + p.playerId + rank;
-  var nameSafe = p.name.replace(/'/g,'&#39;');
-  var teamSafe = p.team.replace(/'/g,'&#39;');
-  var hitsInfo = p.ab > 0 ? (p.hits + '-' + p.ab + ' this season') : 'No stats yet';
-
-  return '<div class="' + cls + '">' +
-    '<div class="pc-top">' +
-    '<div class="rank ' + rc + '">' + rank + '</div>' +
-    '<div class="pc-info">' +
-    '<div class="name-row"><div class="pc-name">' + p.name + '</div>' +
-    (p.avg > 0 ? '<div class="avg-badge">' + avgDisp + '</div>' : '') +
-    '</div>' +
-    '<div class="pc-meta"><span>' + p.team + '</span><span class="tag">' + p.pos + '</span><span class="tag">' + p.gameTime + '</span>' +
-    (p.trend==='hot' ? '<span class="tag tag-hot">&#x1F525; Hot</span>' : '') +
-    (p.yourGuy ? '<span class="tag tag-you">&#x2B50; Your Guy</span>' : '') +
-    '</div>' +
-    '<div class="pitcher-pill">' + eraEmoji + ' vs <strong>' + p.pitcher + '</strong> &middot; ERA <span class="' + eraC + '">' + eraDisp + '</span> &middot; Park: ' + p.parkFactor + '</div>' +
-    '</div>' +
-    '<div class="prob-block"><div class="prob-pct ' + pc + '">' + p.prob + '%</div><div class="prob-l">Hit Prob</div></div>' +
-    '</div>' +
-    '<div class="info-pill">&#x1F4CA; ' + hitsInfo + (p.kRate != null ? ' &middot; K%: ' + p.kRate + '%' : '') + '</div>' +
-    '<div class="pbar-w"><div class="pbar-bg"><div class="pbar-f ' + fc + '" style="width:' + p.prob + '%"></div></div></div>' +
-    '<div class="sg">' +
-    '<div class="sc"><div class="sv">' + avgDisp + '</div><div class="sk">AVG</div></div>' +
-    '<div class="sc"><div class="sv">' + (p.hits||'--') + '</div><div class="sk">Hits</div></div>' +
-    '<div class="sc"><div class="sv">' + (p.ab||'--') + '</div><div class="sk">AB</div></div>' +
-    '<div class="sc"><div class="sv">' + (p.kRate != null ? p.kRate+'%' : '--') + '</div><div class="sk">K Rate</div></div>' +
-    '</div>' +
-    '<button class="exp-btn" data-eid="' + id + '"><span>&#x1F4CA; Pick this player</span><span data-arr="' + id + '">&#x25BC;</span></button>' +
-    '<div class="exp-body" id="' + id + '">' +
-    '<div class="exp-actions">' +
-    '<div class="pick-btn" data-num="1" data-name="' + nameSafe + '" data-prob="' + p.prob + '" data-team="' + teamSafe + '" style="flex:1;padding:7px;background:var(--grn2);border:1px solid var(--grn3);color:var(--grn);border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;text-align:center">&#x2B50; Pick 1</div>' +
-    '<div class="pick-btn" data-num="2" data-name="' + nameSafe + '" data-prob="' + p.prob + '" data-team="' + teamSafe + '" style="flex:1;padding:7px;background:var(--b2);border:1px solid var(--b3);color:var(--blu);border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;text-align:center">&#x2B50; Pick 2</div>' +
-    '</div></div></div>';
-}
-
-function wirePlayerButtons() {
-  var expBtns = document.querySelectorAll('.exp-btn');
-  for (var i = 0; i < expBtns.length; i++) {
-    expBtns[i].addEventListener('click', function() {
-      var id = this.getAttribute('data-eid');
-      var el = document.getElementById(id);
-      var arr = document.querySelector('[data-arr="' + id + '"]');
-      if (el) { var open = el.classList.toggle('open'); if (arr) arr.innerHTML = open ? '&#x25B2;' : '&#x25BC;'; }
+      html += '<div class="' + cls + '">';
+      html += '<div class="ghdr"><div><div class="gteams">' + g.awayAbbr + ' @ ' + g.homeAbbr + '</div><div class="gtime">' + (g.gameTime || g.status) + (g.venue ? ' &middot; ' + g.venue : '') + '</div></div>';
+      html += '<div class="gscore-box"><div class="gscore ' + scoreC + '">' + g.gameScore + '</div><div class="gscore-l">BTS Score</div></div></div>';
+      html += '<div class="gbody">';
+      html += '<div class="gpitcher">';
+      html += '<div class="gpill away"><div class="gpill-lbl">' + g.awayAbbr + ' Pitcher</div><div class="gpill-name">' + g.awayPitcher + '</div><div class="gpill-era" style="' + g.awayEraC + '">ERA: ' + awayEraDisp + '</div></div>';
+      html += '<div class="gpill"><div class="gpill-lbl">' + g.homeAbbr + ' Pitcher</div><div class="gpill-name">' + g.homePitcher + '</div><div class="gpill-era" style="' + g.homeEraC + '">ERA: ' + homeEraDisp + '</div></div>';
+      html += '</div>';
+      html += '<div class="gstats">';
+      html += '<div class="gstat"><div class="gstat-v" style="' + pfC + '">' + g.pf + '</div><div class="gstat-l">Park Factor</div></div>';
+      html += '<div class="gstat"><div class="gstat-v" style="' + g.awayEraC + '">' + awayEraDisp + '</div><div class="gstat-l">Away ERA</div></div>';
+      html += '<div class="gstat"><div class="gstat-v" style="' + g.homeEraC + '">' + homeEraDisp + '</div><div class="gstat-l">Home ERA</div></div>';
+      html += '</div>';
+      html += '<div class="gtip">' + g.tip + '</div>';
+      html += '<div class="gbtn-row">';
+      html += '<div class="gbtn p1" data-game="' + g.id + '" data-team="' + g.awayName + '" data-num="1">&#x2B50; Pick ' + g.awayAbbr + ' batter (P1)</div>';
+      html += '<div class="gbtn p2" data-game="' + g.id + '" data-team="' + g.homeName + '" data-num="1">&#x2B50; Pick ' + g.homeAbbr + ' batter (P1)</div>';
+      html += '</div>';
+      html += '</div></div>';
     });
   }
-  var pickBtns = document.querySelectorAll('.pick-btn');
-  for (var i = 0; i < pickBtns.length; i++) {
-    pickBtns[i].addEventListener('click', function() {
-      setPick(parseInt(this.getAttribute('data-num')), this.getAttribute('data-name'), parseInt(this.getAttribute('data-prob')), this.getAttribute('data-team'));
+
+  document.getElementById('gameWrap').innerHTML = html;
+
+  // Wire pick buttons
+  var btns = document.querySelectorAll('.gbtn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function() {
+      var team = this.getAttribute('data-team');
+      var num = parseInt(this.getAttribute('data-num') || '1');
+      picks[num-1] = {name: 'Pick from ' + team, prob: null, team: team};
+      ls.set('bts_picks', picks);
+      renderStreak();
+      showToast('Pick ' + num + ' set: ' + team + ' batter', 'grn');
+      goTab('streak');
     });
   }
 }
@@ -609,13 +475,6 @@ function renderParks() {
   }).join('');
 }
 
-function setPick(num, name, prob, team) {
-  picks[num-1] = {name:name, prob:prob, team:team};
-  ls.set('bts_picks', picks);
-  renderStreak();
-  showToast('Pick ' + num + ': ' + name + ' (' + prob + '%)', 'grn');
-  goTab('streak');
-}
 function clearPick(num) { picks[num-1]=null; ls.set('bts_picks',picks); renderStreak(); }
 function setManualPick(num) {
   var name = document.getElementById('manPickName').value.trim();
@@ -633,10 +492,10 @@ function renderStreak() {
   document.getElementById('saveLbl').textContent = (streak>=10&&streak<=15) ? '&#x1F6E1; Streak Saver Active!' : '';
   var p1=picks[0], p2=picks[1];
   document.getElementById('p1name').textContent = p1 ? p1.name : '-- No pick --';
-  document.getElementById('p1det').textContent = p1 ? p1.team+' - '+(p1.prob ? p1.prob+'% hit prob' : 'manual pick') : 'Go to Hit % tab to select';
+  document.getElementById('p1det').textContent = p1 ? (p1.team || '--') + (p1.prob ? ' - ' + p1.prob + '% hit prob' : '') : 'Go to Today\'s Games tab';
   document.getElementById('p1prob').textContent = p1&&p1.prob ? p1.prob+'%' : '--';
   document.getElementById('p2name').textContent = p2 ? p2.name : '-- Double down --';
-  document.getElementById('p2det').textContent = p2 ? p2.team+' - '+(p2.prob ? p2.prob+'% hit prob' : 'manual pick') : 'Optional second pick';
+  document.getElementById('p2det').textContent = p2 ? (p2.team || '--') : 'Optional second pick';
   document.getElementById('p2prob').textContent = p2&&p2.prob ? p2.prob+'%' : '--';
 }
 function recordResult(result) {
@@ -670,18 +529,10 @@ function renderHistory() {
   }).join('');
 }
 function goTab(n) {
-  ['picks','yours','hrs','parks','streak','guide'].forEach(function(t) {
+  ['picks','parks','streak','guide'].forEach(function(t) {
     document.getElementById('s-'+t).className = 'screen'+(t===n?' on':'');
     document.getElementById('t-'+t).className = 'tab'+(t===n?' on':'');
   });
-}
-function showLoading(id, msg, prog) {
-  document.getElementById(id).innerHTML = '<div class="loading"><div class="spin"></div><div class="load-txt">'+msg+'</div><div class="load-sub">'+( prog||'Please wait')+'</div></div>';
-}
-function showError(id, msg, sub) {
-  document.getElementById(id).innerHTML = '<div class="err-box"><div class="err-icon">&#x26A0;&#xFE0F;</div><div class="err-txt">'+msg+'</div><div class="err-sub">'+sub+'</div><button class="retry-btn" id="rb'+id+'">&#x21BB; Try Again</button></div>';
-  var b = document.getElementById('rb'+id);
-  if (b) b.addEventListener('click', loadAll);
 }
 function showToast(msg, type) {
   var el=document.getElementById('toast');
