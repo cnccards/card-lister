@@ -430,50 +430,7 @@ function fetchPitcherStats(pitcherId) {
 // vsPlayer returned season-by-season rows which were failing to parse
 // ============================================================
 function fetchBatterVsPitcher(batterId, pitcherId) {
-  if (!batterId || !pitcherId) return Promise.resolve(null);
-  var mlbUrl = 'https://statsapi.mlb.com/api/v1/people/' + batterId +
-               '/stats?stats=vsPlayerTotal&opposingPlayerId=' + pitcherId +
-               '&group=hitting';
-
-  function parseVsP(data) {
-    var splits = data.stats && data.stats[0] && data.stats[0].splits;
-    if (!splits || !splits.length) return null;
-    var s = splits[0].stat || {};
-    var ab = parseInt(s.atBats || 0);
-    if (ab < 1) return null;
-    var h  = parseInt(s.hits     || 0);
-    var hr = parseInt(s.homeRuns || 0);
-    var avg = ab > 0 ? h / ab : 0;
-    return {
-      ab: ab, h: h, hr: hr, avg: avg,
-      str: h + '-' + ab + (hr > 0 ? ', ' + hr + ' HR' : ''),
-      ops: parseFloat(s.ops || 0)
-    };
-  }
-
-  // Try corsproxy.io first, then killcors as fallback
-  var proxies = [
-    'https://corsproxy.io/?url=' + encodeURIComponent(mlbUrl),
-    'https://proxy.killcors.com/?url=' + encodeURIComponent(mlbUrl)
-  ];
-
-  function tryProxy(i) {
-    if (i >= proxies.length) return Promise.resolve(null);
-    return fetch(proxies[i])
-      .then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
-      .then(function(data) {
-        var result = parseVsP(data);
-        return result;
-      })
-      .catch(function() {
-        return tryProxy(i + 1);
-      });
-  }
-
-  return tryProxy(0);
+  return Promise.resolve(null);
 }
 
 function buildPlayerList(games) {
@@ -561,6 +518,8 @@ function buildPlayerList(games) {
                   prob: prob,
                   yourGuy: YOUR_GUYS.some(function(yg) { return name.toLowerCase().indexOf(yg.toLowerCase().split(' ').pop()) >= 0; }),
                   avg: seasonAvg,
+                  seasonHits: parseInt(sSplit.hits || 0),
+                  seasonAB: parseInt(sSplit.atBats || 0),
                   vsP: vs,
                   vsPAvg: vs ? vs.avg : null,
                   kRate: kRate,
@@ -655,12 +614,14 @@ function buildCard(p, rank, showRank, isYours) {
     var sample = p.vsP.ab >= 5 ? '' : ' <span style="color:var(--fog);font-weight:400">(small sample)</span>';
     vsPPill = '<div class="' + pillClass + '">' + icon + ' <strong>' + p.vsP.str + '</strong> career vs ' + p.pitcher + ' &middot; <strong>' + vsAvgStr + '</strong> AVG' + sample + '</div>';
   } else {
-    vsPPill = '<div class="vsp-pill warn">&#x1F4CB; No prior matchups vs ' + p.pitcher + '</div>';
+    var hitsDisp = (p.seasonHits > 0 || p.seasonAB > 0)
+      ? p.seasonHits + ' hits in ' + p.seasonAB + ' AB this season (' + seasonAvgDisp + ')'
+      : 'No season stats yet';
+    vsPPill = '<div class="vsp-pill warn">&#x1F4CA; ' + hitsDisp + ' &middot; vs ' + p.pitcher + '</div>';
   }
 
   var avgBadgeContent = '';
-  if (p.vsP && p.vsP.ab >= 5) { avgBadgeContent = 'vs SP: ' + p.vsP.avg.toFixed(3).replace('0.','.'); }
-  else if (p.avg > 0) { avgBadgeContent = 'Season: ' + seasonAvgDisp; }
+  if (p.avg > 0) { avgBadgeContent = p.seasonHits + '-' + p.seasonAB + ' (' + seasonAvgDisp + ')'; }
 
   var nameSafe = p.name.replace(/'/g, '&#39;');
   var teamSafe = p.team.replace(/'/g, '&#39;');
@@ -685,9 +646,9 @@ function buildCard(p, rank, showRank, isYours) {
     '<div class="pbar-w"><div class="pbar-bg"><div class="pbar-f ' + fc + '" style="width:' + p.prob + '%"></div></div></div>' +
     '<div class="sg">' +
     '<div class="sc"><div class="sv">' + seasonAvgDisp + '</div><div class="sk">2026 AVG</div></div>' +
-    '<div class="sc"><div class="sv">' + (p.vsP && p.vsP.ab >= 1 ? p.vsP.avg.toFixed(3).replace('0.','.') : '--') + '</div><div class="sk">vs SP</div></div>' +
+    '<div class="sc"><div class="sv">' + (p.seasonHits || '--') + '</div><div class="sk">Hits</div></div>' +
+    '<div class="sc"><div class="sv">' + (p.seasonAB || '--') + '</div><div class="sk">AB</div></div>' +
     '<div class="sc"><div class="sv">' + (p.kRate != null ? p.kRate + '%' : '--') + '</div><div class="sk">K Rate</div></div>' +
-    '<div class="sc"><div class="sv">' + p.parkFactor + '</div><div class="sk">Park+</div></div>' +
     '</div>' +
     '<button class="exp-btn" data-expid="' + id + '"><span>&#x1F4CA; Pick this player</span><span class="arr" data-arrid="' + id + '">&#x25BC;</span></button>' +
     '<div class="exp-body" id="' + id + '">' +
