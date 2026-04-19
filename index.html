@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -154,6 +155,7 @@ button.btn:last-child{margin-bottom:0}
 <div class="toast-box" id="toast"></div>
 
 <!-- LIST -->
+
 <div class="tab-screen on" id="s-list">
   <div id="keybar">
     <div id="keydot"></div>
@@ -199,6 +201,7 @@ button.btn:last-child{margin-bottom:0}
 </div>
 
 <!-- ACCOUNTS -->
+
 <div class="tab-screen" id="s-accts">
   <div class="info iy"><span>&#x1F4CB;</span><div>No eBay developer account needed. Each account gets its own CSV. All listings are <strong>Buy It Now</strong>.</div></div>
   <div id="acctList"></div>
@@ -213,6 +216,7 @@ button.btn:last-child{margin-bottom:0}
 </div>
 
 <!-- EXPORT -->
+
 <div class="tab-screen" id="s-export">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.08em">Download CSVs</span>
@@ -235,6 +239,7 @@ button.btn:last-child{margin-bottom:0}
 </div>
 
 <!-- HISTORY -->
+
 <div class="tab-screen" id="s-history">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.08em">History</span>
@@ -245,6 +250,7 @@ button.btn:last-child{margin-bottom:0}
 </div>
 
 <!-- SETUP -->
+
 <div class="tab-screen" id="s-setup">
   <div class="info ig"><span>&#x2713;</span><div><strong>Free Gemini key works here!</strong> 1,500 free reads/day. Key starts with AIza or AQ &mdash; both work.</div></div>
   <div class="card">
@@ -291,6 +297,7 @@ button.btn:last-child{margin-bottom:0}
 </div>
 
 <script>
+var HARDCODED_KEY='AIzaSyD-3OmZsxNFyHhjDZjSBtq7BQ27wSqUAk8'; // <-- PASTE YOUR GEMINI KEY BETWEEN THESE QUOTES
 var S={gemKey:'',dur:'GTC',ret:'ReturnsAccepted',ship:4.99,env:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
 var COLORS=['#16a34a','#1d4ed8','#d97706','#dc2626','#7c3aed','#ea580c','#0891b2','#db2777'];
 var CAT={Baseball:'213',Basketball:'261329',Football:'261328',Hockey:'247',Soccer:'261330',Other:'213'};
@@ -324,6 +331,7 @@ window.onload=function(){
   S.activeId=lg('aid')||null;
   if(!S.activeId&&S.accounts.length)S.activeId=S.accounts[0].id;
   if(!S.gemKey){var v=lg('vault');if(v){S.gemKey=v;ls('gk',v);}}
+  if(!S.gemKey&&HARDCODED_KEY){S.gemKey=HARDCODED_KEY;ls('gk',HARDCODED_KEY);ls('vault',HARDCODED_KEY);}
   if(S.gemKey)document.getElementById('gemIn').value=mask(S.gemKey);
   var sv=lg('vault');if(sv)document.getElementById('vaultIn').value=sv;
   document.getElementById('cfgDur').value=S.dur;
@@ -568,563 +576,566 @@ function showPreview(item){
   h+='</div></div>';
   h+='<div class="pf"><div class="pf-lbl">eBay Title (max 80) - <span id="ptc_'+item.id+'">'+tl+'</span>/80</div>';
   h+='<textarea id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length">'+he(d.ebayTitle)+'</textarea></div>';
-  h+='<div class="pf"><div class="pf-lbl">Description</div>';
-  h+='<textarea id="pd_'+item.id+'" rows="5">'+he(d.description)+'</textarea></div>';
-  h+='<div class="pf"><div class="pf-lbl">Buy It Now Price</div>';
-  h+='<div class="pbox"><div class="price-lbl">BUY IT NOW - FIXED PRICE</div>';
-  h+='<div class="price-row"><span class="price-cur">$</span>';
-  h+='<input class="price-inp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="updShip(\''+item.id+'\',this.value)"/>';
-  h+='</div></div></div>';
-  h+='<div class="pf"><div class="g2">';
-  h+='<div><div class="pf-lbl">Player</div><input id="ppl_'+item.id+'" value="'+he(d.player)+'"/></div>';
-  h+='<div><div class="pf-lbl">Year</div><input id="pyr_'+item.id+'" value="'+he(d.year)+'"/></div>';
-  h+='</div></div>';
-  h+='<div class="pf"><div class="g2">';
-  h+='<div><div class="pf-lbl">Set</div><input id="pst_'+item.id+'" value="'+he(d.set)+'"/></div>';
-  h+='<div><div class="pf-lbl">Card #</div><input id="pcn_'+item.id+'" value="'+he(d.cardNumber)+'"/></div>';
-  h+='</div></div>';
-  h+='<div class="pf"><div class="g2">';
-  h+='<div><div class="pf-lbl">Variation</div><input id="pvr_'+item.id+'" value="'+he(d.variation)+'"/></div>';
-  h+='<div><div class="pf-lbl">Team</div><input id="ptm_'+item.id+'" value="'+he(d.team)+'"/></div>';
-  h+='</div></div>';
-  h+='<div class="pf"><div class="pf-lbl">Condition Note</div>';
-  h+='<input id="pco_'+item.id+'" value="'+he(d.conditionNote)+'"/></div>';
-  h+='<div class="pf" style="display:flex;align-items:center;gap:10px">';
-  h+='<span style="font-size:8px;text-transform:uppercase;color:#94a3b8;letter-spacing:.1em">Shipping:</span>';
-  h+='<span class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">'+(env?'Envelope $1.00':'USPS $'+S.ship)+'</span>';
-  h+='</div>';
-  if(d.searchTags&&d.searchTags.length){
-    h+='<div class="pf" style="display:flex;flex-wrap:wrap;gap:4px">';
-    for(var j=0;j<d.searchTags.length;j++){
-      h+='<span style="font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff">'+d.searchTags[j]+'</span>';
-    }
-    h+='</div>';
-  }
-  h+='<div class="prev-btns">';
-  h+='<button class="btn btn-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>';
-  h+='<button class="btn btn-o" onclick="copyCard(\''+item.id+'\')">Copy</button>';
-  h+='</div></div>';
-  sec.innerHTML=h;
-  sec.scrollIntoView({behavior:'smooth',block:'start'});
+
+h+=’<div class="pf"><div class="pf-lbl">Description</div>’;
+h+=’<textarea id="pd_'+item.id+'" rows="5">’+he(d.description)+’</textarea></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Buy It Now Price</div>’;
+h+=’<div class="pbox"><div class="price-lbl">BUY IT NOW - FIXED PRICE</div>’;
+h+=’<div class="price-row"><span class="price-cur">$</span>’;
+h+=’<input class="price-inp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="updShip(\''+item.id+'\',this.value)"/>’;
+h+=’</div></div></div>’;
+h+=’<div class="pf"><div class="g2">’;
+h+=’<div><div class="pf-lbl">Player</div><input id="ppl_'+item.id+'" value="'+he(d.player)+'"/></div>’;
+h+=’<div><div class="pf-lbl">Year</div><input id="pyr_'+item.id+'" value="'+he(d.year)+'"/></div>’;
+h+=’</div></div>’;
+h+=’<div class="pf"><div class="g2">’;
+h+=’<div><div class="pf-lbl">Set</div><input id="pst_'+item.id+'" value="'+he(d.set)+'"/></div>’;
+h+=’<div><div class="pf-lbl">Card #</div><input id="pcn_'+item.id+'" value="'+he(d.cardNumber)+'"/></div>’;
+h+=’</div></div>’;
+h+=’<div class="pf"><div class="g2">’;
+h+=’<div><div class="pf-lbl">Variation</div><input id="pvr_'+item.id+'" value="'+he(d.variation)+'"/></div>’;
+h+=’<div><div class="pf-lbl">Team</div><input id="ptm_'+item.id+'" value="'+he(d.team)+'"/></div>’;
+h+=’</div></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Condition Note</div>’;
+h+=’<input id="pco_'+item.id+'" value="'+he(d.conditionNote)+'"/></div>’;
+h+=’<div class="pf" style="display:flex;align-items:center;gap:10px">’;
+h+=’<span style="font-size:8px;text-transform:uppercase;color:#94a3b8;letter-spacing:.1em">Shipping:</span>’;
+h+=’<span class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">’+(env?‘Envelope $1.00’:‘USPS $’+S.ship)+’</span>’;
+h+=’</div>’;
+if(d.searchTags&&d.searchTags.length){
+h+=’<div class="pf" style="display:flex;flex-wrap:wrap;gap:4px">’;
+for(var j=0;j<d.searchTags.length;j++){
+h+=’<span style="font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff">’+d.searchTags[j]+’</span>’;
 }
-function updShip(id,val){var t=document.getElementById('stag_'+id);if(!t)return;var env=parseFloat(val)<S.env;t.className='stag '+(env?'senv':'susps');t.textContent=env?'Envelope $1.00':'USPS $'+S.ship;}
+h+=’</div>’;
+}
+h+=’<div class="prev-btns">’;
+h+=’<button class="btn btn-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>’;
+h+=’<button class="btn btn-o" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
+h+=’</div></div>’;
+sec.innerHTML=h;
+sec.scrollIntoView({behavior:‘smooth’,block:‘start’});
+}
+function updShip(id,val){var t=document.getElementById(‘stag_’+id);if(!t)return;var env=parseFloat(val)<S.env;t.className=‘stag ‘+(env?‘senv’:‘susps’);t.textContent=env?‘Envelope $1.00’:‘USPS $’+S.ship;}
 function copyCard(id){
-  var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
-  if(!item||!item.result)return;
-  var NL=String.fromCharCode(10);
-  var txt='TITLE:'+NL+gv('pt_'+id,item.result.ebayTitle)+NL+NL+'BUY IT NOW: $'+gv('pp_'+id,item.result.suggestedBIN)+NL+NL+'DESCRIPTION:'+NL+gv('pd_'+id,item.result.description);
-  navigator.clipboard.writeText(txt).then(function(){toast('Copied!');}).catch(function(){
-    var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;top:-9999px';
-    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');
-  });
+var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
+if(!item||!item.result)return;
+var NL=String.fromCharCode(10);
+var txt=‘TITLE:’+NL+gv(‘pt_’+id,item.result.ebayTitle)+NL+NL+‘BUY IT NOW: $’+gv(‘pp_’+id,item.result.suggestedBIN)+NL+NL+‘DESCRIPTION:’+NL+gv(‘pd_’+id,item.result.description);
+navigator.clipboard.writeText(txt).then(function(){toast(‘Copied!’);}).catch(function(){
+var ta=document.createElement(‘textarea’);ta.value=txt;ta.style.cssText=‘position:fixed;top:-9999px’;
+document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);toast(‘Copied!’);
+});
 }
 function addExport(id){
-  var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
-  if(!item||!item.result)return;
-  var price=parseFloat(gv('pp_'+id,item.result.suggestedBIN));
-  var d={};for(var k in item.result)d[k]=item.result[k];
-  d._id=id;d.acctId=item.acctId||S.activeId;
-  d.ebayTitle=gv('pt_'+id,item.result.ebayTitle).slice(0,80);
-  d.description=gv('pd_'+id,item.result.description);
-  d.suggestedBIN=price;d.player=gv('ppl_'+id,item.result.player);
-  d.year=gv('pyr_'+id,item.result.year);d.set=gv('pst_'+id,item.result.set);
-  d.cardNumber=gv('pcn_'+id,item.result.cardNumber);d.variation=gv('pvr_'+id,item.result.variation);
-  d.team=gv('ptm_'+id,item.result.team);d.conditionNote=gv('pco_'+id,item.result.conditionNote);
-  d.useEnvelope=price<S.env;d.sport=item.result.sport||'Baseball';
-  var idx=-1;for(var j=0;j<S.exported.length;j++){if(S.exported[j]._id===id){idx=j;break;}}
-  if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
-  addHistory(d);toast('Added!');document.getElementById('prevArea').innerHTML='';renderExport();refreshStats();
+var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
+if(!item||!item.result)return;
+var price=parseFloat(gv(‘pp_’+id,item.result.suggestedBIN));
+var d={};for(var k in item.result)d[k]=item.result[k];
+d.*id=id;d.acctId=item.acctId||S.activeId;
+d.ebayTitle=gv(’pt*’+id,item.result.ebayTitle).slice(0,80);
+d.description=gv(‘pd_’+id,item.result.description);
+d.suggestedBIN=price;d.player=gv(‘ppl_’+id,item.result.player);
+d.year=gv(‘pyr_’+id,item.result.year);d.set=gv(‘pst_’+id,item.result.set);
+d.cardNumber=gv(‘pcn_’+id,item.result.cardNumber);d.variation=gv(‘pvr_’+id,item.result.variation);
+d.team=gv(‘ptm_’+id,item.result.team);d.conditionNote=gv(‘pco_’+id,item.result.conditionNote);
+d.useEnvelope=price<S.env;d.sport=item.result.sport||‘Baseball’;
+var idx=-1;for(var j=0;j<S.exported.length;j++){if(S.exported[j].*id===id){idx=j;break;}}
+if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
+addHistory(d);toast(‘Added!’);document.getElementById(‘prevArea’).innerHTML=’’;renderExport();refreshStats();
 }
 function ce(v){
-  var s=String(v||'').replace(/"/g,'""');
-  var NL=String.fromCharCode(10),CR=String.fromCharCode(13);
-  if(s.indexOf(',')>=0||s.indexOf('"')>=0||s.indexOf(NL)>=0||s.indexOf(CR)>=0)return'"'+s+'"';
-  return s;
+var s=String(v||’’).replace(/”/g,’””’);
+var NL=String.fromCharCode(10),CR=String.fromCharCode(13);
+if(s.indexOf(’,’)>=0||s.indexOf(’”’)>=0||s.indexOf(NL)>=0||s.indexOf(CR)>=0)return’”’+s+’”’;
+return s;
 }
 function buildCSV(acctId){
-  var rows=S.exported.filter(function(d){return d.acctId===acctId;});
-  if(!rows.length)return'';
-  var cols=[CSV_H,'Title','Description','Category','BuyItNowPrice','Quantity','ConditionID','ConditionDescription','ListingDuration','ListingType','ReturnsAcceptedOption','ReturnsWithinOption','RefundOption','ShippingCostPaidByOption','ShippingService-1:Option','ShippingService-1:Cost','C:Player/Athlete','C:Year Manufactured','C:Set','C:Card Number','C:Parallel/Variety','C:Team','C:Sport'];
-  var NL=String.fromCharCode(13)+String.fromCharCode(10);
-  var lines=[cols.map(ce).join(',')];
-  for(var i=0;i<rows.length;i++){
-    var d=rows[i];
-    lines.push(['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',
-      (d.isGraded&&d.grade)?d.gradingCompany+' '+d.grade:'USED',
-      d.conditionNote||'Near Mint',S.dur,'FixedPriceItem',S.ret,'Days_30','MoneyBack',
-      'Buyer','USPSFirstClass',d.useEnvelope?'1.00':String(S.ship),
-      d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||'Baseball'
-    ].map(ce).join(','));
-  }
-  return lines.join(NL);
+var rows=S.exported.filter(function(d){return d.acctId===acctId;});
+if(!rows.length)return’’;
+var cols=[CSV_H,‘Title’,‘Description’,‘Category’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ListingType’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
+var NL=String.fromCharCode(13)+String.fromCharCode(10);
+var lines=[cols.map(ce).join(’,’)];
+for(var i=0;i<rows.length;i++){
+var d=rows[i];
+lines.push([‘Add’,d.ebayTitle,d.description,CAT[d.sport]||‘213’,d.suggestedBIN||9.99,‘1’,
+(d.isGraded&&d.grade)?d.gradingCompany+’ ‘+d.grade:‘USED’,
+d.conditionNote||‘Near Mint’,S.dur,‘FixedPriceItem’,S.ret,‘Days_30’,‘MoneyBack’,
+‘Buyer’,‘USPSFirstClass’,d.useEnvelope?‘1.00’:String(S.ship),
+d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||‘Baseball’
+].map(ce).join(’,’));
+}
+return lines.join(NL);
 }
 function dlCSV(acctId){
-  var csv=buildCSV(acctId);if(!csv){toast('No cards','err');return;}
-  var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===acctId){a=S.accounts[i];break;}}
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var url=URL.createObjectURL(blob);var el=document.createElement('a');el.href=url;
-  el.download='ebay_'+(a?a.name:'cards').replace(/ /g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(el);el.click();document.body.removeChild(el);URL.revokeObjectURL(url);toast('Downloaded!');
+var csv=buildCSV(acctId);if(!csv){toast(‘No cards’,‘err’);return;}
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===acctId){a=S.accounts[i];break;}}
+var blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
+var url=URL.createObjectURL(blob);var el=document.createElement(‘a’);el.href=url;
+el.download=’ebay*’+(a?a.name:‘cards’).replace(/ /g,’*’)+’*’+new Date().toISOString().slice(0,10)+’.csv’;
+document.body.appendChild(el);el.click();document.body.removeChild(el);URL.revokeObjectURL(url);toast(‘Downloaded!’);
 }
 function renderExport(){
-  var el=document.getElementById('expBlocks'),emp=document.getElementById('expEmpty'),guide=document.getElementById('expGuide');
-  var lbl=document.getElementById('expLbl');if(lbl)lbl.textContent=S.exported.length+' ready';
-  if(!S.exported.length){el.innerHTML='';emp.style.display='block';if(guide)guide.style.display='none';return;}
-  emp.style.display='none';if(guide)guide.style.display='block';
-  var g={};for(var i=0;i<S.exported.length;i++){var d=S.exported[i];if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);}
-  var h='';var keys=Object.keys(g);
-  for(var k=0;k<keys.length;k++){
-    var aId=keys[k],cards=g[aId];
-    var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===aId){a=S.accounts[j];break;}}
-    var name=a?a.name:'Unknown',color=a?a.color:'#888';
-    var tot=0;for(var m=0;m<cards.length;m++)tot+=cards[m].suggestedBIN||0;
-    h+='<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>';
-    h+='<div><div style="font-size:14px;font-weight:800;color:'+color+'">'+name+'</div>';
-    h+='<div style="font-size:10px;color:#64748b;margin-top:2px">'+cards.length+' listings - $'+Math.round(tot)+' - All Buy It Now</div></div></div>';
-    h+='<div class="exp-body">';
-    var show=Math.min(5,cards.length);
-    for(var n=0;n<show;n++){var c=cards[n];h+='<div class="exp-row"><span class="exp-name">'+(c.player||'Card')+' '+(c.year||'')+'</span><span class="exp-price">$'+(c.suggestedBIN||'?')+' BIN</span></div>';}
-    if(cards.length>5)h+='<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ '+(cards.length-5)+' more</div>';
-    h+='<button class="btn btn-y" style="margin-top:10px" onclick="dlCSV(\''+aId+'\')">Download CSV for '+name+'</button>';
-    h+='<p style="font-size:11px;color:#64748b;margin-top:8px;line-height:1.6">Sign into <strong>'+name+'</strong> in Safari - Seller Hub - Reports - Upload Template - select this file.</p>';
-    h+='</div></div>';
-  }
-  el.innerHTML=h;
+var el=document.getElementById(‘expBlocks’),emp=document.getElementById(‘expEmpty’),guide=document.getElementById(‘expGuide’);
+var lbl=document.getElementById(‘expLbl’);if(lbl)lbl.textContent=S.exported.length+’ ready’;
+if(!S.exported.length){el.innerHTML=’’;emp.style.display=‘block’;if(guide)guide.style.display=‘none’;return;}
+emp.style.display=‘none’;if(guide)guide.style.display=‘block’;
+var g={};for(var i=0;i<S.exported.length;i++){var d=S.exported[i];if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);}
+var h=’’;var keys=Object.keys(g);
+for(var k=0;k<keys.length;k++){
+var aId=keys[k],cards=g[aId];
+var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===aId){a=S.accounts[j];break;}}
+var name=a?a.name:‘Unknown’,color=a?a.color:’#888’;
+var tot=0;for(var m=0;m<cards.length;m++)tot+=cards[m].suggestedBIN||0;
+h+=’<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>’;
+h+=’<div><div style="font-size:14px;font-weight:800;color:'+color+'">’+name+’</div>’;
+h+=’<div style="font-size:10px;color:#64748b;margin-top:2px">’+cards.length+’ listings - $’+Math.round(tot)+’ - All Buy It Now</div></div></div>’;
+h+=’<div class="exp-body">’;
+var show=Math.min(5,cards.length);
+for(var n=0;n<show;n++){var c=cards[n];h+=’<div class="exp-row"><span class="exp-name">’+(c.player||‘Card’)+’ ‘+(c.year||’’)+’</span><span class="exp-price">$’+(c.suggestedBIN||’?’)+’ BIN</span></div>’;}
+if(cards.length>5)h+=’<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ ‘+(cards.length-5)+’ more</div>’;
+h+=’<button class="btn btn-y" style="margin-top:10px" onclick="dlCSV(\''+aId+'\')">Download CSV for ‘+name+’</button>’;
+h+=’<p style="font-size:11px;color:#64748b;margin-top:8px;line-height:1.6">Sign into <strong>’+name+’</strong> in Safari - Seller Hub - Reports - Upload Template - select this file.</p>’;
+h+=’</div></div>’;
+}
+el.innerHTML=h;
 }
 function addHistory(d){
-  var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===d.acctId){a=S.accounts[i];break;}}
-  document.getElementById('logEmpty').style.display='none';
-  var el=document.createElement('div');el.className='log-item';
-  el.innerHTML='<div class="log-dot"></div><div><div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+'</div><div class="log-det">'+(a?a.name+' - ':'')+' $'+(d.suggestedBIN||'?')+' BIN</div></div>';
-  document.getElementById('logList').prepend(el);
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===d.acctId){a=S.accounts[i];break;}}
+document.getElementById(‘logEmpty’).style.display=‘none’;
+var el=document.createElement(‘div’);el.className=‘log-item’;
+el.innerHTML=’<div class="log-dot"></div><div><div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’</div><div class="log-det">’+(a?a.name+’ - ‘:’’)+’ $’+(d.suggestedBIN||’?’)+’ BIN</div></div>’;
+document.getElementById(‘logList’).prepend(el);
 }
 function renderHistory(){
-  var list=document.getElementById('logList'),emp=document.getElementById('logEmpty');
-  if(!S.exported.length){list.innerHTML='';emp.style.display='block';return;}
-  emp.style.display='none';
-  var h='';
-  for(var i=S.exported.length-1;i>=0;i--){
-    var d=S.exported[i];var a=null;
-    for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
-    h+='<div class="log-item"><div class="log-dot"></div><div><div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+'</div><div class="log-det">'+(a?a.name+' - ':'')+' $'+(d.suggestedBIN||'?')+' BIN</div></div></div>';
-  }
-  list.innerHTML=h;
+var list=document.getElementById(‘logList’),emp=document.getElementById(‘logEmpty’);
+if(!S.exported.length){list.innerHTML=’’;emp.style.display=‘block’;return;}
+emp.style.display=‘none’;
+var h=’’;
+for(var i=S.exported.length-1;i>=0;i–){
+var d=S.exported[i];var a=null;
+for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
+h+=’<div class="log-item"><div class="log-dot"></div><div><div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’</div><div class="log-det">’+(a?a.name+’ - ‘:’’)+’ $’+(d.suggestedBIN||’?’)+’ BIN</div></div></div>’;
+}
+list.innerHTML=h;
 }
 function exportLog(){
-  if(!S.exported.length){toast('No cards','err');return;}
-  var NL=String.fromCharCode(10);
-  var cols=['Account','Player','Year','Set','Card#','Variation','BIN','Title'];
-  var lines=[cols.join(',')];
-  for(var i=0;i<S.exported.length;i++){
-    var d=S.exported[i];var a=null;
-    for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
-    lines.push([a?a.name:'',d.player,d.year,d.set,d.cardNumber,d.variation,d.suggestedBIN,d.ebayTitle].map(function(v){return'"'+(v||'').toString().replace(/"/g,'""')+'"';}).join(','));
-  }
-  var blob=new Blob([lines.join(NL)],{type:'text/csv'});
-  var url=URL.createObjectURL(blob);var el=document.createElement('a');el.href=url;el.download='card_log.csv';el.click();URL.revokeObjectURL(url);
+if(!S.exported.length){toast(‘No cards’,‘err’);return;}
+var NL=String.fromCharCode(10);
+var cols=[‘Account’,‘Player’,‘Year’,‘Set’,‘Card#’,‘Variation’,‘BIN’,‘Title’];
+var lines=[cols.join(’,’)];
+for(var i=0;i<S.exported.length;i++){
+var d=S.exported[i];var a=null;
+for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
+lines.push([a?a.name:’’,d.player,d.year,d.set,d.cardNumber,d.variation,d.suggestedBIN,d.ebayTitle].map(function(v){return’”’+(v||’’).toString().replace(/”/g,’””’)+’”’;}).join(’,’));
+}
+var blob=new Blob([lines.join(NL)],{type:‘text/csv’});
+var url=URL.createObjectURL(blob);var el=document.createElement(‘a’);el.href=url;el.download=‘card_log.csv’;el.click();URL.revokeObjectURL(url);
 }
 function refreshStats(){
-  var tot=S.queue.length,rdy=S.queue.filter(function(i){return i.status==='ready';}).length;
-  var val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
-  document.getElementById('s-tot').textContent=tot;
-  document.getElementById('s-rdy').textContent=rdy;
-  document.getElementById('s-val').textContent='$'+Math.round(val);
-  document.getElementById('nc-q').textContent=tot;
-  document.getElementById('nc-r').textContent=rdy;
+var tot=S.queue.length,rdy=S.queue.filter(function(i){return i.status===‘ready’;}).length;
+var val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
+document.getElementById(‘s-tot’).textContent=tot;
+document.getElementById(‘s-rdy’).textContent=rdy;
+document.getElementById(‘s-val’).textContent=’$’+Math.round(val);
+document.getElementById(‘nc-q’).textContent=tot;
+document.getElementById(‘nc-r’).textContent=rdy;
 }
 function toast(msg,type){
-  var el=document.getElementById('toast');el.textContent=msg;
-  el.className='toast-box show'+(type==='err'?' err':type==='warn'?' warn':'');
-  clearTimeout(window._tt);window._tt=setTimeout(function(){el.className='toast-box';},3000);
+var el=document.getElementById(‘toast’);el.textContent=msg;
+el.className=‘toast-box show’+(type===‘err’?’ err’:type===‘warn’?’ warn’:’’);
+clearTimeout(window._tt);window._tt=setTimeout(function(){el.className=‘toast-box’;},3000);
 }
 
-var S={gemKey:'',dur:'GTC',ret:'ReturnsAccepted',ship:4.99,env:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
-var COLORS=['#16a34a','#1d4ed8','#d97706','#dc2626','#7c3aed','#ea580c','#0891b2','#db2777'];
-var CAT={Baseball:'213',Basketball:'261329',Football:'261328',Hockey:'247',Soccer:'261330',Other:'213'};
-var CSV_H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
+var S={gemKey:’’,dur:‘GTC’,ret:‘ReturnsAccepted’,ship:4.99,env:20,accounts:[],activeId:null,queue:[],exported:[],stop:false};
+var COLORS=[’#16a34a’,’#1d4ed8’,’#d97706’,’#dc2626’,’#7c3aed’,’#ea580c’,’#0891b2’,’#db2777’];
+var CAT={Baseball:‘213’,Basketball:‘261329’,Football:‘261328’,Hockey:‘247’,Soccer:‘261330’,Other:‘213’};
+var CSV_H=‘Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)’;
 var selColor=COLORS[0];
 
 function lg(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
-function ls(k,v){try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));}catch(e){}}
+function ls(k,v){try{localStorage.setItem(k,typeof v===‘string’?v:JSON.stringify(v));}catch(e){}}
 function ld(k){try{localStorage.removeItem(k);}catch(e){}}
 
 function compress(dataUrl){
-  return new Promise(function(res){
-    var img=new Image();
-    img.onload=function(){
-      var MAX=1024,w=img.width,h=img.height;
-      if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
-      var c=document.createElement('canvas');c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,0,0,w,h);
-      res(c.toDataURL('image/jpeg',0.82));
-    };
-    img.onerror=function(){res(dataUrl);};
-    img.src=dataUrl;
-  });
+return new Promise(function(res){
+var img=new Image();
+img.onload=function(){
+var MAX=1024,w=img.width,h=img.height;
+if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+var c=document.createElement(‘canvas’);c.width=w;c.height=h;
+c.getContext(‘2d’).drawImage(img,0,0,w,h);
+res(c.toDataURL(‘image/jpeg’,0.82));
+};
+img.onerror=function(){res(dataUrl);};
+img.src=dataUrl;
+});
 }
 
 window.onload=function(){
-  S.gemKey=lg('gk')||'';
-  S.dur=lg('dur')||'GTC';
-  S.ret=lg('ret')||'ReturnsAccepted';
-  S.ship=parseFloat(lg('ship')||4.99);
-  S.env=parseFloat(lg('env')||20);
-  S.accounts=lg('accts')||[];
-  S.activeId=lg('aid')||null;
-  if(!S.activeId&&S.accounts.length)S.activeId=S.accounts[0].id;
-  if(!S.gemKey){var v=lg('vault');if(v){S.gemKey=v;ls('gk',v);}}
-  if(S.gemKey)document.getElementById('gemIn').value=mask(S.gemKey);
-  var sv=lg('vault');if(sv)document.getElementById('vaultIn').value=sv;
-  document.getElementById('cfgDur').value=S.dur;
-  document.getElementById('cfgRet').value=S.ret;
-  document.getElementById('cfgShip').value=S.ship;
-  document.getElementById('cfgEnv').value=S.env;
-  buildColors();renderAccts();updateBanner();refreshKey();refreshStats();
+S.gemKey=lg(‘gk’)||’’;
+S.dur=lg(‘dur’)||‘GTC’;
+S.ret=lg(‘ret’)||‘ReturnsAccepted’;
+S.ship=parseFloat(lg(‘ship’)||4.99);
+S.env=parseFloat(lg(‘env’)||20);
+S.accounts=lg(‘accts’)||[];
+S.activeId=lg(‘aid’)||null;
+if(!S.activeId&&S.accounts.length)S.activeId=S.accounts[0].id;
+if(!S.gemKey){var v=lg(‘vault’);if(v){S.gemKey=v;ls(‘gk’,v);}}
+if(!S.gemKey&&HARDCODED_KEY){S.gemKey=HARDCODED_KEY;ls(‘gk’,HARDCODED_KEY);ls(‘vault’,HARDCODED_KEY);}
+if(S.gemKey)document.getElementById(‘gemIn’).value=mask(S.gemKey);
+var sv=lg(‘vault’);if(sv)document.getElementById(‘vaultIn’).value=sv;
+document.getElementById(‘cfgDur’).value=S.dur;
+document.getElementById(‘cfgRet’).value=S.ret;
+document.getElementById(‘cfgShip’).value=S.ship;
+document.getElementById(‘cfgEnv’).value=S.env;
+buildColors();renderAccts();updateBanner();refreshKey();refreshStats();
 };
 
-function mask(v){return v.length<=8?'****':v.slice(0,6)+'****'+v.slice(-4);}
+function mask(v){return v.length<=8?’****’:v.slice(0,6)+’****’+v.slice(-4);}
 
 function goTab(n){
-  var tabs=['list','accts','export','history','setup'];
-  for(var i=0;i<tabs.length;i++){
-    document.getElementById('s-'+tabs[i]).className='tab-screen'+(tabs[i]===n?' on':'');
-    document.getElementById('t-'+tabs[i]).className=(tabs[i]===n?'on':'');
-  }
-  if(n==='accts')renderAccts();
-  if(n==='export')renderExport();
-  if(n==='history')renderHistory();
+var tabs=[‘list’,‘accts’,‘export’,‘history’,‘setup’];
+for(var i=0;i<tabs.length;i++){
+document.getElementById(‘s-’+tabs[i]).className=‘tab-screen’+(tabs[i]===n?’ on’:’’);
+document.getElementById(‘t-’+tabs[i]).className=(tabs[i]===n?‘on’:’’);
+}
+if(n===‘accts’)renderAccts();
+if(n===‘export’)renderExport();
+if(n===‘history’)renderHistory();
 }
 
 function saveKey(){
-  var raw=document.getElementById('gemIn').value.trim();
-  if(raw.length<10){document.getElementById('gemMsg').innerHTML='<div class="info" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;margin:0">Key too short</div>';return;}
-  S.gemKey=raw;ls('gk',raw);ls('vault',raw);
-  document.getElementById('vaultIn').value=raw;
-  document.getElementById('gemIn').value=mask(raw);
-  document.getElementById('gemMsg').innerHTML='<div class="info ig" style="margin:0">Saved and backed up!</div>';
-  refreshKey();toast('Key saved!');
+var raw=document.getElementById(‘gemIn’).value.trim();
+if(raw.length<10){document.getElementById(‘gemMsg’).innerHTML=’<div class="info" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;margin:0">Key too short</div>’;return;}
+S.gemKey=raw;ls(‘gk’,raw);ls(‘vault’,raw);
+document.getElementById(‘vaultIn’).value=raw;
+document.getElementById(‘gemIn’).value=mask(raw);
+document.getElementById(‘gemMsg’).innerHTML=’<div class="info ig" style="margin:0">Saved and backed up!</div>’;
+refreshKey();toast(‘Key saved!’);
 }
-function clearKey(){if(!confirm('Remove key?'))return;S.gemKey='';ld('gk');document.getElementById('gemIn').value='';document.getElementById('gemMsg').innerHTML='';refreshKey();toast('Removed','warn');}
-function saveVault(){var raw=document.getElementById('vaultIn').value.trim();if(raw.length<10){toast('Key too short','err');return;}ls('vault',raw);S.gemKey=raw;ls('gk',raw);document.getElementById('gemIn').value=mask(raw);refreshKey();toast('Vault saved!');}
-function reloadVault(){var v=lg('vault');if(!v){toast('No vault key','err');return;}S.gemKey=v;ls('gk',v);document.getElementById('gemIn').value=mask(v);refreshKey();toast('Reloaded!');}
+function clearKey(){if(!confirm(‘Remove key?’))return;S.gemKey=’’;ld(‘gk’);document.getElementById(‘gemIn’).value=’’;document.getElementById(‘gemMsg’).innerHTML=’’;refreshKey();toast(‘Removed’,‘warn’);}
+function saveVault(){var raw=document.getElementById(‘vaultIn’).value.trim();if(raw.length<10){toast(‘Key too short’,‘err’);return;}ls(‘vault’,raw);S.gemKey=raw;ls(‘gk’,raw);document.getElementById(‘gemIn’).value=mask(raw);refreshKey();toast(‘Vault saved!’);}
+function reloadVault(){var v=lg(‘vault’);if(!v){toast(‘No vault key’,‘err’);return;}S.gemKey=v;ls(‘gk’,v);document.getElementById(‘gemIn’).value=mask(v);refreshKey();toast(‘Reloaded!’);}
 function refreshKey(){
-  var ok=!!S.gemKey;
-  document.getElementById('keydot').className=ok?'ok':'';
-  document.getElementById('keydot').style.background=ok?'#16a34a':'#dc2626';
-  document.getElementById('keylbl').textContent=ok?'Gemini AI ready':'No API key';
-  document.getElementById('keysub').textContent=ok?mask(S.gemKey):'Go to Setup tab';
+var ok=!!S.gemKey;
+document.getElementById(‘keydot’).className=ok?‘ok’:’’;
+document.getElementById(‘keydot’).style.background=ok?’#16a34a’:’#dc2626’;
+document.getElementById(‘keylbl’).textContent=ok?‘Gemini AI ready’:‘No API key’;
+document.getElementById(‘keysub’).textContent=ok?mask(S.gemKey):‘Go to Setup tab’;
 }
 function saveDefaults(){
-  S.dur=document.getElementById('cfgDur').value;S.ret=document.getElementById('cfgRet').value;
-  S.ship=parseFloat(document.getElementById('cfgShip').value)||4.99;S.env=parseFloat(document.getElementById('cfgEnv').value)||20;
-  ls('dur',S.dur);ls('ret',S.ret);ls('ship',S.ship);ls('env',S.env);toast('Saved!');
+S.dur=document.getElementById(‘cfgDur’).value;S.ret=document.getElementById(‘cfgRet’).value;
+S.ship=parseFloat(document.getElementById(‘cfgShip’).value)||4.99;S.env=parseFloat(document.getElementById(‘cfgEnv’).value)||20;
+ls(‘dur’,S.dur);ls(‘ret’,S.ret);ls(‘ship’,S.ship);ls(‘env’,S.env);toast(‘Saved!’);
 }
 function buildColors(){
-  var h='';for(var i=0;i<COLORS.length;i++)h+='<div class="copt'+(i===0?' sel':'')+'" style="background:'+COLORS[i]+'" onclick="pickCol(this,\''+COLORS[i]+'\')"></div>';
-  document.getElementById('cpick').innerHTML=h;
+var h=’’;for(var i=0;i<COLORS.length;i++)h+=’<div class="copt'+(i===0?' sel':'')+'" style="background:'+COLORS[i]+'" onclick="pickCol(this,\''+COLORS[i]+'\')"></div>’;
+document.getElementById(‘cpick’).innerHTML=h;
 }
-function pickCol(el,c){var opts=document.querySelectorAll('.copt');for(var i=0;i<opts.length;i++)opts[i].classList.remove('sel');el.classList.add('sel');selColor=c;}
+function pickCol(el,c){var opts=document.querySelectorAll(’.copt’);for(var i=0;i<opts.length;i++)opts[i].classList.remove(‘sel’);el.classList.add(‘sel’);selColor=c;}
 function addAcct(){
-  var n=document.getElementById('newName').value.trim();if(!n){toast('Enter name','err');return;}
-  var a={id:'a'+Date.now(),name:n,color:selColor};S.accounts.push(a);ls('accts',S.accounts);
-  if(!S.activeId){S.activeId=a.id;ls('aid',a.id);}
-  document.getElementById('newName').value='';renderAccts();updateBanner();toast('Account added!');
+var n=document.getElementById(‘newName’).value.trim();if(!n){toast(‘Enter name’,‘err’);return;}
+var a={id:‘a’+Date.now(),name:n,color:selColor};S.accounts.push(a);ls(‘accts’,S.accounts);
+if(!S.activeId){S.activeId=a.id;ls(‘aid’,a.id);}
+document.getElementById(‘newName’).value=’’;renderAccts();updateBanner();toast(‘Account added!’);
 }
-function setActive(id){S.activeId=id;ls('aid',id);renderAccts();updateBanner();goTab('list');}
+function setActive(id){S.activeId=id;ls(‘aid’,id);renderAccts();updateBanner();goTab(‘list’);}
 function delAcct(id){
-  if(!confirm('Remove?'))return;
-  S.accounts=S.accounts.filter(function(a){return a.id!==id;});ls('accts',S.accounts);
-  if(S.activeId===id){S.activeId=S.accounts.length?S.accounts[0].id:null;ls('aid',S.activeId);}
-  renderAccts();updateBanner();
+if(!confirm(‘Remove?’))return;
+S.accounts=S.accounts.filter(function(a){return a.id!==id;});ls(‘accts’,S.accounts);
+if(S.activeId===id){S.activeId=S.accounts.length?S.accounts[0].id:null;ls(‘aid’,S.activeId);}
+renderAccts();updateBanner();
 }
 function renderAccts(){
-  var el=document.getElementById('acctList');
-  if(!S.accounts.length){el.innerHTML='<div class="empty">No accounts yet.</div>';return;}
-  var h='';
-  for(var i=0;i<S.accounts.length;i++){
-    var a=S.accounts[i],act=a.id===S.activeId;
-    var ct=S.exported.filter(function(p){return p.acctId===a.id;}).length;
-    h+='<div class="acct-item'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">';
-    h+='<div class="acct-dot" style="background:'+a.color+'"></div>';
-    h+='<div class="acct-body"><div class="acct-name">'+a.name+'</div><div class="acct-det">'+ct+' cards'+(act?' &mdash; ACTIVE':'')+'</div></div>';
-    h+='<button class="acct-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">&#x00D7;</button></div>';
-  }
-  el.innerHTML=h;
+var el=document.getElementById(‘acctList’);
+if(!S.accounts.length){el.innerHTML=’<div class="empty">No accounts yet.</div>’;return;}
+var h=’’;
+for(var i=0;i<S.accounts.length;i++){
+var a=S.accounts[i],act=a.id===S.activeId;
+var ct=S.exported.filter(function(p){return p.acctId===a.id;}).length;
+h+=’<div class="acct-item'+(act?' active':'')+'" onclick="setActive(\''+a.id+'\')">’;
+h+=’<div class="acct-dot" style="background:'+a.color+'"></div>’;
+h+=’<div class="acct-body"><div class="acct-name">’+a.name+’</div><div class="acct-det">’+ct+’ cards’+(act?’ — ACTIVE’:’’)+’</div></div>’;
+h+=’<button class="acct-del" onclick="event.stopPropagation();delAcct(\''+a.id+'\')">×</button></div>’;
+}
+el.innerHTML=h;
 }
 function updateBanner(){
-  var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===S.activeId){a=S.accounts[i];break;}}
-  document.getElementById('acctdot').style.background=a?a.color:'#cbd5e1';
-  document.getElementById('acctname').textContent=a?a.name:'No account - add one first';
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===S.activeId){a=S.accounts[i];break;}}
+document.getElementById(‘acctdot’).style.background=a?a.color:’#cbd5e1’;
+document.getElementById(‘acctname’).textContent=a?a.name:‘No account - add one first’;
 }
-function onFiles(e){addToQueue(Array.prototype.slice.call(e.target.files));e.target.value='';}
+function onFiles(e){addToQueue(Array.prototype.slice.call(e.target.files));e.target.value=’’;}
 function addToQueue(files){
-  if(!S.gemKey){toast('Add Gemini key in Setup first','err');goTab('setup');return;}
-  if(!S.activeId){toast('Add account first','err');goTab('accts');return;}
-  for(var i=0;i<files.length;i++){
-    (function(f){
-      var id='c'+Date.now()+Math.random().toString(36).slice(2,5);
-      var r=new FileReader();
-      r.onload=function(ev){
-        S.queue.push({id:id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:'pending',result:null,error:null,acctId:S.activeId});
-        renderQueue();
-        if(files.length===1)doCard(S.queue[S.queue.length-1]);
-      };
-      r.readAsDataURL(f);
-    })(files[i]);
-  }
+if(!S.gemKey){toast(‘Add Gemini key in Setup first’,‘err’);goTab(‘setup’);return;}
+if(!S.activeId){toast(‘Add account first’,‘err’);goTab(‘accts’);return;}
+for(var i=0;i<files.length;i++){
+(function(f){
+var id=‘c’+Date.now()+Math.random().toString(36).slice(2,5);
+var r=new FileReader();
+r.onload=function(ev){
+S.queue.push({id:id,thumb:ev.target.result,rawData:ev.target.result,name:f.name,status:‘pending’,result:null,error:null,acctId:S.activeId});
+renderQueue();
+if(files.length===1)doCard(S.queue[S.queue.length-1]);
+};
+r.readAsDataURL(f);
+})(files[i]);
 }
-var PROMPT='You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{"player":"","year":"","brand":"","set":"","cardNumber":"","variation":"","team":"","sport":"Baseball","position":"","isRookie":false,"is1stBowman":false,"isAuto":false,"isNumbered":false,"serialNumber":null,"serialOf":null,"isGraded":false,"gradingCompany":null,"grade":null,"condition":"Near Mint-Mint","conditionNote":"Sharp corners, clean surface","ebayTitle":"","description":"","suggestedBIN":0,"searchTags":[]}\n\nebayTitle: max 80 chars. description: 180-200 words. suggestedBIN: real current eBay market price. searchTags: 5-7 terms.';
+}
+var PROMPT=‘You are an expert sports card authenticator and eBay power seller. Analyze this card photo.\n\nIDENTIFY: player full name, year, complete set/brand, card number, parallel type (Base/Refractor/Gold/Prizm/Auto/Relic/Numbered/RC/1st Bowman), serial number if numbered, team, sport, position. If slabbed: grading company and grade. Condition from centering, corners, surface.\n\nReply ONLY with valid JSON, no markdown:\n{“player”:””,“year”:””,“brand”:””,“set”:””,“cardNumber”:””,“variation”:””,“team”:””,“sport”:“Baseball”,“position”:””,“isRookie”:false,“is1stBowman”:false,“isAuto”:false,“isNumbered”:false,“serialNumber”:null,“serialOf”:null,“isGraded”:false,“gradingCompany”:null,“grade”:null,“condition”:“Near Mint-Mint”,“conditionNote”:“Sharp corners, clean surface”,“ebayTitle”:””,“description”:””,“suggestedBIN”:0,“searchTags”:[]}\n\nebayTitle: max 80 chars. description: 180-200 words. suggestedBIN: real current eBay market price. searchTags: 5-7 terms.’;
 
 function callAI(rawDataUrl){
-  return compress(rawDataUrl).then(function(comp){
-    var b64=comp.indexOf(',')>=0?comp.split(',')[1]:comp;
-    var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(S.gemKey);
-    return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:'image/jpeg',data:b64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}})
-    });
-  }).then(function(resp){
-    if(!resp.ok)return resp.json().catch(function(){return{};}).then(function(e){
-      var m=e.error?e.error.message:'Error '+resp.status;
-      if(resp.status===400||resp.status===401||resp.status===403)throw new Error('Key invalid - paste fresh key in Setup');
-      if(resp.status===429)throw new Error('Rate limit - wait 1 min then retry');
-      throw new Error(m.slice(0,100));
-    });
-    return resp.json();
-  }).then(function(d){
-    var txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:'';
-    if(!txt)throw new Error('Empty response - tap AI to retry');
-    var c=txt.replace(/```json/g,'').replace(/```/g,'').trim();
-    var si=c.indexOf('{');if(si<0)throw new Error('No JSON - tap AI to retry');
-    c=c.slice(si);
-    try{return JSON.parse(c);}catch(e1){
-      try{return JSON.parse(c+'}');}catch(e2){throw new Error('Parse error - tap AI to retry');}
-    }
-  });
+return compress(rawDataUrl).then(function(comp){
+var b64=comp.indexOf(’,’)>=0?comp.split(’,’)[1]:comp;
+var url=‘https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=’+encodeURIComponent(S.gemKey);
+return fetch(url,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:‘image/jpeg’,data:b64}},{text:PROMPT}]}],generationConfig:{temperature:0.1,maxOutputTokens:2048}})
+});
+}).then(function(resp){
+if(!resp.ok)return resp.json().catch(function(){return{};}).then(function(e){
+var m=e.error?e.error.message:‘Error ‘+resp.status;
+if(resp.status===400||resp.status===401||resp.status===403)throw new Error(‘Key invalid - paste fresh key in Setup’);
+if(resp.status===429)throw new Error(‘Rate limit - wait 1 min then retry’);
+throw new Error(m.slice(0,100));
+});
+return resp.json();
+}).then(function(d){
+var txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:’’;
+if(!txt)throw new Error(‘Empty response - tap AI to retry’);
+var c=txt.replace(/`json/g,'').replace(/`/g,’’).trim();
+var si=c.indexOf(’{’);if(si<0)throw new Error(‘No JSON - tap AI to retry’);
+c=c.slice(si);
+try{return JSON.parse(c);}catch(e1){
+try{return JSON.parse(c+’}’);}catch(e2){throw new Error(‘Parse error - tap AI to retry’);}
+}
+});
 }
 
-var STEPS=['Compressing...','Sending to Gemini...','Reading card...','Writing listing...'];
+var STEPS=[‘Compressing…’,‘Sending to Gemini…’,‘Reading card…’,‘Writing listing…’];
 function doCard(item){
-  item.status='reading';renderQI(item);
-  var si=0;
-  document.getElementById('bst').textContent=STEPS[0];
-  var t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById('bst').textContent=STEPS[si];},1200);
-  callAI(item.rawData).then(function(result){
-    clearInterval(t);item.result=result;item.status='ready';
-    if(result.player&&result.year)item.name=result.player+' '+result.year;
-    renderQI(item);refreshStats();showPreview(item);
-    document.getElementById('bst').textContent='';
-  }).catch(function(e){
-    clearInterval(t);item.status='error';item.error=e.message||'Failed';
-    renderQI(item);refreshStats();toast(item.error,'err');
-    document.getElementById('bst').textContent='';
-  });
+item.status=‘reading’;renderQI(item);
+var si=0;
+document.getElementById(‘bst’).textContent=STEPS[0];
+var t=setInterval(function(){si=(si+1)%STEPS.length;document.getElementById(‘bst’).textContent=STEPS[si];},1200);
+callAI(item.rawData).then(function(result){
+clearInterval(t);item.result=result;item.status=‘ready’;
+if(result.player&&result.year)item.name=result.player+’ ‘+result.year;
+renderQI(item);refreshStats();showPreview(item);
+document.getElementById(‘bst’).textContent=’’;
+}).catch(function(e){
+clearInterval(t);item.status=‘error’;item.error=e.message||‘Failed’;
+renderQI(item);refreshStats();toast(item.error,‘err’);
+document.getElementById(‘bst’).textContent=’’;
+});
 }
 function doById(id){var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}if(item)doCard(item);}
 function runBatch(){
-  var pend=S.queue.filter(function(i){return i.status==='pending'||i.status==='error';});
-  if(!pend.length){toast('No pending cards');return;}
-  S.stop=false;var btn=document.getElementById('batchBtn');
-  btn.textContent='Stop';btn.onclick=function(){S.stop=true;btn.textContent='AI Read All';btn.onclick=runBatch;};
-  document.getElementById('bprog').style.display='block';
-  var done=0,tot=pend.length;
-  function next(){
-    if(done>=tot||S.stop){btn.textContent='AI Read All';btn.onclick=runBatch;document.getElementById('bst').textContent='Done '+done+'/'+tot;return;}
-    var item=pend[done];
-    document.getElementById('bst').textContent=(done+1)+'/'+tot+': '+item.name+'...';
-    item.status='reading';renderQI(item);
-    callAI(item.rawData).then(function(result){
-      item.result=result;item.status='ready';
-      if(result.player&&result.year)item.name=result.player+' '+result.year;
-      done++;document.getElementById('bfill').style.width=Math.round(done/tot*100)+'%';
-      document.getElementById('binfo').textContent=done+'/'+tot+' done';
-      renderQI(item);refreshStats();setTimeout(next,600);
-    }).catch(function(e){
-      item.status='error';item.error=e.message.slice(0,80);
-      done++;renderQI(item);refreshStats();setTimeout(next,600);
-    });
-  }
-  next();
+var pend=S.queue.filter(function(i){return i.status===‘pending’||i.status===‘error’;});
+if(!pend.length){toast(‘No pending cards’);return;}
+S.stop=false;var btn=document.getElementById(‘batchBtn’);
+btn.textContent=‘Stop’;btn.onclick=function(){S.stop=true;btn.textContent=‘AI Read All’;btn.onclick=runBatch;};
+document.getElementById(‘bprog’).style.display=‘block’;
+var done=0,tot=pend.length;
+function next(){
+if(done>=tot||S.stop){btn.textContent=‘AI Read All’;btn.onclick=runBatch;document.getElementById(‘bst’).textContent=‘Done ‘+done+’/’+tot;return;}
+var item=pend[done];
+document.getElementById(‘bst’).textContent=(done+1)+’/’+tot+’: ‘+item.name+’…’;
+item.status=‘reading’;renderQI(item);
+callAI(item.rawData).then(function(result){
+item.result=result;item.status=‘ready’;
+if(result.player&&result.year)item.name=result.player+’ ‘+result.year;
+done++;document.getElementById(‘bfill’).style.width=Math.round(done/tot*100)+’%’;
+document.getElementById(‘binfo’).textContent=done+’/’+tot+’ done’;
+renderQI(item);refreshStats();setTimeout(next,600);
+}).catch(function(e){
+item.status=‘error’;item.error=e.message.slice(0,80);
+done++;renderQI(item);refreshStats();setTimeout(next,600);
+});
+}
+next();
 }
 function renderQueue(){
-  var ct=S.queue.length;
-  document.getElementById('qct').textContent=ct;
-  document.getElementById('binfo').textContent=ct+' card'+(ct!==1?'s':'');
-  document.getElementById('qwrap').style.display=ct?'block':'none';
-  var h='';for(var i=0;i<S.queue.length;i++)h+=buildQI(S.queue[i]);
-  document.getElementById('qlist').innerHTML=h;
-  refreshStats();
+var ct=S.queue.length;
+document.getElementById(‘qct’).textContent=ct;
+document.getElementById(‘binfo’).textContent=ct+’ card’+(ct!==1?‘s’:’’);
+document.getElementById(‘qwrap’).style.display=ct?‘block’:‘none’;
+var h=’’;for(var i=0;i<S.queue.length;i++)h+=buildQI(S.queue[i]);
+document.getElementById(‘qlist’).innerHTML=h;
+refreshStats();
 }
-function renderQI(item){var el=document.getElementById('qi_'+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
+function renderQI(item){var el=document.getElementById(‘qi_’+item.id);if(el)el.outerHTML=buildQI(item);else renderQueue();}
 function buildQI(item){
-  var sc={pending:'sp',reading:'sr',ready:'sok',error:'se'};
-  var sl={pending:'Pending',reading:'Reading...','ready':'Ready','error':'Error: '+(item.error||'')};
-  var pr=item.result?item.result.suggestedBIN:null,env=pr&&pr<S.env;
-  var h='<div class="qi" id="qi_'+item.id+'">';
-  h+=item.thumb?'<img src="'+item.thumb+'" style="width:56px;flex-shrink:0;object-fit:cover"/>':'<div style="width:56px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:11px">Card</div>';
-  h+='<div class="qi-body"><div class="qi-name">'+(item.result&&item.result.player?item.result.player:item.name)+'</div>';
-  h+='<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">'+(sl[item.status]||item.status)+'</span></div>';
-  if(pr)h+='<div class="qi-price">$'+pr+' BIN &middot; '+(env?'Envelope $1':'USPS $'+S.ship)+'</div>';
-  if(item.result&&item.result.ebayTitle)h+='<div class="qi-meta">'+item.result.ebayTitle+'</div>';
-  h+='</div><div class="qi-side">';
-  if(item.status==='ready')h+='<button onclick="showById(\''+item.id+'\')">View</button>';
-  if(item.status!=='reading'&&item.status!=='ready')h+='<button onclick="doById(\''+item.id+'\')" style="color:#1d4ed8">AI</button>';
-  h+='<button onclick="rmCard(\''+item.id+'\')">X</button>';
-  h+='</div></div>';
-  return h;
+var sc={pending:‘sp’,reading:‘sr’,ready:‘sok’,error:‘se’};
+var sl={pending:‘Pending’,reading:‘Reading…’,‘ready’:‘Ready’,‘error’:‘Error: ‘+(item.error||’’)};
+var pr=item.result?item.result.suggestedBIN:null,env=pr&&pr<S.env;
+var h=’<div class="qi" id="qi_'+item.id+'">’;
+h+=item.thumb?’<img src="'+item.thumb+'" style="width:56px;flex-shrink:0;object-fit:cover"/>’:’<div style="width:56px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:11px">Card</div>’;
+h+=’<div class="qi-body"><div class="qi-name">’+(item.result&&item.result.player?item.result.player:item.name)+’</div>’;
+h+=’<div class="qi-st"><span class="'+(sc[item.status]||'sp')+'">’+(sl[item.status]||item.status)+’</span></div>’;
+if(pr)h+=’<div class="qi-price">$’+pr+’ BIN · ‘+(env?‘Envelope $1’:‘USPS $’+S.ship)+’</div>’;
+if(item.result&&item.result.ebayTitle)h+=’<div class="qi-meta">’+item.result.ebayTitle+’</div>’;
+h+=’</div><div class="qi-side">’;
+if(item.status===‘ready’)h+=’<button onclick="showById(\''+item.id+'\')">View</button>’;
+if(item.status!==‘reading’&&item.status!==‘ready’)h+=’<button onclick="doById(\''+item.id+'\')" style="color:#1d4ed8">AI</button>’;
+h+=’<button onclick="rmCard(\''+item.id+'\')">X</button>’;
+h+=’</div></div>’;
+return h;
 }
 function rmCard(id){S.queue=S.queue.filter(function(i){return i.id!==id;});renderQueue();}
-function clearQueue(){if(!confirm('Clear all?'))return;S.queue=[];document.getElementById('qlist').innerHTML='';document.getElementById('qwrap').style.display='none';document.getElementById('prevArea').innerHTML='';refreshStats();}
+function clearQueue(){if(!confirm(‘Clear all?’))return;S.queue=[];document.getElementById(‘qlist’).innerHTML=’’;document.getElementById(‘qwrap’).style.display=‘none’;document.getElementById(‘prevArea’).innerHTML=’’;refreshStats();}
 function showById(id){var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}if(item)showPreview(item);}
-function hEsc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function gv(id,fb){var el=document.getElementById(id);return el?el.value:(fb||'');}
+function hEsc(s){return(s||’’).replace(/&/g,’&’).replace(/”/g,’"’).replace(/</g,’<’).replace(/>/g,’>’);}
+function gv(id,fb){var el=document.getElementById(id);return el?el.value:(fb||’’);}
 function showPreview(item){
-  if(!item||!item.result)return;
-  var d=item.result,pr=d.suggestedBIN||9.99,env=pr<S.env;
-  var tl=(d.ebayTitle||'').length;
-  var h='<div class="prev"><div class="prev-hdr"><span>Listing Ready &mdash; Review &amp; Edit</span>';
-  h+='<div style="display:flex;gap:5px">';
-  h+='<button class="btn btn-o" style="width:auto;padding:5px 10px;font-size:11px;margin:0" onclick="copyCard(\''+item.id+'\')">Copy</button>';
-  h+='<button class="btn btn-o" style="width:auto;padding:5px 10px;font-size:11px;margin:0" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>';
-  h+='</div></div>';
-  h+='<div class="pf"><div class="pf-lbl">eBay Title (max 80) &mdash; <span id="ptc_'+item.id+'">'+tl+'</span>/80</div>';
-  h+='<textarea id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length">'+hEsc(d.ebayTitle)+'</textarea></div>';
-  h+='<div class="pf"><div class="pf-lbl">Description</div><textarea id="pd_'+item.id+'" rows="5">'+hEsc(d.description)+'</textarea></div>';
-  h+='<div class="pf"><div class="pf-lbl">Buy It Now Price &mdash; Fixed Price Only</div>';
-  h+='<div class="pbox"><div class="price-lbl">BUY IT NOW</div><div class="price-row"><span class="price-cur">$</span>';
-  h+='<input class="price-inp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="updShip(\''+item.id+'\',this.value)"/></div></div></div>';
-  h+='<div class="pf"><div class="g2">';
-  h+='<div><div class="pf-lbl">Player</div><input id="ppl_'+item.id+'" value="'+hEsc(d.player)+'"/></div>';
-  h+='<div><div class="pf-lbl">Year</div><input id="pyr_'+item.id+'" value="'+hEsc(d.year)+'"/></div></div></div>';
-  h+='<div class="pf"><div class="g2">';
-  h+='<div><div class="pf-lbl">Set</div><input id="pst_'+item.id+'" value="'+hEsc(d.set)+'"/></div>';
-  h+='<div><div class="pf-lbl">Card #</div><input id="pcn_'+item.id+'" value="'+hEsc(d.cardNumber)+'"/></div></div></div>';
-  h+='<div class="pf"><div class="g2">';
-  h+='<div><div class="pf-lbl">Variation</div><input id="pvr_'+item.id+'" value="'+hEsc(d.variation)+'"/></div>';
-  h+='<div><div class="pf-lbl">Team</div><input id="ptm_'+item.id+'" value="'+hEsc(d.team)+'"/></div></div></div>';
-  h+='<div class="pf"><div class="pf-lbl">Condition Note</div><input id="pco_'+item.id+'" value="'+hEsc(d.conditionNote)+'"/></div>';
-  h+='<div class="pf" style="display:flex;align-items:center;gap:10px"><span style="font-size:8px;text-transform:uppercase;color:#94a3b8;letter-spacing:.1em">Shipping:</span>';
-  h+='<span class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">'+(env?'Envelope $1.00':'USPS $'+S.ship)+'</span></div>';
-  if(d.searchTags&&d.searchTags.length){
-    h+='<div class="pf" style="display:flex;flex-wrap:wrap;gap:4px">';
-    for(var j=0;j<d.searchTags.length;j++)h+='<span style="font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff">'+d.searchTags[j]+'</span>';
-    h+='</div>';
-  }
-  h+='<div class="prev-btns">';
-  h+='<button class="btn btn-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>';
-  h+='<button class="btn btn-o" onclick="copyCard(\''+item.id+'\')">Copy</button>';
-  h+='</div></div>';
-  var sec=document.getElementById('prevArea');
-  sec.innerHTML=h;
-  sec.scrollIntoView({behavior:'smooth',block:'start'});
+if(!item||!item.result)return;
+var d=item.result,pr=d.suggestedBIN||9.99,env=pr<S.env;
+var tl=(d.ebayTitle||’’).length;
+var h=’<div class="prev"><div class="prev-hdr"><span>Listing Ready — Review & Edit</span>’;
+h+=’<div style="display:flex;gap:5px">’;
+h+=’<button class="btn btn-o" style="width:auto;padding:5px 10px;font-size:11px;margin:0" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
+h+=’<button class="btn btn-o" style="width:auto;padding:5px 10px;font-size:11px;margin:0" onclick="document.getElementById(\'prevArea\').innerHTML=\'\'">X</button>’;
+h+=’</div></div>’;
+h+=’<div class="pf"><div class="pf-lbl">eBay Title (max 80) — <span id="ptc_'+item.id+'">’+tl+’</span>/80</div>’;
+h+=’<textarea id="pt_'+item.id+'" rows="2" oninput="document.getElementById(\'ptc_'+item.id+'\').textContent=this.value.length">’+hEsc(d.ebayTitle)+’</textarea></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Description</div><textarea id="pd_'+item.id+'" rows="5">’+hEsc(d.description)+’</textarea></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Buy It Now Price — Fixed Price Only</div>’;
+h+=’<div class="pbox"><div class="price-lbl">BUY IT NOW</div><div class="price-row"><span class="price-cur">$</span>’;
+h+=’<input class="price-inp" id="pp_'+item.id+'" type="number" value="'+pr+'" step="0.01" min="0.99" oninput="updShip(\''+item.id+'\',this.value)"/></div></div></div>’;
+h+=’<div class="pf"><div class="g2">’;
+h+=’<div><div class="pf-lbl">Player</div><input id="ppl_'+item.id+'" value="'+hEsc(d.player)+'"/></div>’;
+h+=’<div><div class="pf-lbl">Year</div><input id="pyr_'+item.id+'" value="'+hEsc(d.year)+'"/></div></div></div>’;
+h+=’<div class="pf"><div class="g2">’;
+h+=’<div><div class="pf-lbl">Set</div><input id="pst_'+item.id+'" value="'+hEsc(d.set)+'"/></div>’;
+h+=’<div><div class="pf-lbl">Card #</div><input id="pcn_'+item.id+'" value="'+hEsc(d.cardNumber)+'"/></div></div></div>’;
+h+=’<div class="pf"><div class="g2">’;
+h+=’<div><div class="pf-lbl">Variation</div><input id="pvr_'+item.id+'" value="'+hEsc(d.variation)+'"/></div>’;
+h+=’<div><div class="pf-lbl">Team</div><input id="ptm_'+item.id+'" value="'+hEsc(d.team)+'"/></div></div></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Condition Note</div><input id="pco_'+item.id+'" value="'+hEsc(d.conditionNote)+'"/></div>’;
+h+=’<div class="pf" style="display:flex;align-items:center;gap:10px"><span style="font-size:8px;text-transform:uppercase;color:#94a3b8;letter-spacing:.1em">Shipping:</span>’;
+h+=’<span class="stag '+(env?'senv':'susps')+'" id="stag_'+item.id+'">’+(env?‘Envelope $1.00’:‘USPS $’+S.ship)+’</span></div>’;
+if(d.searchTags&&d.searchTags.length){
+h+=’<div class="pf" style="display:flex;flex-wrap:wrap;gap:4px">’;
+for(var j=0;j<d.searchTags.length;j++)h+=’<span style="font-size:9px;padding:2px 7px;border-radius:99px;background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff">’+d.searchTags[j]+’</span>’;
+h+=’</div>’;
 }
-function updShip(id,val){var t=document.getElementById('stag_'+id);if(!t)return;var env=parseFloat(val)<S.env;t.className='stag '+(env?'senv':'susps');t.textContent=env?'Envelope $1.00':'USPS $'+S.ship;}
+h+=’<div class="prev-btns">’;
+h+=’<button class="btn btn-g" onclick="addExport(\''+item.id+'\')" style="flex:2">Add to Export</button>’;
+h+=’<button class="btn btn-o" onclick="copyCard(\''+item.id+'\')">Copy</button>’;
+h+=’</div></div>’;
+var sec=document.getElementById(‘prevArea’);
+sec.innerHTML=h;
+sec.scrollIntoView({behavior:‘smooth’,block:‘start’});
+}
+function updShip(id,val){var t=document.getElementById(‘stag_’+id);if(!t)return;var env=parseFloat(val)<S.env;t.className=‘stag ‘+(env?‘senv’:‘susps’);t.textContent=env?‘Envelope $1.00’:‘USPS $’+S.ship;}
 function copyCard(id){
-  var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
-  if(!item||!item.result)return;
-  var txt='TITLE:\n'+gv('pt_'+id,item.result.ebayTitle)+'\n\nBUY IT NOW: $'+gv('pp_'+id,item.result.suggestedBIN)+'\n\nDESCRIPTION:\n'+gv('pd_'+id,item.result.description);
-  navigator.clipboard.writeText(txt).then(function(){toast('Copied!');}).catch(function(){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;top:-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');});
+var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
+if(!item||!item.result)return;
+var txt=‘TITLE:\n’+gv(‘pt_’+id,item.result.ebayTitle)+’\n\nBUY IT NOW: $’+gv(‘pp_’+id,item.result.suggestedBIN)+’\n\nDESCRIPTION:\n’+gv(‘pd_’+id,item.result.description);
+navigator.clipboard.writeText(txt).then(function(){toast(‘Copied!’);}).catch(function(){var ta=document.createElement(‘textarea’);ta.value=txt;ta.style.cssText=‘position:fixed;top:-9999px’;document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);toast(‘Copied!’);});
 }
 function addExport(id){
-  var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
-  if(!item||!item.result)return;
-  var price=parseFloat(gv('pp_'+id,item.result.suggestedBIN));
-  var d={};for(var k in item.result)d[k]=item.result[k];
-  d._id=id;d.acctId=item.acctId||S.activeId;
-  d.ebayTitle=gv('pt_'+id,item.result.ebayTitle).slice(0,80);
-  d.description=gv('pd_'+id,item.result.description);
-  d.suggestedBIN=price;d.player=gv('ppl_'+id,item.result.player);
-  d.year=gv('pyr_'+id,item.result.year);d.set=gv('pst_'+id,item.result.set);
-  d.cardNumber=gv('pcn_'+id,item.result.cardNumber);d.variation=gv('pvr_'+id,item.result.variation);
-  d.team=gv('ptm_'+id,item.result.team);d.conditionNote=gv('pco_'+id,item.result.conditionNote);
-  d.useEnvelope=price<S.env;d.sport=item.result.sport||'Baseball';
-  var idx=-1;for(var j=0;j<S.exported.length;j++){if(S.exported[j]._id===id){idx=j;break;}}
-  if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
-  addHistory(d);toast('Added!');document.getElementById('prevArea').innerHTML='';renderExport();refreshStats();
+var item=null;for(var i=0;i<S.queue.length;i++){if(S.queue[i].id===id){item=S.queue[i];break;}}
+if(!item||!item.result)return;
+var price=parseFloat(gv(‘pp_’+id,item.result.suggestedBIN));
+var d={};for(var k in item.result)d[k]=item.result[k];
+d.*id=id;d.acctId=item.acctId||S.activeId;
+d.ebayTitle=gv(’pt*’+id,item.result.ebayTitle).slice(0,80);
+d.description=gv(‘pd_’+id,item.result.description);
+d.suggestedBIN=price;d.player=gv(‘ppl_’+id,item.result.player);
+d.year=gv(‘pyr_’+id,item.result.year);d.set=gv(‘pst_’+id,item.result.set);
+d.cardNumber=gv(‘pcn_’+id,item.result.cardNumber);d.variation=gv(‘pvr_’+id,item.result.variation);
+d.team=gv(‘ptm_’+id,item.result.team);d.conditionNote=gv(‘pco_’+id,item.result.conditionNote);
+d.useEnvelope=price<S.env;d.sport=item.result.sport||‘Baseball’;
+var idx=-1;for(var j=0;j<S.exported.length;j++){if(S.exported[j].*id===id){idx=j;break;}}
+if(idx>=0)S.exported[idx]=d;else S.exported.push(d);
+addHistory(d);toast(‘Added!’);document.getElementById(‘prevArea’).innerHTML=’’;renderExport();refreshStats();
 }
-function ce(v){var s=String(v||'').replace(/"/g,'""');if(s.indexOf(',')>=0||s.indexOf('"')>=0||s.indexOf('\n')>=0||s.indexOf('\r')>=0)return'"'+s+'"';return s;}
+function ce(v){var s=String(v||’’).replace(/”/g,’””’);if(s.indexOf(’,’)>=0||s.indexOf(’”’)>=0||s.indexOf(’\n’)>=0||s.indexOf(’\r’)>=0)return’”’+s+’”’;return s;}
 function buildCSV(acctId){
-  var rows=S.exported.filter(function(d){return d.acctId===acctId;});if(!rows.length)return'';
-  var cols=[CSV_H,'Title','Description','Category','BuyItNowPrice','Quantity','ConditionID','ConditionDescription','ListingDuration','ListingType','ReturnsAcceptedOption','ReturnsWithinOption','RefundOption','ShippingCostPaidByOption','ShippingService-1:Option','ShippingService-1:Cost','C:Player/Athlete','C:Year Manufactured','C:Set','C:Card Number','C:Parallel/Variety','C:Team','C:Sport'];
-  var lines=[cols.map(ce).join(',')];
-  for(var i=0;i<rows.length;i++){
-    var d=rows[i];
-    lines.push(['Add',d.ebayTitle,d.description,CAT[d.sport]||'213',d.suggestedBIN||9.99,'1',(d.isGraded&&d.grade)?d.gradingCompany+' '+d.grade:'USED',d.conditionNote||'Near Mint',S.dur,'FixedPriceItem',S.ret,'Days_30','MoneyBack','Buyer','USPSFirstClass',d.useEnvelope?'1.00':String(S.ship),d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||'Baseball'].map(ce).join(','));
-  }
-  return lines.join('\r\n');
+var rows=S.exported.filter(function(d){return d.acctId===acctId;});if(!rows.length)return’’;
+var cols=[CSV_H,‘Title’,‘Description’,‘Category’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ListingType’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
+var lines=[cols.map(ce).join(’,’)];
+for(var i=0;i<rows.length;i++){
+var d=rows[i];
+lines.push([‘Add’,d.ebayTitle,d.description,CAT[d.sport]||‘213’,d.suggestedBIN||9.99,‘1’,(d.isGraded&&d.grade)?d.gradingCompany+’ ‘+d.grade:‘USED’,d.conditionNote||‘Near Mint’,S.dur,‘FixedPriceItem’,S.ret,‘Days_30’,‘MoneyBack’,‘Buyer’,‘USPSFirstClass’,d.useEnvelope?‘1.00’:String(S.ship),d.player,d.year,d.set,d.cardNumber,d.variation,d.team,d.sport||‘Baseball’].map(ce).join(’,’));
+}
+return lines.join(’\r\n’);
 }
 function dlCSV(acctId){
-  var csv=buildCSV(acctId);if(!csv){toast('No cards','err');return;}
-  var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===acctId){a=S.accounts[i];break;}}
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var url=URL.createObjectURL(blob);var el=document.createElement('a');el.href=url;
-  el.download='ebay_'+(a?a.name:'cards').replace(/ /g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(el);el.click();document.body.removeChild(el);URL.revokeObjectURL(url);toast('Downloaded!');
+var csv=buildCSV(acctId);if(!csv){toast(‘No cards’,‘err’);return;}
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===acctId){a=S.accounts[i];break;}}
+var blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
+var url=URL.createObjectURL(blob);var el=document.createElement(‘a’);el.href=url;
+el.download=’ebay*’+(a?a.name:‘cards’).replace(/ /g,’*’)+’*’+new Date().toISOString().slice(0,10)+’.csv’;
+document.body.appendChild(el);el.click();document.body.removeChild(el);URL.revokeObjectURL(url);toast(‘Downloaded!’);
 }
 function renderExport(){
-  var el=document.getElementById('expBlocks'),emp=document.getElementById('expEmpty'),guide=document.getElementById('expGuide');
-  var lbl=document.getElementById('expLbl');if(lbl)lbl.textContent=S.exported.length+' ready';
-  if(!S.exported.length){el.innerHTML='';emp.style.display='block';if(guide)guide.style.display='none';return;}
-  emp.style.display='none';if(guide)guide.style.display='block';
-  var g={};for(var i=0;i<S.exported.length;i++){var d=S.exported[i];if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);}
-  var h='';var keys=Object.keys(g);
-  for(var k=0;k<keys.length;k++){
-    var aId=keys[k],cards=g[aId];
-    var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===aId){a=S.accounts[j];break;}}
-    var name=a?a.name:'Unknown',color=a?a.color:'#888';
-    var tot=0;for(var m=0;m<cards.length;m++)tot+=cards[m].suggestedBIN||0;
-    h+='<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>';
-    h+='<div><div style="font-size:14px;font-weight:800;color:'+color+'">'+name+'</div>';
-    h+='<div style="font-size:10px;color:#64748b;margin-top:2px">'+cards.length+' listings &middot; $'+Math.round(tot)+' &middot; All Buy It Now</div></div></div>';
-    h+='<div class="exp-body">';
-    var show=Math.min(5,cards.length);
-    for(var n=0;n<show;n++){var c=cards[n];h+='<div class="exp-row"><span class="exp-name">'+(c.player||'Card')+' '+(c.year||'')+'</span><span class="exp-price">$'+(c.suggestedBIN||'?')+' BIN</span></div>';}
-    if(cards.length>5)h+='<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ '+(cards.length-5)+' more</div>';
-    h+='<button class="btn btn-y" onclick="dlCSV(\''+aId+'\')" style="margin-top:10px">Download CSV for '+name+'</button>';
-    h+='<p style="font-size:11px;color:#64748b;margin-top:8px;line-height:1.6">Sign into <strong>'+name+'</strong> in Safari &rarr; Seller Hub &rarr; Reports &rarr; Upload Template &rarr; select this file.</p>';
-    h+='</div></div>';
-  }
-  el.innerHTML=h;
+var el=document.getElementById(‘expBlocks’),emp=document.getElementById(‘expEmpty’),guide=document.getElementById(‘expGuide’);
+var lbl=document.getElementById(‘expLbl’);if(lbl)lbl.textContent=S.exported.length+’ ready’;
+if(!S.exported.length){el.innerHTML=’’;emp.style.display=‘block’;if(guide)guide.style.display=‘none’;return;}
+emp.style.display=‘none’;if(guide)guide.style.display=‘block’;
+var g={};for(var i=0;i<S.exported.length;i++){var d=S.exported[i];if(!g[d.acctId])g[d.acctId]=[];g[d.acctId].push(d);}
+var h=’’;var keys=Object.keys(g);
+for(var k=0;k<keys.length;k++){
+var aId=keys[k],cards=g[aId];
+var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===aId){a=S.accounts[j];break;}}
+var name=a?a.name:‘Unknown’,color=a?a.color:’#888’;
+var tot=0;for(var m=0;m<cards.length;m++)tot+=cards[m].suggestedBIN||0;
+h+=’<div class="exp-block"><div class="exp-hd"><div class="exp-dot" style="background:'+color+'"></div>’;
+h+=’<div><div style="font-size:14px;font-weight:800;color:'+color+'">’+name+’</div>’;
+h+=’<div style="font-size:10px;color:#64748b;margin-top:2px">’+cards.length+’ listings · $’+Math.round(tot)+’ · All Buy It Now</div></div></div>’;
+h+=’<div class="exp-body">’;
+var show=Math.min(5,cards.length);
+for(var n=0;n<show;n++){var c=cards[n];h+=’<div class="exp-row"><span class="exp-name">’+(c.player||‘Card’)+’ ‘+(c.year||’’)+’</span><span class="exp-price">$’+(c.suggestedBIN||’?’)+’ BIN</span></div>’;}
+if(cards.length>5)h+=’<div style="font-size:11px;color:#94a3b8;padding:4px 0">+ ‘+(cards.length-5)+’ more</div>’;
+h+=’<button class="btn btn-y" onclick="dlCSV(\''+aId+'\')" style="margin-top:10px">Download CSV for ‘+name+’</button>’;
+h+=’<p style="font-size:11px;color:#64748b;margin-top:8px;line-height:1.6">Sign into <strong>’+name+’</strong> in Safari → Seller Hub → Reports → Upload Template → select this file.</p>’;
+h+=’</div></div>’;
+}
+el.innerHTML=h;
 }
 function addHistory(d){
-  var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===d.acctId){a=S.accounts[i];break;}}
-  document.getElementById('logEmpty').style.display='none';
-  var el=document.createElement('div');el.className='log-item';
-  el.innerHTML='<div class="log-dot"></div><div><div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+'</div><div class="log-det">'+(a?a.name+' &middot; ':'')+' $'+(d.suggestedBIN||'?')+' BIN</div></div>';
-  document.getElementById('logList').prepend(el);
+var a=null;for(var i=0;i<S.accounts.length;i++){if(S.accounts[i].id===d.acctId){a=S.accounts[i];break;}}
+document.getElementById(‘logEmpty’).style.display=‘none’;
+var el=document.createElement(‘div’);el.className=‘log-item’;
+el.innerHTML=’<div class="log-dot"></div><div><div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’</div><div class="log-det">’+(a?a.name+’ · ‘:’’)+’ $’+(d.suggestedBIN||’?’)+’ BIN</div></div>’;
+document.getElementById(‘logList’).prepend(el);
 }
 function renderHistory(){
-  var list=document.getElementById('logList'),emp=document.getElementById('logEmpty');
-  if(!S.exported.length){list.innerHTML='';emp.style.display='block';return;}
-  emp.style.display='none';
-  var h='';for(var i=S.exported.length-1;i>=0;i--){
-    var d=S.exported[i];var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
-    h+='<div class="log-item"><div class="log-dot"></div><div><div class="log-name">'+(d.player||'Card')+' '+(d.year||'')+'</div><div class="log-det">'+(a?a.name+' &middot; ':'')+' $'+(d.suggestedBIN||'?')+' BIN</div></div></div>';
-  }
-  list.innerHTML=h;
+var list=document.getElementById(‘logList’),emp=document.getElementById(‘logEmpty’);
+if(!S.exported.length){list.innerHTML=’’;emp.style.display=‘block’;return;}
+emp.style.display=‘none’;
+var h=’’;for(var i=S.exported.length-1;i>=0;i–){
+var d=S.exported[i];var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
+h+=’<div class="log-item"><div class="log-dot"></div><div><div class="log-name">’+(d.player||‘Card’)+’ ‘+(d.year||’’)+’</div><div class="log-det">’+(a?a.name+’ · ‘:’’)+’ $’+(d.suggestedBIN||’?’)+’ BIN</div></div></div>’;
+}
+list.innerHTML=h;
 }
 function exportLog(){
-  if(!S.exported.length){toast('No cards','err');return;}
-  var cols=['Account','Player','Year','Set','Card#','Variation','BIN','Title'];
-  var lines=[cols.join(',')];
-  for(var i=0;i<S.exported.length;i++){
-    var d=S.exported[i];var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
-    lines.push([a?a.name:'',d.player,d.year,d.set,d.cardNumber,d.variation,d.suggestedBIN,d.ebayTitle].map(function(v){return'"'+(v||'').toString().replace(/"/g,'""')+'"';}).join(','));
-  }
-  var blob=new Blob([lines.join('\n')],{type:'text/csv'});
-  var url=URL.createObjectURL(blob);var el=document.createElement('a');el.href=url;el.download='card_log.csv';el.click();URL.revokeObjectURL(url);
+if(!S.exported.length){toast(‘No cards’,‘err’);return;}
+var cols=[‘Account’,‘Player’,‘Year’,‘Set’,‘Card#’,‘Variation’,‘BIN’,‘Title’];
+var lines=[cols.join(’,’)];
+for(var i=0;i<S.exported.length;i++){
+var d=S.exported[i];var a=null;for(var j=0;j<S.accounts.length;j++){if(S.accounts[j].id===d.acctId){a=S.accounts[j];break;}}
+lines.push([a?a.name:’’,d.player,d.year,d.set,d.cardNumber,d.variation,d.suggestedBIN,d.ebayTitle].map(function(v){return’”’+(v||’’).toString().replace(/”/g,’””’)+’”’;}).join(’,’));
+}
+var blob=new Blob([lines.join(’\n’)],{type:‘text/csv’});
+var url=URL.createObjectURL(blob);var el=document.createElement(‘a’);el.href=url;el.download=‘card_log.csv’;el.click();URL.revokeObjectURL(url);
 }
 function refreshStats(){
-  var tot=S.queue.length,rdy=S.queue.filter(function(i){return i.status==='ready';}).length;
-  var val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
-  document.getElementById('s-tot').textContent=tot;document.getElementById('s-rdy').textContent=rdy;
-  document.getElementById('s-val').textContent='$'+Math.round(val);
-  document.getElementById('nc-q').textContent=tot;document.getElementById('nc-r').textContent=rdy;
+var tot=S.queue.length,rdy=S.queue.filter(function(i){return i.status===‘ready’;}).length;
+var val=S.exported.reduce(function(s,d){return s+(d.suggestedBIN||0);},0);
+document.getElementById(‘s-tot’).textContent=tot;document.getElementById(‘s-rdy’).textContent=rdy;
+document.getElementById(‘s-val’).textContent=’$’+Math.round(val);
+document.getElementById(‘nc-q’).textContent=tot;document.getElementById(‘nc-r’).textContent=rdy;
 }
 function toast(msg,type){
-  var el=document.getElementById('toast');el.textContent=msg;
-  el.className='toast-box show'+(type==='err'?' err':type==='warn'?' warn':'');
-  clearTimeout(window._tt);window._tt=setTimeout(function(){el.className='toast-box';},3000);
+var el=document.getElementById(‘toast’);el.textContent=msg;
+el.className=‘toast-box show’+(type===‘err’?’ err’:type===‘warn’?’ warn’:’’);
+clearTimeout(window._tt);window._tt=setTimeout(function(){el.className=‘toast-box’;},3000);
 }
 </script>
+
 </body>
 </html>
