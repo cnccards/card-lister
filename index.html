@@ -441,7 +441,8 @@ function doTestKey(){
 function doSaveKey(){
   var raw = document.getElementById('KEYINP').value.trim();
   if(!raw){showMsg('KEYMSG','rose','Please paste your Gemini API key first.');return;}
-  if(raw.indexOf('.')>=0 && raw.indexOf('AIza')<0 && raw.length<20){showMsg('KEYMSG','rose','Key looks masked. Clear the field and paste your real key.');return;}
+  // Only reject if it looks like our own masked display (4 chars + dots + 4 chars)
+  if(raw.length <= 12 && raw.indexOf('....') >= 0){showMsg('KEYMSG','rose','Clear the field and paste your real key from aistudio.google.com/apikey');return;}
   if(raw.length<15){showMsg('KEYMSG','rose','Key too short. Make sure you copied the full key from aistudio.google.com/apikey');return;}
   KEY=raw;
   ls('gkey',raw);
