@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -204,6 +205,7 @@ textarea.inp{resize:vertical;min-height:38px;font-size:13px;line-height:1.5}
 </div>
 
 <!-- ═══ SETUP ═══ -->
+
 <div class="screen on" id="scr-setup">
 
   <div class="al al-cyan">
@@ -262,6 +264,7 @@ textarea.inp{resize:vertical;min-height:38px;font-size:13px;line-height:1.5}
 </div>
 
 <!-- ═══ LIST ═══ -->
+
 <div class="screen" id="scr-list">
 
   <div id="NOKEYBOX" style="display:none">
@@ -271,55 +274,59 @@ textarea.inp{resize:vertical;min-height:38px;font-size:13px;line-height:1.5}
 
   <div id="LISTMAIN" style="display:none">
 
-    <!-- Active account selector -->
-    <div class="active-acct-bar" onclick="goTab('setup')">
-      <div class="active-acct-dot" id="ACTDOT" style="background:#888"></div>
-      <div class="active-acct-name" id="ACTNAME">No account selected</div>
-      <div class="active-acct-change">tap to change &rsaquo;</div>
-    </div>
+```
+<!-- Active account selector -->
+<div class="active-acct-bar" onclick="goTab('setup')">
+  <div class="active-acct-dot" id="ACTDOT" style="background:#888"></div>
+  <div class="active-acct-name" id="ACTNAME">No account selected</div>
+  <div class="active-acct-change">tap to change &rsaquo;</div>
+</div>
 
-    <div class="dz" id="DZ" ondragover="onDrag(event,true)" ondragleave="onDrag(event,false)" ondrop="onDrop(event)">
-      <input type="file" id="FILEINP" accept="image/*" multiple onchange="onFiles(event)"/>
-      <div class="dz-ring">&#x1F4F8;</div>
-      <div class="dz-h">Photograph your cards</div>
-      <div class="dz-s">Tap to open camera or choose from photos<br>Add multiple cards at once</div>
-      <div class="dz-badge">Gemini AI reads every card automatically</div>
-    </div>
+<div class="dz" id="DZ" ondragover="onDrag(event,true)" ondragleave="onDrag(event,false)" ondrop="onDrop(event)">
+  <input type="file" id="FILEINP" accept="image/*" multiple onchange="onFiles(event)"/>
+  <div class="dz-ring">&#x1F4F8;</div>
+  <div class="dz-h">Photograph your cards</div>
+  <div class="dz-s">Tap to open camera or choose from photos<br>Add multiple cards at once</div>
+  <div class="dz-badge">Gemini AI reads every card automatically</div>
+</div>
 
-    <div id="PREVIEW"></div>
+<div id="PREVIEW"></div>
 
-    <div id="QSTATS" style="display:none">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">
-        <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
-          <div style="font-size:22px;font-weight:800;font-family:monospace" id="QT">0</div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:2px">Queue</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
-          <div style="font-size:22px;font-weight:800;font-family:monospace;color:var(--lime)" id="QR">0</div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:2px">Ready</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
-          <div style="font-size:22px;font-weight:800;font-family:monospace;color:var(--gold)" id="QV">$0</div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:2px">Value</div>
-        </div>
-      </div>
-      <div class="brow">
-        <button class="btn bcyan" id="ALLBTN" onclick="analyzeAll()">AI Read All Cards</button>
-        <button class="btn boutline bsm" onclick="goTab('queue')">View Queue</button>
-      </div>
-      <div class="bp" id="BPROG">
-        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-          <span style="font-size:12px;font-weight:700">Processing</span>
-          <span style="font-size:11px;font-family:monospace;color:var(--fog)" id="PCNT">0/0</span>
-        </div>
-        <div class="pt"><div class="pf2" id="PFILL" style="width:0%"></div></div>
-        <div class="ps" id="PSTAT"></div>
-      </div>
+<div id="QSTATS" style="display:none">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">
+    <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:22px;font-weight:800;font-family:monospace" id="QT">0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:2px">Queue</div>
     </div>
+    <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:22px;font-weight:800;font-family:monospace;color:var(--lime)" id="QR">0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:2px">Ready</div>
+    </div>
+    <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:22px;font-weight:800;font-family:monospace;color:var(--gold)" id="QV">$0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-top:2px">Value</div>
+    </div>
+  </div>
+  <div class="brow">
+    <button class="btn bcyan" id="ALLBTN" onclick="analyzeAll()">AI Read All Cards</button>
+    <button class="btn boutline bsm" onclick="goTab('queue')">View Queue</button>
+  </div>
+  <div class="bp" id="BPROG">
+    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+      <span style="font-size:12px;font-weight:700">Processing</span>
+      <span style="font-size:11px;font-family:monospace;color:var(--fog)" id="PCNT">0/0</span>
+    </div>
+    <div class="pt"><div class="pf2" id="PFILL" style="width:0%"></div></div>
+    <div class="ps" id="PSTAT"></div>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
 <!-- ═══ QUEUE ═══ -->
+
 <div class="screen" id="scr-queue">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
     <div style="font-size:14px;font-weight:700" id="QTITLE">Card Queue</div>
@@ -333,6 +340,7 @@ textarea.inp{resize:vertical;min-height:38px;font-size:13px;line-height:1.5}
 </div>
 
 <!-- ═══ EXPORT ═══ -->
+
 <div class="screen" id="scr-export">
   <div class="empty" id="EXPEMPTY"><div class="ei">&#x1F4CA;</div>No listings ready yet. Analyze cards and tap Add to Export.</div>
   <div id="EXPCONT" style="display:none">
@@ -576,7 +584,7 @@ function parseGeminiJSON(txt){
 function geminiRequest(model, imgData){
   var mime = getMimeType(imgData);
   // NOTE: No responseMimeType - that causes 400 on free tier keys
-  return fetch('https://generativelanguage.googleapis.com/v1/models/'+model+':generateContent?key='+KEY,{
+  return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+KEY,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
@@ -610,13 +618,13 @@ function callGemini(imgData){
   
   // Try gemini-1.5-flash first (universally available on all free keys)
   // Fall back to gemini-2.0-flash if that fails
-  return geminiRequest('gemini-1.5-flash', imgData)
+  return geminiRequest('gemini-2.5-flash', imgData)
     .catch(function(e1){
       var msg1 = e1.message || '';
       // If rate limited, dont retry
       if(msg1.indexOf('429') >= 0 || msg1.indexOf('RATE') >= 0) throw e1;
       // Try fallback model
-      return geminiRequest('gemini-2.0-flash', imgData)
+      return geminiRequest('gemini-2.5-flash-lite', imgData)
         .catch(function(e2){
           // Both failed - throw the more informative error
           throw new Error(msg1 || e2.message);
@@ -772,193 +780,195 @@ function buildPrev(item){
   h+='<div class="acct-assign"><div class="acct-assign-lbl">Assign to eBay Account</div>'+acctPicks+'</div>';
   h+='<div class="pf"><div class="pf-lbl">eBay Title (max 80 chars)</div>';
   h+='<textarea class="pf-inp" id="pt'+item.id+'" rows="2" oninput="document.getElementById(\'pc'+item.id+'\').textContent=this.value.length+\'/80\'">'+esc(title)+'</textarea>';
-  h+='<div style="font-size:10px;color:var(--fog);font-family:monospace;margin-top:2px" id="pc'+item.id+'">'+title.length+'/80</div></div>';
-  h+='<div class="pf"><div class="pf-lbl">Description</div><textarea class="pf-inp" id="pd'+item.id+'" rows="5">'+esc(desc)+'</textarea></div>';
-  h+='<div class="pgrid"><div class="pbox"><div class="pbox-lbl">Buy It Now</div><input class="pbox-inp" id="pb'+item.id+'" type="number" value="'+bin+'" step="0.01" min="0.99"/></div>';
-  h+='<div class="pbox"><div class="pbox-lbl">Auction Start</div><input class="pbox-inp auc" id="pa'+item.id+'" type="number" value="'+auc+'" step="0.01" min="0.99"/></div></div>';
-  h+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl'+item.id+'" value="'+esc(d.player||'')+'"/></div>';
-  h+='<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr'+item.id+'" value="'+esc(d.year||'')+'"/></div></div>';
-  h+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst'+item.id+'" value="'+esc(d.set||'')+'"/></div>';
-  h+='<div><div class="pf-lbl">Card Number</div><input class="pf-inp" id="pn'+item.id+'" value="'+esc(d.cardNumber||'')+'"/></div></div>';
-  h+='<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pva'+item.id+'" value="'+esc(d.variation||'')+'"/></div>';
-  h+='<div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm'+item.id+'" value="'+esc(d.team||'')+'"/></div></div>';
-  h+='<div class="pf"><div class="pf-lbl">Condition Note</div><input class="pf-inp" id="pcn'+item.id+'" value="'+esc(d.conditionNote||d.condition||'')+'"/></div>';
-  if(tags) h+='<div class="twrap">'+tags+'</div>';
-  h+='<div class="pv-btns"><button class="btn blime" onclick="addExp(\''+item.id+'\')" style="flex:2;margin-bottom:0">Add to CSV Export</button>';
-  h+='<button class="btn boutline" onclick="copyIt(\''+item.id+'\')" style="flex:1;margin-bottom:0">Copy</button></div>';
-  h+='</div>';
-  return h;
+
+h+=’<div style="font-size:10px;color:var(--fog);font-family:monospace;margin-top:2px" id="pc'+item.id+'">’+title.length+’/80</div></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Description</div><textarea class="pf-inp" id="pd'+item.id+'" rows="5">’+esc(desc)+’</textarea></div>’;
+h+=’<div class="pgrid"><div class="pbox"><div class="pbox-lbl">Buy It Now</div><input class="pbox-inp" id="pb'+item.id+'" type="number" value="'+bin+'" step="0.01" min="0.99"/></div>’;
+h+=’<div class="pbox"><div class="pbox-lbl">Auction Start</div><input class="pbox-inp auc" id="pa'+item.id+'" type="number" value="'+auc+'" step="0.01" min="0.99"/></div></div>’;
+h+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="pf-lbl">Player</div><input class="pf-inp" id="ppl'+item.id+'" value="'+esc(d.player||'')+'"/></div>’;
+h+=’<div><div class="pf-lbl">Year</div><input class="pf-inp" id="pyr'+item.id+'" value="'+esc(d.year||'')+'"/></div></div>’;
+h+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="pf-lbl">Set</div><input class="pf-inp" id="pst'+item.id+'" value="'+esc(d.set||'')+'"/></div>’;
+h+=’<div><div class="pf-lbl">Card Number</div><input class="pf-inp" id="pn'+item.id+'" value="'+esc(d.cardNumber||'')+'"/></div></div>’;
+h+=’<div class="pf" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="pf-lbl">Variation</div><input class="pf-inp" id="pva'+item.id+'" value="'+esc(d.variation||'')+'"/></div>’;
+h+=’<div><div class="pf-lbl">Team</div><input class="pf-inp" id="ptm'+item.id+'" value="'+esc(d.team||'')+'"/></div></div>’;
+h+=’<div class="pf"><div class="pf-lbl">Condition Note</div><input class="pf-inp" id="pcn'+item.id+'" value="'+esc(d.conditionNote||d.condition||'')+'"/></div>’;
+if(tags) h+=’<div class="twrap">’+tags+’</div>’;
+h+=’<div class="pv-btns"><button class="btn blime" onclick="addExp(\''+item.id+'\')" style="flex:2;margin-bottom:0">Add to CSV Export</button>’;
+h+=’<button class="btn boutline" onclick="copyIt(\''+item.id+'\')" style="flex:1;margin-bottom:0">Copy</button></div>’;
+h+=’</div>’;
+return h;
 }
 
 function assignAcct(itemId, acctId){
-  var item=null;for(var i=0;i<Q.length;i++){if(Q[i].id===itemId){item=Q[i];break;}}
-  if(!item) return;
-  item.acctId=acctId;
-  showPreview(item);
+var item=null;for(var i=0;i<Q.length;i++){if(Q[i].id===itemId){item=Q[i];break;}}
+if(!item) return;
+item.acctId=acctId;
+showPreview(item);
 }
 
 /* EXPORT */
 function g(id){var el=document.getElementById(id);return el?el.value:null;}
 function addExp(id){
-  var item=null;for(var i=0;i<Q.length;i++){if(Q[i].id===id){item=Q[i];break;}}
-  if(!item||!item.result){toast('Analyze this card first','err');return;}
-  var d={};for(var k in item.result){if(item.result.hasOwnProperty(k)) d[k]=item.result[k];}
-  d.ebayTitle=(g('pt'+id)||d.ebayTitle||'').slice(0,80);
-  d.description=g('pd'+id)||d.description||'';
-  d.suggestedBIN=parseFloat(g('pb'+id)||d.suggestedBIN);
-  d.suggestedAuction=parseFloat(g('pa'+id)||d.suggestedAuction);
-  d.player=g('ppl'+id)||d.player||'';
-  d.year=g('pyr'+id)||d.year||'';
-  d.set=g('pst'+id)||d.set||'';
-  d.cardNumber=g('pn'+id)||d.cardNumber||'';
-  d.variation=g('pva'+id)||d.variation||'';
-  d.team=g('ptm'+id)||d.team||'';
-  d.conditionNote=g('pcn'+id)||d.conditionNote||'';
-  d._id=id;
-  d._acct=item.acctId||'';
-  var idx=-1;for(var i=0;i<EXP.length;i++){if(EXP[i]._id===id){idx=i;break;}}
-  if(idx>=0){EXP[idx]=d;toast('Updated!');}else{EXP.push(d);toast('Added to CSV!');}
-  renderExp();
-  document.getElementById('PREVIEW').innerHTML='';
+var item=null;for(var i=0;i<Q.length;i++){if(Q[i].id===id){item=Q[i];break;}}
+if(!item||!item.result){toast(‘Analyze this card first’,‘err’);return;}
+var d={};for(var k in item.result){if(item.result.hasOwnProperty(k)) d[k]=item.result[k];}
+d.ebayTitle=(g(‘pt’+id)||d.ebayTitle||’’).slice(0,80);
+d.description=g(‘pd’+id)||d.description||’’;
+d.suggestedBIN=parseFloat(g(‘pb’+id)||d.suggestedBIN);
+d.suggestedAuction=parseFloat(g(‘pa’+id)||d.suggestedAuction);
+d.player=g(‘ppl’+id)||d.player||’’;
+d.year=g(‘pyr’+id)||d.year||’’;
+d.set=g(‘pst’+id)||d.set||’’;
+d.cardNumber=g(‘pn’+id)||d.cardNumber||’’;
+d.variation=g(‘pva’+id)||d.variation||’’;
+d.team=g(‘ptm’+id)||d.team||’’;
+d.conditionNote=g(‘pcn’+id)||d.conditionNote||’’;
+d._id=id;
+d._acct=item.acctId||’’;
+var idx=-1;for(var i=0;i<EXP.length;i++){if(EXP[i]._id===id){idx=i;break;}}
+if(idx>=0){EXP[idx]=d;toast(‘Updated!’);}else{EXP.push(d);toast(‘Added to CSV!’);}
+renderExp();
+document.getElementById(‘PREVIEW’).innerHTML=’’;
 }
 
 function buildCSV(cards){
-  var H='Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)';
-  var cols=[H,'Title','Description','Category','StartPrice','BuyItNowPrice','Quantity','ConditionID','ConditionDescription','ListingDuration','ReturnsAcceptedOption','ReturnsWithinOption','RefundOption','ShippingCostPaidByOption','ShippingService-1:Option','ShippingService-1:Cost','C:Player/Athlete','C:Year Manufactured','C:Set','C:Card Number','C:Parallel/Variety','C:Team','C:Sport'];
-  var rows=[cols.join(',')];
-  for(var i=0;i<cards.length;i++){
-    var d=cards[i];
-    var cat=CATS[d.sport]||'213';
-    var row=['Add',d.ebayTitle,d.description,cat,d.suggestedAuction||0.99,d.suggestedBIN||9.99,'1','USED',d.conditionNote||'Near Mint or Better',DEFS.dur,DEFS.ret,'Days_30','MoneyBack','Buyer','USPSFirstClass',DEFS.ship,d.player||'',d.year||'',d.set||'',d.cardNumber||'',d.variation||'',d.team||'',d.sport||'Baseball'];
-    rows.push(row.map(function(v){
-      var s=String(v===null||v===undefined?'':v).replace(/"/g,'""');
-      return(s.indexOf(',')>=0||s.indexOf('"')>=0||s.indexOf('\n')>=0)?'"'+s+'"':s;
-    }).join(','));
-  }
-  return rows.join('\r\n');
+var H=‘Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)’;
+var cols=[H,‘Title’,‘Description’,‘Category’,‘StartPrice’,‘BuyItNowPrice’,‘Quantity’,‘ConditionID’,‘ConditionDescription’,‘ListingDuration’,‘ReturnsAcceptedOption’,‘ReturnsWithinOption’,‘RefundOption’,‘ShippingCostPaidByOption’,‘ShippingService-1:Option’,‘ShippingService-1:Cost’,‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Set’,‘C:Card Number’,‘C:Parallel/Variety’,‘C:Team’,‘C:Sport’];
+var rows=[cols.join(’,’)];
+for(var i=0;i<cards.length;i++){
+var d=cards[i];
+var cat=CATS[d.sport]||‘213’;
+var row=[‘Add’,d.ebayTitle,d.description,cat,d.suggestedAuction||0.99,d.suggestedBIN||9.99,‘1’,‘USED’,d.conditionNote||‘Near Mint or Better’,DEFS.dur,DEFS.ret,‘Days_30’,‘MoneyBack’,‘Buyer’,‘USPSFirstClass’,DEFS.ship,d.player||’’,d.year||’’,d.set||’’,d.cardNumber||’’,d.variation||’’,d.team||’’,d.sport||‘Baseball’];
+rows.push(row.map(function(v){
+var s=String(v===null||v===undefined?’’:v).replace(/”/g,’””’);
+return(s.indexOf(’,’)>=0||s.indexOf(’”’)>=0||s.indexOf(’\n’)>=0)?’”’+s+’”’:s;
+}).join(’,’));
+}
+return rows.join(’\r\n’);
 }
 
 function dlCSVfor(acctId){
-  var cards=EXP.filter(function(e){return e._acct===acctId;});
-  if(!cards.length){toast('No cards for this account','err');return;}
-  var acct=ACCTS.find(function(a){return a.id===acctId;})||{name:'account'};
-  var csv=buildCSV(cards);
-  var filename='ebay_'+acct.name.replace(/\s+/g,'_')+'_'+cards.length+'cards_'+new Date().toISOString().slice(0,10)+'.csv';
-  // iOS Safari compatible download — opens in new tab so user can Share to Files
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var url=URL.createObjectURL(blob);
-  // Try standard download first
-  var a=document.createElement('a');
-  a.href=url;
-  a.download=filename;
-  a.target='_blank';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  // On iOS the above opens the file — show instructions
-  setTimeout(function(){
-    toast('File ready! On iPhone: tap Share then Save to Files');
-    URL.revokeObjectURL(url);
-  },800);
+var cards=EXP.filter(function(e){return e.*acct===acctId;});
+if(!cards.length){toast(‘No cards for this account’,‘err’);return;}
+var acct=ACCTS.find(function(a){return a.id===acctId;})||{name:‘account’};
+var csv=buildCSV(cards);
+var filename=’ebay*’+acct.name.replace(/\s+/g,’*’)+’*’+cards.length+‘cards_’+new Date().toISOString().slice(0,10)+’.csv’;
+// iOS Safari compatible download — opens in new tab so user can Share to Files
+var blob=new Blob([csv],{type:‘text/csv;charset=utf-8;’});
+var url=URL.createObjectURL(blob);
+// Try standard download first
+var a=document.createElement(‘a’);
+a.href=url;
+a.download=filename;
+a.target=’_blank’;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+// On iOS the above opens the file — show instructions
+setTimeout(function(){
+toast(‘File ready! On iPhone: tap Share then Save to Files’);
+URL.revokeObjectURL(url);
+},800);
 }
 
 function dlAndRemove(acctId){
-  dlCSVfor(acctId);
-  // Remove cards for this account from export after short delay
-  setTimeout(function(){
-    var before=EXP.length;
-    EXP=EXP.filter(function(e){return e._acct!==acctId;});
-    var removed=before-EXP.length;
-    renderExp();
-    renderQ();
-    if(removed>0) toast(removed+' cards removed from export list');
-  },1200);
+dlCSVfor(acctId);
+// Remove cards for this account from export after short delay
+setTimeout(function(){
+var before=EXP.length;
+EXP=EXP.filter(function(e){return e._acct!==acctId;});
+var removed=before-EXP.length;
+renderExp();
+renderQ();
+if(removed>0) toast(removed+’ cards removed from export list’);
+},1200);
 }
 
 function renderExp(){
-  var empty=document.getElementById('EXPEMPTY'),cont=document.getElementById('EXPCONT');
-  if(!EXP.length){empty.style.display='block';cont.style.display='none';return;}
-  empty.style.display='none';cont.style.display='block';
-  // Group by account
-  var blocks='';
-  var unassigned=EXP.filter(function(e){return !e._acct;});
-  // Render each account block
-  for(var ai=0;ai<ACCTS.length;ai++){
-    var acct=ACCTS[ai];
-    var cards=EXP.filter(function(e){return e._acct===acct.id;});
-    if(!cards.length) continue;
-    var tv=0;for(var i=0;i<cards.length;i++) tv+=(cards[i].suggestedBIN||0);
-    blocks+='<div class="exp-acct-block">';
-    blocks+='<div class="exp-acct-hdr"><div class="exp-acct-dot" style="background:'+acct.color+'"></div>';
-    blocks+='<div class="exp-acct-name">'+esc(acct.name)+'</div>';
-    blocks+='<div class="exp-acct-cnt">'+cards.length+' card'+(cards.length!==1?'s':'')+'</div></div>';
-    blocks+='<div class="exp-acct-body">';
-    blocks+='<div class="exp-stat-row">';
-    blocks+='<div class="exp-stat"><div class="exp-stat-n">'+cards.length+'</div><div class="exp-stat-l">Cards</div></div>';
-    blocks+='<div class="exp-stat"><div class="exp-stat-n">$'+Math.round(tv)+'</div><div class="exp-stat-l">Value</div></div>';
-    blocks+='<div class="exp-stat"><div class="exp-stat-n">$'+Math.round(tv/cards.length)+'</div><div class="exp-stat-l">Avg</div></div>';
-    blocks+='</div>';
-    // Steps
-    blocks+='<div style="margin-bottom:12px">';
-    blocks+='<div class="srow"><div class="snum">1</div><div>Download CSV for <strong>'+esc(acct.name)+'</strong> below</div></div>';
-    blocks+='<div class="srow"><div class="snum">2</div><div>Log into <strong>'+esc(acct.name)+'</strong> on eBay</div></div>';
-    blocks+='<div class="srow"><div class="snum">3</div><div>Go to <strong>Seller Hub &rarr; Reports &rarr; Upload</strong></div></div>';
-    blocks+='<div class="srow"><div class="snum">4</div><div>Click <strong>Upload Template</strong>, select this CSV</div></div>';
-    blocks+='</div>';
-    // Card list with remove buttons
-    for(var i=0;i<cards.length;i++){
-      var card=cards[i];
-      var cardIdx=EXP.indexOf(card);
-      blocks+='<div class="li"><div class="lick">&#x2713;</div><div class="lin"><div class="lin-n">'+esc(card.player||'Card')+' '+esc(card.year||'')+'</div><div class="lin-d">'+esc(card.set||'')+' $'+(card.suggestedBIN||'?')+' BIN</div></div>';
-      blocks+='<button onclick="rmOneExp(\''+card._id+'\')" style="background:none;border:none;color:var(--fog);cursor:pointer;font-size:14px;padding:4px 8px;border-radius:6px" title="Remove">&#x2715;</button></div>';
-    }
-    blocks+='<div class="brow" style="margin-top:10px">';
-    blocks+='<button class="btn blime" onclick="dlCSVfor(\''+acct.id+'\')" style="flex:2;margin-bottom:0">&#x2B07; Download CSV</button>';
-    blocks+='<button class="btn brose" onclick="dlAndRemove(\''+acct.id+'\')" style="flex:1;margin-bottom:0;font-size:12px">Download + Remove</button>';
-    blocks+='</div>';
-    blocks+='</div></div>';
-  }
-  if(unassigned.length){
-    blocks+='<div class="exp-acct-block"><div class="exp-acct-hdr"><div class="exp-acct-dot" style="background:#888"></div><div class="exp-acct-name">Unassigned Cards</div><div class="exp-acct-cnt">'+unassigned.length+'</div></div>';
-    blocks+='<div class="exp-acct-body"><div class="al al-rose" style="margin-bottom:10px">These cards have no account assigned. Go to the card preview and tap an account to assign.</div>';
-    for(var i=0;i<unassigned.length;i++){
-      var card=unassigned[i];
-      blocks+='<div class="li"><div class="lick" style="background:var(--rose2);border-color:var(--rose3);color:var(--rose)">!</div><div class="lin"><div class="lin-n">'+esc(card.player||'Card')+' '+esc(card.year||'')+'</div><div class="lin-d">'+esc(card.set||'')+'</div></div></div>';
-    }
-    blocks+='</div></div>';
-  }
-  document.getElementById('EXPBLOCKS').innerHTML=blocks;
+var empty=document.getElementById(‘EXPEMPTY’),cont=document.getElementById(‘EXPCONT’);
+if(!EXP.length){empty.style.display=‘block’;cont.style.display=‘none’;return;}
+empty.style.display=‘none’;cont.style.display=‘block’;
+// Group by account
+var blocks=’’;
+var unassigned=EXP.filter(function(e){return !e._acct;});
+// Render each account block
+for(var ai=0;ai<ACCTS.length;ai++){
+var acct=ACCTS[ai];
+var cards=EXP.filter(function(e){return e._acct===acct.id;});
+if(!cards.length) continue;
+var tv=0;for(var i=0;i<cards.length;i++) tv+=(cards[i].suggestedBIN||0);
+blocks+=’<div class="exp-acct-block">’;
+blocks+=’<div class="exp-acct-hdr"><div class="exp-acct-dot" style="background:'+acct.color+'"></div>’;
+blocks+=’<div class="exp-acct-name">’+esc(acct.name)+’</div>’;
+blocks+=’<div class="exp-acct-cnt">’+cards.length+’ card’+(cards.length!==1?‘s’:’’)+’</div></div>’;
+blocks+=’<div class="exp-acct-body">’;
+blocks+=’<div class="exp-stat-row">’;
+blocks+=’<div class="exp-stat"><div class="exp-stat-n">’+cards.length+’</div><div class="exp-stat-l">Cards</div></div>’;
+blocks+=’<div class="exp-stat"><div class="exp-stat-n">$’+Math.round(tv)+’</div><div class="exp-stat-l">Value</div></div>’;
+blocks+=’<div class="exp-stat"><div class="exp-stat-n">$’+Math.round(tv/cards.length)+’</div><div class="exp-stat-l">Avg</div></div>’;
+blocks+=’</div>’;
+// Steps
+blocks+=’<div style="margin-bottom:12px">’;
+blocks+=’<div class="srow"><div class="snum">1</div><div>Download CSV for <strong>’+esc(acct.name)+’</strong> below</div></div>’;
+blocks+=’<div class="srow"><div class="snum">2</div><div>Log into <strong>’+esc(acct.name)+’</strong> on eBay</div></div>’;
+blocks+=’<div class="srow"><div class="snum">3</div><div>Go to <strong>Seller Hub → Reports → Upload</strong></div></div>’;
+blocks+=’<div class="srow"><div class="snum">4</div><div>Click <strong>Upload Template</strong>, select this CSV</div></div>’;
+blocks+=’</div>’;
+// Card list with remove buttons
+for(var i=0;i<cards.length;i++){
+var card=cards[i];
+var cardIdx=EXP.indexOf(card);
+blocks+=’<div class="li"><div class="lick">✓</div><div class="lin"><div class="lin-n">’+esc(card.player||‘Card’)+’ ‘+esc(card.year||’’)+’</div><div class="lin-d">’+esc(card.set||’’)+’ $’+(card.suggestedBIN||’?’)+’ BIN</div></div>’;
+blocks+=’<button onclick="rmOneExp(\''+card._id+'\')" style="background:none;border:none;color:var(--fog);cursor:pointer;font-size:14px;padding:4px 8px;border-radius:6px" title="Remove">✕</button></div>’;
+}
+blocks+=’<div class="brow" style="margin-top:10px">’;
+blocks+=’<button class="btn blime" onclick="dlCSVfor(\''+acct.id+'\')" style="flex:2;margin-bottom:0">⬇ Download CSV</button>’;
+blocks+=’<button class="btn brose" onclick="dlAndRemove(\''+acct.id+'\')" style="flex:1;margin-bottom:0;font-size:12px">Download + Remove</button>’;
+blocks+=’</div>’;
+blocks+=’</div></div>’;
+}
+if(unassigned.length){
+blocks+=’<div class="exp-acct-block"><div class="exp-acct-hdr"><div class="exp-acct-dot" style="background:#888"></div><div class="exp-acct-name">Unassigned Cards</div><div class="exp-acct-cnt">’+unassigned.length+’</div></div>’;
+blocks+=’<div class="exp-acct-body"><div class="al al-rose" style="margin-bottom:10px">These cards have no account assigned. Go to the card preview and tap an account to assign.</div>’;
+for(var i=0;i<unassigned.length;i++){
+var card=unassigned[i];
+blocks+=’<div class="li"><div class="lick" style="background:var(--rose2);border-color:var(--rose3);color:var(--rose)">!</div><div class="lin"><div class="lin-n">’+esc(card.player||‘Card’)+’ ‘+esc(card.year||’’)+’</div><div class="lin-d">’+esc(card.set||’’)+’</div></div></div>’;
+}
+blocks+=’</div></div>’;
+}
+document.getElementById(‘EXPBLOCKS’).innerHTML=blocks;
 }
 
-function rmOneExp(id){EXP=EXP.filter(function(e){return e._id!==id;});renderExp();toast('Card removed from export');}
-function clearExp(){if(!confirm('Clear all exports?')) return;EXP=[];renderExp();}
+function rmOneExp(id){EXP=EXP.filter(function(e){return e._id!==id;});renderExp();toast(‘Card removed from export’);}
+function clearExp(){if(!confirm(‘Clear all exports?’)) return;EXP=[];renderExp();}
 
 /* MISC */
 function updStats(){
-  var qs=document.getElementById('QSTATS');
-  if(Q.length) qs.style.display='block'; else qs.style.display='none';
-  document.getElementById('QT').textContent=Q.length;
-  var ready=0,val=0;
-  for(var i=0;i<Q.length;i++){if(Q[i].status==='ready'){ready++;val+=(Q[i].result&&Q[i].result.suggestedBIN?Q[i].result.suggestedBIN:0);}}
-  document.getElementById('QR').textContent=ready;
-  document.getElementById('QV').textContent='$'+Math.round(val);
+var qs=document.getElementById(‘QSTATS’);
+if(Q.length) qs.style.display=‘block’; else qs.style.display=‘none’;
+document.getElementById(‘QT’).textContent=Q.length;
+var ready=0,val=0;
+for(var i=0;i<Q.length;i++){if(Q[i].status===‘ready’){ready++;val+=(Q[i].result&&Q[i].result.suggestedBIN?Q[i].result.suggestedBIN:0);}}
+document.getElementById(‘QR’).textContent=ready;
+document.getElementById(‘QV’).textContent=’$’+Math.round(val);
 }
 function copyIt(id){
-  var item=null;for(var i=0;i<Q.length;i++){if(Q[i].id===id){item=Q[i];break;}}
-  if(!item||!item.result) return;
-  var text='TITLE:\n'+(g('pt'+id)||item.result.ebayTitle||'')+'\n\nBUY IT NOW: $'+(g('pb'+id)||item.result.suggestedBIN||'')+'\n\nDESCRIPTION:\n'+(g('pd'+id)||item.result.description||'');
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast('Copied!');}).catch(function(){fbCopy(text);});}
-  else fbCopy(text);
+var item=null;for(var i=0;i<Q.length;i++){if(Q[i].id===id){item=Q[i];break;}}
+if(!item||!item.result) return;
+var text=‘TITLE:\n’+(g(‘pt’+id)||item.result.ebayTitle||’’)+’\n\nBUY IT NOW: $’+(g(‘pb’+id)||item.result.suggestedBIN||’’)+’\n\nDESCRIPTION:\n’+(g(‘pd’+id)||item.result.description||’’);
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast(‘Copied!’);}).catch(function(){fbCopy(text);});}
+else fbCopy(text);
 }
-function fbCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');}
-function setLoader(t,s){document.getElementById('LTXT').textContent=t;document.getElementById('LSTEP').textContent=s;document.getElementById('LDR').className='ldr show';}
-function hideLoader(){document.getElementById('LDR').className='ldr';}
-function setStatus(r){document.getElementById('SDOT').className='sdot'+(r?' on':'');document.getElementById('STXT').textContent=r?'Ready':'Setup';}
-function showMsg(id,type,msg){var el=document.getElementById(id);if(!el) return;el.innerHTML='<div class="al al-'+type+'" style="margin-bottom:8px">'+msg+'</div>';}
-function toast(msg,type){var el=document.getElementById('TST');el.textContent=msg;el.className='tst show'+(type==='err'?' err':'');clearTimeout(window._tt);window._tt=setTimeout(function(){el.className='tst';},3500);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fbCopy(text){var ta=document.createElement(‘textarea’);ta.value=text;ta.style.position=‘fixed’;ta.style.opacity=‘0’;document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);toast(‘Copied!’);}
+function setLoader(t,s){document.getElementById(‘LTXT’).textContent=t;document.getElementById(‘LSTEP’).textContent=s;document.getElementById(‘LDR’).className=‘ldr show’;}
+function hideLoader(){document.getElementById(‘LDR’).className=‘ldr’;}
+function setStatus(r){document.getElementById(‘SDOT’).className=‘sdot’+(r?’ on’:’’);document.getElementById(‘STXT’).textContent=r?‘Ready’:‘Setup’;}
+function showMsg(id,type,msg){var el=document.getElementById(id);if(!el) return;el.innerHTML=’<div class="al al-'+type+'" style="margin-bottom:8px">’+msg+’</div>’;}
+function toast(msg,type){var el=document.getElementById(‘TST’);el.textContent=msg;el.className=‘tst show’+(type===‘err’?’ err’:’’);clearTimeout(window._tt);window._tt=setTimeout(function(){el.className=‘tst’;},3500);}
+function esc(s){return String(s||’’).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’);}
 
 boot();
 </script>
+
 </body>
 </html>
