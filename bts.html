@@ -431,11 +431,13 @@ function fetchPitcherStats(pitcherId) {
 // ============================================================
 function fetchBatterVsPitcher(batterId, pitcherId) {
   if (!batterId || !pitcherId) return Promise.resolve(null);
-  // Build full MLB path and encode the ENTIRE thing as one parameter
-  // so the Netlify proxy passes opposingPlayerId through correctly
-  var mlbPath = '/people/' + batterId + '/stats?stats=vsPlayerTotal&opposingPlayerId=' + pitcherId + '&group=hitting';
-  var url = NETLIFY_PROXY + '?path=' + encodeURIComponent(mlbPath);
-  return fetch(url)
+  // Use allorigins.win CORS proxy to call MLB API directly
+  // The Netlify proxy strips opposingPlayerId so we bypass it here
+  var mlbUrl = 'https://statsapi.mlb.com/api/v1/people/' + batterId +
+               '/stats?stats=vsPlayerTotal&opposingPlayerId=' + pitcherId +
+               '&group=hitting';
+  var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(mlbUrl);
+  return fetch(proxyUrl)
     .then(function(r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
