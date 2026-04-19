@@ -431,35 +431,49 @@ function fetchPitcherStats(pitcherId) {
 // ============================================================
 function fetchBatterVsPitcher(batterId, pitcherId) {
   if (!batterId || !pitcherId) return Promise.resolve(null);
-  // Use allorigins.win CORS proxy to call MLB API directly
-  // The Netlify proxy strips opposingPlayerId so we bypass it here
   var mlbUrl = 'https://statsapi.mlb.com/api/v1/people/' + batterId +
                '/stats?stats=vsPlayerTotal&opposingPlayerId=' + pitcherId +
                '&group=hitting';
-  var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(mlbUrl);
-  return fetch(proxyUrl)
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      var splits = data.stats && data.stats[0] && data.stats[0].splits;
-      if (!splits || !splits.length) return null;
-      var s = splits[0].stat || {};
-      var ab = parseInt(s.atBats || 0);
-      if (ab < 1) return null;
-      var h  = parseInt(s.hits        || 0);
-      var hr = parseInt(s.homeRuns    || 0);
-      var bb = parseInt(s.baseOnBalls || 0);
-      var so = parseInt(s.strikeOuts  || 0);
-      var avg = ab > 0 ? h / ab : 0;
-      return {
-        ab: ab, h: h, hr: hr, bb: bb, so: so, avg: avg,
-        str: h + '-' + ab + (hr > 0 ? ', ' + hr + ' HR' : ''),
-        ops: parseFloat(s.ops || 0)
-      };
-    })
-    .catch(function() { return null; });
+
+  function parseVsP(data) {
+    var splits = data.stats && data.stats[0] && data.stats[0].splits;
+    if (!splits || !splits.length) return null;
+    var s = splits[0].stat || {};
+    var ab = parseInt(s.atBats || 0);
+    if (ab < 1) return null;
+    var h  = parseInt(s.hits     || 0);
+    var hr = parseInt(s.homeRuns || 0);
+    var avg = ab > 0 ? h / ab : 0;
+    return {
+      ab: ab, h: h, hr: hr, avg: avg,
+      str: h + '-' + ab + (hr > 0 ? ', ' + hr + ' HR' : ''),
+      ops: parseFloat(s.ops || 0)
+    };
+  }
+
+  // Try corsproxy.io first, then killcors as fallback
+  var proxies = [
+    'https://corsproxy.io/?url=' + encodeURIComponent(mlbUrl),
+    'https://proxy.killcors.com/?url=' + encodeURIComponent(mlbUrl)
+  ];
+
+  function tryProxy(i) {
+    if (i >= proxies.length) return Promise.resolve(null);
+    return fetch(proxies[i])
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(data) {
+        var result = parseVsP(data);
+        return result;
+      })
+      .catch(function() {
+        return tryProxy(i + 1);
+      });
+  }
+
+  return tryProxy(0);
 }
 
 function buildPlayerList(games) {
