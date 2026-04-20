@@ -3,546 +3,665 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>Beat The Streak Helper</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>eBay Card Lister</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#eef3fb;--s1:#fff;--s2:#dce8f8;--s3:#c8dbf5;
-  --bdr:rgba(29,78,216,.18);--bdr2:rgba(29,78,216,.32);
-  --txt:#0f1e3a;--fog:#4a6080;--dim:#b8cce8;
-  --gold:#b87800;--g2:rgba(184,120,0,.1);--g3:rgba(184,120,0,.28);
-  --grn:#15803d;--grn2:rgba(21,128,61,.1);--grn3:rgba(21,128,61,.28);
-  --red:#b91c1c;--r2:rgba(185,28,28,.08);--r3:rgba(185,28,28,.22);
-  --blu:#1d4ed8;--b2:rgba(29,78,216,.1);--b3:rgba(29,78,216,.28);
-  --org:#c45000;--rad:10px;
+  --bg:#f4f6fb;--s1:#fff;--s2:#eaeef6;--s3:#d8e0f0;
+  --bdr:rgba(30,64,175,.15);--bdr2:rgba(30,64,175,.3);
+  --txt:#0f172a;--fog:#475569;--dim:#cbd5e1;
+  --blu:#1e40af;--b2:rgba(30,64,175,.08);--b3:rgba(30,64,175,.24);
+  --grn:#15803d;--g2:rgba(21,128,61,.1);--g3:rgba(21,128,61,.28);
+  --red:#b91c1c;--r2:rgba(185,28,28,.08);--r3:rgba(185,28,28,.24);
+  --gold:#b87800;--go2:rgba(184,120,0,.1);--go3:rgba(184,120,0,.28);
+  --rad:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
-header{position:sticky;top:0;z-index:100;background:rgba(238,243,251,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding-bottom:40px}
+header{position:sticky;top:0;z-index:100;background:rgba(244,246,251,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:9px}
-.logo-ico{width:32px;height:32px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
-.logo-t{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700}
+.logo-ico{width:32px;height:32px;background:var(--blu);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff}
+.logo-t{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700}
 .logo-s{font-size:9px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
-.prize-box{background:var(--g2);border:1px solid var(--g3);border-radius:6px;padding:4px 9px;text-align:center}
-.prize-amt{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--gold);line-height:1}
-.prize-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
+.count-box{background:var(--g2);border:1px solid var(--g3);border-radius:6px;padding:4px 10px;text-align:center}
+.count-amt{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--grn);line-height:1}
+.count-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
 .tabs{background:#fff;border-bottom:1px solid var(--bdr);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 10px}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:9px 11px;font-size:9px;font-weight:600;color:var(--fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;transition:all .15s;flex-shrink:0}
+.tab{padding:11px 13px;font-size:10px;font-weight:600;color:var(--fog);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 .tab.on{color:var(--blu);border-bottom-color:var(--blu)}
-.screen{display:none;padding:12px;max-width:540px;margin:0 auto;padding-bottom:50px}
+.screen{display:none;padding:14px;max-width:640px;margin:0 auto}
 .screen.on{display:block}
-.sh{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--fog);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sh{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--fog);margin-bottom:9px;margin-top:14px;display:flex;align-items:center;gap:8px}
 .sh::after{content:'';flex:1;height:1px;background:var(--bdr)}
-.loading{text-align:center;padding:40px 20px;color:var(--fog)}
-.spin{width:36px;height:36px;border:3px solid var(--bdr);border-top-color:var(--blu);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.load-txt{font-size:13px;font-weight:500}
-.load-sub{font-size:11px;color:var(--fog);margin-top:4px}
-.err-box{background:#fff;border:1px solid var(--r3);border-radius:var(--rad);padding:16px;text-align:center;margin:12px 0}
-.err-icon{font-size:28px;margin-bottom:8px}
-.err-txt{font-size:13px;color:var(--red);font-weight:600;margin-bottom:4px}
-.err-sub{font-size:11px;color:var(--fog);margin-bottom:12px;line-height:1.5}
-.retry-btn{background:var(--blu);color:#fff;border:none;padding:9px 20px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
-.live-bar{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:9px 13px;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between}
-.live-dot{width:8px;height:8px;border-radius:50%;background:var(--grn);animation:pulse 1.5s infinite;flex-shrink:0;margin-right:6px}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.live-txt{font-size:11px;font-weight:600;color:var(--grn);display:flex;align-items:center}
-.live-date{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--blu)}
-.refresh-btn{font-size:10px;color:var(--blu);cursor:pointer;padding:4px 9px;border:1px solid var(--b3);border-radius:5px;background:var(--b2);font-weight:600}
-.gcard{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);overflow:hidden;margin-bottom:10px}
-.gcard.hot{border-color:var(--g3);background:linear-gradient(135deg,#fff 0%,rgba(184,120,0,.04) 100%)}
-.gcard.good{border-color:var(--b3)}
-.ghdr{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid var(--bdr)}
-.gteams{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700}
-.gtime{font-size:10px;color:var(--fog);font-family:monospace;margin-top:2px}
-.gscore-box{text-align:right}
-.gscore{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;line-height:1}
-.gscore-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.08em}
-.ph{color:var(--grn)}.pm{color:var(--gold)}.pl{color:var(--red)}
-.gbody{padding:11px 13px}
-.gpitcher{display:flex;gap:10px;margin-bottom:8px}
-.gpill{flex:1;background:var(--s2);border-radius:7px;padding:8px 10px;border-left:3px solid var(--blu)}
-.gpill.away{border-left-color:var(--red)}
-.gpill-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);font-family:monospace;margin-bottom:3px}
-.gpill-name{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gpill-era{font-size:11px;font-family:monospace;margin-top:1px}
-.gstats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.gstat{background:var(--s2);border-radius:6px;padding:7px;text-align:center}
-.gstat-v{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;line-height:1}
-.gstat-l{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
-.gbtn-row{display:flex;gap:7px;margin-top:9px}
-.gbtn{flex:1;padding:8px;border-radius:7px;border:1px solid var(--bdr);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center}
-.gbtn.p1{background:var(--grn2);border-color:var(--grn3);color:var(--grn)}
-.gbtn.p2{background:var(--b2);border-color:var(--b3);color:var(--blu)}
-.gtip{font-size:11px;color:var(--txt);background:var(--s2);border-radius:7px;padding:8px 10px;margin-top:8px;line-height:1.5}
-.park-tbl{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);overflow:hidden;margin-bottom:10px}
-.park-hd{display:grid;grid-template-columns:1fr 50px 50px 50px;padding:7px 12px;background:var(--s2);border-bottom:1px solid var(--bdr);font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.1em}
-.park-row{display:grid;grid-template-columns:1fr 50px 50px 50px;padding:8px 12px;border-bottom:1px solid var(--bdr);align-items:center}
-.park-row:last-child{border-bottom:none}
-.park-nm{font-size:11px;font-weight:600}
-.park-tm{font-size:9px;color:var(--fog);margin-top:1px}
-.psc{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;text-align:center}
-.sg2{color:var(--grn)}.sy{color:var(--gold)}.sn{color:var(--fog)}.sr{color:var(--red)}
-.streak-disp{text-align:center;padding:18px;background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);margin-bottom:10px}
-.snum{font-family:'Oswald',sans-serif;font-size:70px;font-weight:700;color:var(--blu);line-height:1}
-.slbl{font-size:10px;color:var(--fog);text-transform:uppercase;letter-spacing:.15em;margin-top:4px}
-.sgoal{font-size:10px;color:var(--fog);margin-top:7px}
-.sgoal span{color:var(--blu);font-weight:600}
-.sc-row{display:flex;gap:7px;margin-bottom:10px}
-.scbtn{flex:1;padding:10px;border-radius:var(--rad);border:1px solid var(--bdr);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
-.scbtn:active{transform:scale(.97)}
-.sc-hit{background:var(--grn2);border-color:var(--grn3);color:var(--grn)}
-.sc-miss{background:var(--r2);border-color:var(--r3);color:var(--red)}
-.sc-rst{background:var(--s3);color:var(--fog)}
-.picks-box{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:13px;margin-bottom:10px}
-.pick-slot{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bdr)}
-.pick-slot:last-child{border-bottom:none}
-.pick-n{font-family:'Oswald',sans-serif;font-size:12px;color:var(--fog);min-width:18px}
-.pick-player{flex:1;min-width:0}
-.pick-nm{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pick-d{font-size:9px;color:var(--fog);margin-top:2px}
-.pick-p{font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;color:var(--blu)}
-.pick-x{width:22px;height:22px;border:none;background:var(--r2);border-radius:4px;color:var(--red);cursor:pointer;font-size:11px;flex-shrink:0}
-.acc-box{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:14px;margin-bottom:10px}
-.acc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
-.acc-stat{text-align:center;background:var(--s2);border-radius:6px;padding:8px 4px}
-.acc-num{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;line-height:1;color:var(--txt)}
-.acc-lbl{font-size:8px;color:var(--fog);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
-.acc-bar-bg{height:8px;background:var(--dim);border-radius:99px;overflow:hidden}
-.acc-bar-fill{height:100%;border-radius:99px;background:var(--grn);transition:width .6s ease}
-.manual-pick-box{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:13px;margin-bottom:10px}
-.manual-pick-box input{width:100%;padding:8px 10px;border-radius:6px;border:1px solid var(--bdr2);background:var(--s3);color:var(--txt);font-family:inherit;font-size:12px;margin-bottom:7px}
-.hist-item{display:flex;align-items:center;gap:9px;padding:8px 13px;border-bottom:1px solid var(--bdr);font-size:11px}
-.hist-item:last-child{border-bottom:none}
-.hist-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.hit-dot{background:var(--grn)}.miss-dot{background:var(--red)}
-.hit-res{color:var(--grn);font-family:'Oswald',sans-serif;font-size:12px;font-weight:700}
-.miss-res{color:var(--red);font-family:'Oswald',sans-serif;font-size:12px;font-weight:700}
-.ibox{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:11px 13px;margin-bottom:10px;font-size:11px;color:var(--fog);line-height:1.7}
+.sh:first-child{margin-top:0}
+.card{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:14px;margin-bottom:12px}
+.ibox{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:11px 13px;margin-bottom:10px;font-size:12px;color:var(--fog);line-height:1.6}
 .ibox strong{color:var(--txt)}
-.ibox.gold{border-left:3px solid var(--gold)}
-.ibox.grn{border-left:3px solid var(--grn)}
-.ibox.red{border-left:3px solid var(--red)}
 .ibox.blu{border-left:3px solid var(--blu)}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a2233;color:#fff;padding:9px 18px;border-radius:99px;font-size:11px;font-weight:600;z-index:500;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:88vw;text-align:center}
+.ibox.grn{border-left:3px solid var(--grn)}
+.ibox.gold{border-left:3px solid var(--gold)}
+.ibox.red{border-left:3px solid var(--red)}
+.btn{display:inline-block;padding:10px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .1s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.btn:active{transform:scale(.97)}
+.btn-pri{background:var(--blu);color:#fff}
+.btn-grn{background:var(--grn);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-ghost{background:var(--s2);color:var(--txt);border:1px solid var(--bdr)}
+.btn-wide{display:block;width:100%;padding:13px}
+.drop-zone{border:2px dashed var(--bdr2);border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;background:#fff;transition:all .2s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.drop-zone.dragging{border-color:var(--blu);background:var(--b2)}
+.drop-ico{font-size:40px;margin-bottom:8px}
+.drop-t{font-size:14px;font-weight:600;color:var(--txt)}
+.drop-s{font-size:11px;color:var(--fog);margin-top:4px}
+.preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.preview{position:relative;aspect-ratio:1;background:var(--s2);border-radius:7px;overflow:hidden}
+.preview img{width:100%;height:100%;object-fit:cover}
+.preview-x{position:absolute;top:4px;right:4px;width:22px;height:22px;border:none;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+input[type="file"]{display:none}
+.form-grp{margin-bottom:10px}
+.form-grp label{display:block;font-size:10px;font-weight:600;color:var(--fog);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.form-grp input,.form-grp select,.form-grp textarea{width:100%;padding:9px 11px;border:1px solid var(--bdr2);border-radius:6px;background:#fff;color:var(--txt);font-family:inherit;font-size:13px}
+.form-grp textarea{min-height:70px;resize:vertical;font-family:inherit}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.title-char{font-size:10px;color:var(--fog);text-align:right;margin-top:2px}
+.title-char.bad{color:var(--red);font-weight:600}
+.loading{text-align:center;padding:24px;color:var(--fog)}
+.spin{width:34px;height:34px;border:3px solid var(--bdr);border-top-color:var(--blu);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err-box{background:#fff;border:1px solid var(--r3);border-radius:var(--rad);padding:14px;margin:12px 0}
+.err-t{font-size:13px;color:var(--red);font-weight:600;margin-bottom:6px}
+.err-d{font-family:monospace;font-size:10px;background:var(--r2);padding:8px;border-radius:5px;word-break:break-all;white-space:pre-wrap;max-height:150px;overflow:auto}
+.success-box{background:var(--g2);border:1px solid var(--g3);border-radius:var(--rad);padding:11px 13px;margin-bottom:10px;font-size:12px;color:var(--grn);font-weight:600}
+.list-item{background:#fff;border:1px solid var(--bdr);border-radius:var(--rad);padding:11px 13px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.list-item-thumb{width:50px;height:50px;background:var(--s2);border-radius:6px;flex-shrink:0;overflow:hidden}
+.list-item-thumb img{width:100%;height:100%;object-fit:cover}
+.list-item-main{flex:1;min-width:0}
+.list-item-title{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-item-sub{font-size:10px;color:var(--fog);margin-top:2px;font-family:monospace}
+.list-item-price{font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;color:var(--grn)}
+.list-item-del{width:28px;height:28px;border:none;background:var(--r2);color:var(--red);border-radius:5px;cursor:pointer;font-size:12px;flex-shrink:0}
+.ver-tag{position:fixed;bottom:6px;right:8px;font-size:9px;color:var(--fog);font-family:monospace;background:rgba(255,255,255,.7);padding:2px 6px;border-radius:4px;z-index:99}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#0f172a;color:#fff;padding:10px 20px;border-radius:99px;font-size:12px;font-weight:600;z-index:500;transition:transform .3s;white-space:nowrap;max-width:88vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.grn{background:var(--grn)}
 .toast.red{background:var(--red)}
+.key-status{display:flex;align-items:center;gap:6px;font-size:11px;padding:8px 11px;border-radius:5px;margin-bottom:10px;word-break:break-word}
+.key-status.ok{background:var(--g2);color:var(--grn)}
+.key-status.bad{background:var(--r2);color:var(--red)}
+.key-status.unknown{background:var(--s2);color:var(--fog)}
+.key-input-row{display:flex;gap:6px;margin-bottom:10px}
+.key-input-row input{flex:1;padding:9px 11px;border:1px solid var(--bdr2);border-radius:6px;font-family:monospace;font-size:11px}
+#noKeyBanner{display:none;background:var(--go2);border:1px solid var(--go3);border-radius:var(--rad);padding:10px 14px;margin:12px 14px;font-size:12px;color:var(--gold);text-align:center;max-width:640px}
+@media (min-width:680px){#noKeyBanner{margin-left:auto;margin-right:auto}}
 </style>
 </head>
 <body>
+<div class="ver-tag">v4 ios tap</div>
 <div class="toast" id="toast"></div>
 <header>
   <div class="logo">
-    <div class="logo-ico">&#x26BE;</div>
-    <div><div class="logo-t">Beat The Streak</div><div class="logo-s">ESPN Live Data</div></div>
+    <div class="logo-ico">&#x1F3C6;</div>
+    <div><div class="logo-t">Card Lister</div><div class="logo-s">AI-Powered eBay CSV</div></div>
   </div>
-  <div class="prize-box"><div class="prize-amt">$5.6M</div><div class="prize-l">57-game prize</div></div>
+  <div class="count-box"><div class="count-amt" id="countNum">0</div><div class="count-l">Cards</div></div>
 </header>
+
 <div class="tabs">
-  <div class="tab on" id="t-picks">&#x1F3AF; Today's Games</div>
-  <div class="tab" id="t-parks">&#x1F3DF; Ballparks</div>
-  <div class="tab" id="t-streak">&#x1F525; My Streak</div>
-  <div class="tab" id="t-guide">&#x1F4D6; Strategy</div>
+  <div class="tab on" id="t-new">&#x2795; New Card</div>
+  <div class="tab" id="t-list">&#x1F4CB; My List</div>
+  <div class="tab" id="t-export">&#x1F4E5; Export CSV</div>
+  <div class="tab" id="t-settings">&#x2699;&#xFE0F; Settings</div>
 </div>
 
-<div class="screen on" id="s-picks">
-  <div class="live-bar">
-    <div class="live-txt"><div class="live-dot"></div>ESPN LIVE</div>
-    <div class="live-date" id="todayDate">Loading...</div>
-    <div class="refresh-btn" id="refreshBtn">&#x21BB; Refresh</div>
+<div id="noKeyBanner">&#x26A0;&#xFE0F; No Gemini API key set. Go to <strong>Settings</strong> to paste your key.</div>
+
+<div class="screen on" id="s-new">
+  <div class="sh">Upload Card Photos</div>
+  <div class="ibox blu">Upload <strong>front and back</strong> (2 photos recommended). The AI will identify the card and generate a listing ready for eBay.</div>
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-ico">&#x1F4F7;</div>
+    <div class="drop-t">Tap to choose photos</div>
+    <div class="drop-s">or drag and drop up to 4 images</div>
   </div>
-  <div id="gameWrap">
-    <div class="loading"><div class="spin"></div><div class="load-txt">Fetching today's games...</div><div class="load-sub">Connecting to ESPN</div></div>
+  <input type="file" id="fileInput" accept="image/*" multiple/>
+  <div class="preview-grid" id="previewGrid"></div>
+  <div id="identifyBtnWrap" style="display:none;margin-top:14px">
+    <button class="btn btn-pri btn-wide" id="identifyBtn">&#x2728; Identify with AI</button>
   </div>
+  <div id="resultWrap"></div>
 </div>
 
-<div class="screen" id="s-parks">
-  <div class="ibox grn" style="margin-bottom:11px"><strong>Park factors vs league avg.</strong> 100 = average. Over 106 = hitter friendly. Under 94 = pitcher's park.</div>
-  <div class="sh">MLB Ballpark Factors</div>
-  <div class="park-tbl">
-    <div class="park-hd"><div>Park / Team</div><div style="text-align:center">Hit+</div><div style="text-align:center">HR+</div><div style="text-align:center">Rate</div></div>
-    <div id="parkRows"></div>
-  </div>
+<div class="screen" id="s-list">
+  <div class="sh">My Card List</div>
+  <div id="listWrap"><div class="ibox">No cards added yet. Go to <strong>+ New Card</strong> to get started.</div></div>
 </div>
 
-<div class="screen" id="s-streak">
-  <div class="streak-disp">
-    <div class="snum" id="streakNum">0</div>
-    <div class="slbl">Current Streak</div>
-    <div class="sgoal">Goal: <span>57</span> &middot; <span id="remain">57</span> to go &middot; <span id="saveLbl" style="color:var(--grn)"></span></div>
-  </div>
-  <div class="sh">Today's Picks</div>
-  <div class="picks-box">
-    <div class="pick-slot">
-      <div class="pick-n">P1</div>
-      <div class="pick-player"><div class="pick-nm" id="p1name">-- No pick --</div><div class="pick-d" id="p1det">Go to Today's Games tab and tap Pick 1</div></div>
-      <div class="pick-p" id="p1prob">--</div>
-      <button class="pick-x" id="clrPick1">&#x2715;</button>
-    </div>
-    <div class="pick-slot">
-      <div class="pick-n">P2</div>
-      <div class="pick-player"><div class="pick-nm" id="p2name">-- Double down --</div><div class="pick-d" id="p2det">Optional second pick</div></div>
-      <div class="pick-p" id="p2prob">--</div>
-      <button class="pick-x" id="clrPick2">&#x2715;</button>
-    </div>
-  </div>
-  <div class="sh">Record Result</div>
-  <div class="sc-row">
-    <button class="scbtn sc-hit" id="btnHit">&#x2713; Got a Hit</button>
-    <button class="scbtn sc-miss" id="btnMiss">&#x2715; No Hit</button>
-    <button class="scbtn sc-rst" id="btnReset">Reset</button>
-  </div>
-  <div class="sh">My Accuracy</div>
-  <div class="acc-box">
-    <div class="acc-row">
-      <div class="acc-stat"><div class="acc-num" id="accPct">--</div><div class="acc-lbl">Hit Rate</div></div>
-      <div class="acc-stat"><div class="acc-num" id="accHits" style="color:var(--grn)">0</div><div class="acc-lbl">Hits</div></div>
-      <div class="acc-stat"><div class="acc-num" id="accMiss" style="color:var(--red)">0</div><div class="acc-lbl">Misses</div></div>
-      <div class="acc-stat"><div class="acc-num" id="accTotal">0</div><div class="acc-lbl">Total</div></div>
-    </div>
-    <div class="acc-bar-bg"><div class="acc-bar-fill" id="accBar" style="width:0%"></div></div>
-    <div style="font-size:9px;color:var(--fog);margin-top:6px;text-align:center" id="accLabel">Record results above to track accuracy</div>
-  </div>
-  <div class="sh">Add Manual Pick</div>
-  <div class="manual-pick-box">
-    <div style="font-size:11px;color:var(--fog);margin-bottom:8px">Add a pick manually:</div>
-    <input id="manPickName" placeholder="Player name (e.g. Manny Machado)"/>
-    <input id="manPickTeam" placeholder="Team (e.g. San Diego)"/>
-    <div style="display:flex;gap:7px">
-      <button id="manPick1" style="flex:1;padding:8px;background:var(--grn2);border:1px solid var(--grn3);color:var(--grn);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">Set as Pick 1</button>
-      <button id="manPick2" style="flex:1;padding:8px;background:var(--b2);border:1px solid var(--b3);color:var(--blu);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">Set as Pick 2</button>
-    </div>
-  </div>
-  <div class="sh">History</div>
-  <div class="park-tbl"><div id="histList" style="padding:4px 0"></div></div>
+<div class="screen" id="s-export">
+  <div class="sh">Export to eBay CSV</div>
+  <div class="ibox grn"><strong>How to use this CSV on eBay:</strong><br>1. Download the CSV below<br>2. On eBay, go to <strong>Seller Hub &rarr; Reports &rarr; Uploads</strong><br>3. Select "Create draft listings" &rarr; upload this file<br>4. Open each draft, add photos, and publish</div>
+  <div class="ibox blu"><strong>Format:</strong> All eBay item specifics filled to maximize search visibility and the lightning bolt badge.</div>
+  <button class="btn btn-grn btn-wide" id="exportBtn">&#x1F4E5; Download CSV (<span id="exportCount">0</span> cards)</button>
+  <div style="height:10px"></div>
+  <button class="btn btn-red btn-wide" id="clearBtn">&#x1F5D1;&#xFE0F; Clear all cards</button>
 </div>
 
-<div class="screen" id="s-guide">
-  <div class="sh">The Winning Formula</div>
-  <div class="ibox gold"><strong>Contact over power.</strong> Luis Arraez hits .308 and puts almost every ball in play. Aaron Judge gets walked and pitched around. For BTS, contact rate beats power every time.</div>
-  <div class="ibox grn"><strong>Great BTS pick checklist:</strong><br>&#x2713; Batting avg <strong>.285+</strong><br>&#x2713; Strikeout rate <strong>under 18%</strong><br>&#x2713; Facing pitcher with <strong>ERA 4.00+</strong><br>&#x2713; Playing in <strong>hitter-friendly park</strong><br>&#x2713; Good career history vs this pitcher</div>
-  <div class="ibox blu"><strong>Double Down:</strong> Only when BOTH picks are 68%+. If either is under 65%, go single pick.</div>
-  <div class="ibox red"><strong>Avoid:</strong><br>&#x2717; Power hitters in pitcher's parks<br>&#x2717; Anyone vs ace (ERA under 2.50)<br>&#x2717; Player mid-slump (0-for-12+)<br>&#x2717; Big name without checking lineup</div>
-  <div class="ibox">&#x1F6E1; <strong>Streak Saver</strong> activates at 10-game streak automatically.</div>
+<div class="screen" id="s-settings">
+  <div class="sh">Gemini API Key</div>
+  <div class="ibox blu">Paste your Gemini API key below. Get one free at <strong>aistudio.google.com</strong>. Your key is stored only on this device and used only to call Gemini directly from your browser.</div>
+  <div class="key-input-row">
+    <input type="password" id="keyInput" placeholder="AIzaSy... (paste here)" autocomplete="off"/>
+    <button class="btn btn-pri" id="saveKeyBtn">Save</button>
+  </div>
+  <div id="keyStatus" class="key-status unknown">No key tested yet</div>
+  <button class="btn btn-ghost btn-wide" id="testKeyBtn">&#x1F504; Test API Key</button>
+  <div class="sh">About</div>
+  <div class="ibox">
+    <strong>How it works:</strong><br>
+    &bull; You upload photos of a card<br>
+    &bull; Gemini AI identifies it (called directly from your browser)<br>
+    &bull; The app generates a fully-filled eBay listing<br>
+    &bull; You review/edit, then add to your list<br>
+    &bull; When ready, export all cards as a CSV to upload to eBay<br><br>
+    <strong>Cost:</strong> Free (Gemini free tier gives 250 requests/day)
+  </div>
 </div>
 
 <script>
-var PARKS = [
-  {name:'Coors Field',team:'Colorado Rockies',hit:117,hr:126,rating:'great'},
-  {name:'Fenway Park',team:'Boston Red Sox',hit:110,hr:108,rating:'great'},
-  {name:'Great American',team:'Cincinnati Reds',hit:109,hr:115,rating:'great'},
-  {name:'Wrigley Field',team:'Chicago Cubs',hit:104,hr:105,rating:'good'},
-  {name:'Citizens Bank Park',team:'Philadelphia',hit:103,hr:111,rating:'good'},
-  {name:'Dodger Stadium',team:'LA Dodgers',hit:103,hr:101,rating:'good'},
-  {name:'Minute Maid Park',team:'Houston Astros',hit:102,hr:104,rating:'good'},
-  {name:'Globe Life Field',team:'Texas Rangers',hit:100,hr:103,rating:'neutral'},
-  {name:'Truist Park',team:'Atlanta Braves',hit:100,hr:104,rating:'neutral'},
-  {name:'Rogers Centre',team:'Toronto',hit:100,hr:100,rating:'neutral'},
-  {name:'Oracle Park',team:'San Francisco',hit:101,hr:92,rating:'neutral'},
-  {name:'Yankee Stadium',team:'NY Yankees',hit:98,hr:110,rating:'neutral'},
-  {name:'Kauffman Stadium',team:'KC Royals',hit:98,hr:94,rating:'neutral'},
-  {name:'Progressive Field',team:'Cleveland',hit:97,hr:98,rating:'neutral'},
-  {name:'Tropicana Field',team:'Tampa Bay',hit:97,hr:95,rating:'bad'},
-  {name:'Nationals Park',team:'Washington',hit:96,hr:103,rating:'bad'},
-  {name:'Angel Stadium',team:'LA Angels',hit:95,hr:93,rating:'bad'},
-  {name:'Petco Park',team:'San Diego',hit:94,hr:88,rating:'bad'},
-  {name:'T-Mobile Park',team:'Seattle',hit:93,hr:91,rating:'bad'},
-  {name:'Oakland Coliseum',team:'Athletics',hit:96,hr:88,rating:'bad'}
-];
-
-var PARK_FACTORS = {
-  'rockies':117,'colorado':117,'red sox':110,'boston':110,'reds':109,'cincinnati':109,
-  'cubs':104,'phillies':103,'philadelphia':103,'dodgers':103,'astros':102,'houston':102,
-  'rangers':100,'texas':100,'braves':100,'atlanta':100,'blue jays':100,'toronto':100,
-  'giants':101,'san francisco':101,'yankees':98,'royals':98,'kansas city':98,
-  'guardians':97,'cleveland':97,'rays':97,'tampa':97,'nationals':96,'washington':96,
-  'angels':95,'padres':94,'san diego':94,'mariners':93,'seattle':93,
-  'athletics':96,'oakland':96,'white sox':98,'tigers':98,'detroit':98,
-  'twins':99,'minnesota':99,'orioles':98,'baltimore':98,'mets':97,
-  'cardinals':99,'st. louis':99,'brewers':99,'milwaukee':99,
-  'pirates':98,'pittsburgh':98,'marlins':94,'miami':94,'diamondbacks':100,'arizona':100
-};
-
-function getParkFactor(name) {
-  if (!name) return 100;
-  var t = name.toLowerCase();
-  var keys = Object.keys(PARK_FACTORS);
-  for (var i = 0; i < keys.length; i++) {
-    if (t.indexOf(keys[i]) >= 0) return PARK_FACTORS[keys[i]];
-  }
-  return 100;
-}
-
 var ls = {
   get: function(k) { try { return JSON.parse(localStorage.getItem(k)); } catch(e) { return null; } },
-  set: function(k,v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+  set: function(k,v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} },
+  getRaw: function(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
+  setRaw: function(k,v) { try { localStorage.setItem(k, v); } catch(e) {} }
 };
 
-var streak = ls.get('bts_streak') || 0;
-var history = ls.get('bts_history') || [];
-var picks = ls.get('bts_picks') || [null,null];
+var cards = ls.get('cards') || [];
+var pendingImages = [];
+
+var GEMINI_MODEL = 'gemini-2.5-flash';
+var GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent';
+
+var SYSTEM_PROMPT = "You are an expert sports card identifier and eBay lister. You will see one or more photos of a sports trading card (front, back, possibly a grading slab). Identify the card with extreme precision and return ONLY a valid JSON object matching this exact schema - no prose, no markdown fences, no explanation:\n\n" +
+"{\n" +
+"  \"player\": \"Full player name (e.g. 'Mike Trout')\",\n" +
+"  \"year\": \"4-digit year of the set (e.g. '2011')\",\n" +
+"  \"manufacturer\": \"Topps | Panini | Bowman | Upper Deck | Donruss | Leaf | Fleer | Score | other\",\n" +
+"  \"set\": \"Set name (e.g. 'Topps Update', 'Panini Prizm', 'Bowman Chrome Draft')\",\n" +
+"  \"cardNumber\": \"Card number as shown (e.g. 'US175', '1', '#BDP12')\",\n" +
+"  \"parallel\": \"Parallel/variety if any (e.g. 'Base', 'Refractor', 'Silver Prizm', 'Gold /10', 'Red Wave')\",\n" +
+"  \"sport\": \"Baseball | Basketball | Football | Hockey | Soccer | Other\",\n" +
+"  \"league\": \"MLB | NBA | NFL | NHL | MLS | NCAA | Other\",\n" +
+"  \"team\": \"Team name shown on card\",\n" +
+"  \"isRookie\": true or false,\n" +
+"  \"isAutograph\": true or false,\n" +
+"  \"isMemorabilia\": true or false,\n" +
+"  \"memorabiliaType\": \"Jersey | Patch | Bat | Ball | None\",\n" +
+"  \"isGraded\": true or false,\n" +
+"  \"grader\": \"PSA | BGS | SGC | CGC | None\",\n" +
+"  \"grade\": \"Grade as string (e.g. '10', '9.5', '8'), or 'None' if ungraded\",\n" +
+"  \"certNumber\": \"Grading cert number if visible, else ''\",\n" +
+"  \"cardCondition\": \"Near Mint or Better | Excellent | Very Good | Poor | Graded\",\n" +
+"  \"cardThickness\": \"35 Pt. | 55 Pt. | 75 Pt. | 100 Pt. | 130 Pt. | 180 Pt. | Unknown\",\n" +
+"  \"features\": \"Comma-separated relevant features\",\n" +
+"  \"vintage\": true or false,\n" +
+"  \"originalReprint\": \"Original | Reprint\",\n" +
+"  \"language\": \"English\",\n" +
+"  \"era\": \"Modern (2000-Now) | Pre-Modern (1970-1999) | Vintage (Pre-1970)\",\n" +
+"  \"season\": \"Year of the season\",\n" +
+"  \"title\": \"eBay title MAX 80 CHARACTERS, keyword-packed: 'YEAR SET PLAYER CARDNUM PARALLEL ROOKIE TEAM SPORT'\",\n" +
+"  \"description\": \"4-6 sentence buyer-friendly description. Professional tone.\",\n" +
+"  \"suggestedPrice\": \"Estimated market value in USD as a number (e.g. 24.99). Conservative. Round to .99.\",\n" +
+"  \"confidence\": \"high | medium | low\"\n" +
+"}\n\n" +
+"CRITICAL RULES:\n" +
+"- Title MUST be at most 80 characters.\n" +
+"- Return ONLY the JSON object. No preamble, no backticks.\n" +
+"- For ungraded cards, set grader to 'None', grade to 'None', certNumber to ''.\n" +
+"- Keep every field filled - never null/undefined.";
+
+function showToast(msg, type) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type === 'grn' ? ' grn' : type === 'red' ? ' red' : '');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(function(){ el.className = 'toast'; }, 3500);
+}
+
+function goTab(n) {
+  ['new','list','export','settings'].forEach(function(t) {
+    var s = document.getElementById('s-'+t);
+    var tb = document.getElementById('t-'+t);
+    if (s) s.className = 'screen' + (t === n ? ' on' : '');
+    if (tb) tb.className = 'tab' + (t === n ? ' on' : '');
+  });
+  if (n === 'list') renderList();
+  if (n === 'export') document.getElementById('exportCount').textContent = cards.length;
+  if (n === 'settings') {
+    var k = ls.getRaw('gemini_key') || '';
+    if (k) document.getElementById('keyInput').value = k;
+  }
+}
+
+function updateCount() {
+  document.getElementById('countNum').textContent = cards.length;
+}
+
+function updateNoKeyBanner() {
+  var key = ls.getRaw('gemini_key');
+  document.getElementById('noKeyBanner').style.display = key ? 'none' : 'block';
+}
+
+function compressImage(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        var maxDim = 1400;
+        var w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round(h * (maxDim / w)); w = maxDim; }
+          else { w = Math.round(w * (maxDim / h)); h = maxDim; }
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        resolve({ dataUrl: dataUrl, mimeType: 'image/jpeg', base64: dataUrl.split(',')[1] });
+      };
+      img.onerror = function() { reject(new Error('Could not load image')); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function() { reject(new Error('Could not read file')); };
+    reader.readAsDataURL(file);
+  });
+}
+
+function setupUpload() {
+  var dz = document.getElementById('dropZone');
+  var fi = document.getElementById('fileInput');
+  dz.addEventListener('click', function() { fi.click(); });
+  dz.addEventListener('dragover', function(e) { e.preventDefault(); dz.classList.add('dragging'); });
+  dz.addEventListener('dragleave', function() { dz.classList.remove('dragging'); });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault(); dz.classList.remove('dragging');
+    handleFiles(e.dataTransfer.files);
+  });
+  fi.addEventListener('change', function() {
+    handleFiles(fi.files); fi.value = '';
+  });
+}
+
+async function handleFiles(fileList) {
+  var files = Array.from(fileList || []).filter(function(f) { return f.type && f.type.indexOf('image/') === 0; });
+  if (!files.length) { showToast('No valid images selected', 'red'); return; }
+  if (pendingImages.length + files.length > 4) {
+    showToast('Max 4 photos per card', 'red'); return;
+  }
+  showToast('Processing ' + files.length + ' photo(s)...');
+  for (var i = 0; i < files.length; i++) {
+    try {
+      var result = await compressImage(files[i]);
+      pendingImages.push(result);
+    } catch (e) {
+      showToast('Skipped: ' + e.message, 'red');
+    }
+  }
+  renderPreviews();
+}
+
+function renderPreviews() {
+  var grid = document.getElementById('previewGrid');
+  var btnWrap = document.getElementById('identifyBtnWrap');
+  grid.innerHTML = pendingImages.map(function(img, i) {
+    return '<div class="preview"><img src="' + img.dataUrl + '"/><button class="preview-x" data-i="' + i + '">&#x2715;</button></div>';
+  }).join('');
+  btnWrap.style.display = pendingImages.length ? 'block' : 'none';
+  var xbtns = grid.querySelectorAll('.preview-x');
+  for (var j = 0; j < xbtns.length; j++) {
+    xbtns[j].addEventListener('click', function() {
+      var idx = parseInt(this.getAttribute('data-i'), 10);
+      pendingImages.splice(idx, 1);
+      renderPreviews();
+    });
+  }
+}
+
+async function callGemini(apiKey, images) {
+  var parts = [];
+  for (var i = 0; i < images.length; i++) {
+    parts.push({ inline_data: { mime_type: images[i].mimeType || 'image/jpeg', data: images[i].base64 } });
+  }
+  parts.push({ text: SYSTEM_PROMPT });
+  var body = {
+    contents: [{ parts: parts }],
+    generationConfig: { temperature: 0.2, maxOutputTokens: 2048, responseMimeType: 'application/json' }
+  };
+  var r = await fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+    body: JSON.stringify(body)
+  });
+  var text = await r.text();
+  if (!r.ok) throw new Error('Gemini HTTP ' + r.status + ': ' + text.slice(0, 500));
+  try { return JSON.parse(text); }
+  catch (e) { throw new Error('Gemini returned non-JSON: ' + text.slice(0, 300)); }
+}
+
+function extractCardJson(geminiResp) {
+  var candidates = geminiResp.candidates || [];
+  if (!candidates.length) throw new Error('Gemini returned no candidates: ' + JSON.stringify(geminiResp).slice(0, 400));
+  var parts = (candidates[0].content && candidates[0].content.parts) || [];
+  if (!parts.length) throw new Error('Gemini returned candidate with no parts');
+  var text = '';
+  for (var i = 0; i < parts.length; i++) if (parts[i].text) text += parts[i].text;
+  if (!text) throw new Error('Gemini returned no text');
+  text = text.trim();
+  if (text.indexOf('```') === 0) {
+    text = text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+  }
+  try { return JSON.parse(text); }
+  catch (e) { throw new Error('Could not parse Gemini JSON: ' + text.slice(0, 300)); }
+}
+
+async function identifyCard() {
+  if (!pendingImages.length) { showToast('Upload at least one photo', 'red'); return; }
+  var apiKey = ls.getRaw('gemini_key');
+  if (!apiKey) {
+    showToast('Set your Gemini API key in Settings first', 'red');
+    goTab('settings');
+    return;
+  }
+  var resultWrap = document.getElementById('resultWrap');
+  resultWrap.innerHTML = '<div class="loading"><div class="spin"></div><div>Analyzing card with Gemini AI...<br><small>Usually takes 5-15 seconds</small></div></div>';
+  try {
+    var resp = await callGemini(apiKey, pendingImages);
+    var card = extractCardJson(resp);
+    renderCardReview(card, pendingImages.slice());
+  } catch (e) {
+    resultWrap.innerHTML = '<div class="err-box"><div class="err-t">&#x26A0;&#xFE0F; Could not identify card</div><div class="err-d">' + (e.message || String(e)) + '</div><button class="btn btn-pri" id="retryIdBtn" style="margin-top:10px">&#x21BB; Retry</button></div>';
+    var r = document.getElementById('retryIdBtn');
+    if (r) r.addEventListener('click', identifyCard);
+  }
+}
+
+function renderCardReview(card, imgs) {
+  var resultWrap = document.getElementById('resultWrap');
+  var conf = card.confidence || 'medium';
+  var html = '<div class="success-box">&#x2728; Card identified (' + conf + ' confidence). Review and edit below.</div>';
+  html += '<div class="card"><div class="sh">Title (eBay listing)</div>';
+  html += '<div class="form-grp"><textarea id="f-title" maxlength="80" style="min-height:50px">' + escapeH(card.title || '') + '</textarea><div class="title-char" id="titleChar"></div></div>';
+
+html += ‘<div class="sh">Core Info</div>’;
+html += ‘<div class="form-row"><div class="form-grp"><label>Player</label><input id="f-player" value="' + escapeH(card.player||'') + '"/></div>’;
+html += ‘<div class="form-grp"><label>Year</label><input id="f-year" value="' + escapeH(card.year||'') + '"/></div></div>’;
+html += ‘<div class="form-row"><div class="form-grp"><label>Manufacturer</label><input id="f-mfr" value="' + escapeH(card.manufacturer||'') + '"/></div>’;
+html += ‘<div class="form-grp"><label>Set</label><input id="f-set" value="' + escapeH(card.set||'') + '"/></div></div>’;
+html += ‘<div class="form-row"><div class="form-grp"><label>Card #</label><input id="f-num" value="' + escapeH(card.cardNumber||'') + '"/></div>’;
+html += ‘<div class="form-grp"><label>Parallel</label><input id="f-par" value="' + escapeH(card.parallel||'') + '"/></div></div>’;
+html += ‘<div class="form-row-3"><div class="form-grp"><label>Sport</label><input id="f-sport" value="' + escapeH(card.sport||'') + '"/></div>’;
+html += ‘<div class="form-grp"><label>League</label><input id="f-league" value="' + escapeH(card.league||'') + '"/></div>’;
+html += ‘<div class="form-grp"><label>Team</label><input id="f-team" value="' + escapeH(card.team||'') + '"/></div></div>’;
+html += ‘<div class="sh">Attributes</div>’;
+html += ‘<div class="form-row-3"><div class="form-grp"><label>Rookie?</label><select id="f-rookie"><option value=“Yes”’ + (card.isRookie?’ selected’:’’) + ‘>Yes</option><option value=“No”’ + (!card.isRookie?’ selected’:’’) + ‘>No</option></select></div>’;
+html += ‘<div class="form-grp"><label>Autograph?</label><select id="f-auto"><option value=“Yes”’ + (card.isAutograph?’ selected’:’’) + ‘>Yes</option><option value=“No”’ + (!card.isAutograph?’ selected’:’’) + ‘>No</option></select></div>’;
+html += ‘<div class="form-grp"><label>Memorabilia?</label><select id="f-mem"><option value=“Yes”’ + (card.isMemorabilia?’ selected’:’’) + ‘>Yes</option><option value=“No”’ + (!card.isMemorabilia?’ selected’:’’) + ‘>No</option></select></div></div>’;
+html += ‘<div class="sh">Grading</div>’;
+html += ‘<div class="form-row-3"><div class="form-grp"><label>Graded?</label><select id="f-graded"><option value=“Yes”’ + (card.isGraded?’ selected’:’’) + ‘>Yes</option><option value=“No”’ + (!card.isGraded?’ selected’:’’) + ‘>No</option></select></div>’;
+html += ‘<div class="form-grp"><label>Grader</label><input id="f-grader" value="' + escapeH(card.grader||'None') + '"/></div>’;
+html += ‘<div class="form-grp"><label>Grade</label><input id="f-grade" value="' + escapeH(card.grade||'None') + '"/></div></div>’;
+html += ‘<div class="form-grp"><label>Cert Number</label><input id="f-cert" value="' + escapeH(card.certNumber||'') + '"/></div>’;
+html += ‘<div class="sh">Condition & Specs</div>’;
+html += ‘<div class="form-row"><div class="form-grp"><label>Card Condition</label><input id="f-cond" value="' + escapeH(card.cardCondition||'') + '"/></div>’;
+html += ‘<div class="form-grp"><label>Card Thickness</label><input id="f-thick" value="' + escapeH(card.cardThickness||'') + '"/></div></div>’;
+html += ‘<div class="form-grp"><label>Features (comma separated)</label><input id="f-feat" value="' + escapeH(card.features||'') + '"/></div>’;
+html += ‘<div class="sh">Price & Description</div>’;
+html += ‘<div class="form-grp"><label>Suggested Price (USD)</label><input id="f-price" type="text" inputmode="decimal" value="' + escapeH(String(card.suggestedPrice||'')) + '"/></div>’;
+html += ‘<div class="form-grp"><label>Description</label><textarea id="f-desc">’ + escapeH(card.description||’’) + ‘</textarea></div>’;
+html += ‘<div style="display:flex;gap:8px;margin-top:14px">’;
+html += ‘<button class="btn btn-ghost" id="cancelAddBtn" style="flex:1">✕ Cancel</button>’;
+html += ‘<button class="btn btn-grn" id="saveCardBtn" style="flex:2">✓ Add to My List</button>’;
+html += ‘</div></div>’;
+resultWrap.innerHTML = html;
+
+function updateTitleChar() {
+var t = document.getElementById(‘f-title’).value;
+var el = document.getElementById(‘titleChar’);
+el.textContent = t.length + ’ / 80 characters’ + (t.length > 80 ? ’ (TOO LONG)’ : ‘’);
+el.className = ‘title-char’ + (t.length > 80 ? ’ bad’ : ‘’);
+}
+document.getElementById(‘f-title’).addEventListener(‘input’, updateTitleChar);
+updateTitleChar();
+document.getElementById(‘cancelAddBtn’).addEventListener(‘click’, function() {
+if (!confirm(‘Discard this card?’)) return;
+resultWrap.innerHTML = ‘’;
+pendingImages = [];
+renderPreviews();
+});
+document.getElementById(‘saveCardBtn’).addEventListener(‘click’, function() {
+saveCardFromForm(imgs, card);
+});
+}
+
+function escapeH(s) {
+return String(s == null ? ‘’ : s).replace(/[&<>”’]/g, function(c) {
+return { ‘&’:’&’,’<’:’<’,’>’:’>’,’”’:’"’,”’”:’'’ }[c];
+});
+}
+
+function saveCardFromForm(imgs, originalCard) {
+function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ‘’; }
+var title = v(‘f-title’);
+if (title.length > 80) { showToast(‘Title too long (max 80 chars)’, ‘red’); return; }
+if (!title) { showToast(‘Title is required’, ‘red’); return; }
+var price = parseFloat(v(‘f-price’));
+if (isNaN(price) || price <= 0) { showToast(‘Valid price required’, ‘red’); return; }
+
+var card = {
+id: ‘c_’ + Date.now() + ‘_’ + Math.random().toString(36).slice(2, 8),
+addedAt: new Date().toISOString(),
+title: title,
+player: v(‘f-player’), year: v(‘f-year’), manufacturer: v(‘f-mfr’),
+set: v(‘f-set’), cardNumber: v(‘f-num’), parallel: v(‘f-par’),
+sport: v(‘f-sport’), league: v(‘f-league’), team: v(‘f-team’),
+isRookie: v(‘f-rookie’) === ‘Yes’, isAutograph: v(‘f-auto’) === ‘Yes’,
+isMemorabilia: v(‘f-mem’) === ‘Yes’, isGraded: v(‘f-graded’) === ‘Yes’,
+grader: v(‘f-grader’), grade: v(‘f-grade’), certNumber: v(‘f-cert’),
+cardCondition: v(‘f-cond’), cardThickness: v(‘f-thick’),
+features: v(‘f-feat’), suggestedPrice: price, description: v(‘f-desc’),
+thumbnail: imgs[0] ? imgs[0].dataUrl : null,
+vintage: originalCard.vintage || false,
+originalReprint: originalCard.originalReprint || ‘Original’,
+language: originalCard.language || ‘English’,
+era: originalCard.era || ‘’,
+season: originalCard.season || v(‘f-year’),
+memorabiliaType: originalCard.memorabiliaType || ‘None’
+};
+cards.push(card);
+ls.set(‘cards’, cards);
+updateCount();
+pendingImages = [];
+renderPreviews();
+document.getElementById(‘resultWrap’).innerHTML = ‘’;
+showToast(‘Added! ’ + cards.length + ’ card(s) in list’, ‘grn’);
+goTab(‘list’);
+}
+
+function renderList() {
+var wrap = document.getElementById(‘listWrap’);
+if (!cards.length) {
+wrap.innerHTML = ‘<div class="ibox">No cards added yet. Go to <strong>+ New Card</strong> to get started.</div>’;
+return;
+}
+var html = ‘’;
+cards.forEach(function(c) {
+html += ‘<div class="list-item">’;
+html += ‘<div class="list-item-thumb">’ + (c.thumbnail ? ‘<img src="' + c.thumbnail + '"/>’ : ‘🏆’) + ‘</div>’;
+html += ‘<div class="list-item-main">’;
+html += ‘<div class="list-item-title">’ + escapeH(c.title) + ‘</div>’;
+html += ‘<div class="list-item-sub">’ + escapeH(c.year) + ’ ’ + escapeH(c.set) + ’ · ’ + escapeH(c.player) + ‘</div>’;
+html += ‘</div>’;
+html += ‘<div class="list-item-price">$’ + c.suggestedPrice.toFixed(2) + ‘</div>’;
+html += ‘<button class="list-item-del" data-id="' + c.id + '">✕</button>’;
+html += ‘</div>’;
+});
+wrap.innerHTML = html;
+var btns = wrap.querySelectorAll(’.list-item-del’);
+for (var i = 0; i < btns.length; i++) {
+btns[i].addEventListener(‘click’, function() {
+var id = this.getAttribute(‘data-id’);
+if (!confirm(‘Delete this card from your list?’)) return;
+cards = cards.filter(function(c) { return c.id !== id; });
+ls.set(‘cards’, cards);
+updateCount();
+renderList();
+});
+}
+}
+
+function csvEscape(v) {
+if (v == null) return ‘’;
+var s = String(v);
+if (s.indexOf(’,’) >= 0 || s.indexOf(’”’) >= 0 || s.indexOf(’\n’) >= 0 || s.indexOf(’\r’) >= 0) {
+return ‘”’ + s.replace(/”/g, ‘””’) + ‘”’;
+}
+return s;
+}
+
+function exportCSV() {
+if (!cards.length) { showToast(‘No cards to export’, ‘red’); return; }
+var headers = [
+‘Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)’,
+‘Category’,‘Title’,‘ConditionID’,
+‘C:Sport’,‘C:Graded’,‘C:Grade’,‘C:Grader’,‘C:Certification Number’,
+‘C:Player/Athlete’,‘C:Year Manufactured’,‘C:Manufacturer’,‘C:Set’,‘C:Card Number’,
+‘C:Parallel/Variety’,‘C:Features’,‘C:League’,‘C:Team’,‘C:Autographed’,
+‘C:Card Condition’,‘C:Card Thickness’,‘C:Vintage’,‘C:Original/Reprint’,
+‘C:Language’,‘C:Era’,‘C:Season’,‘C:Memorabilia’,
+‘Description’,‘Format’,‘Duration’,‘StartPrice’,‘BestOfferEnabled’,
+‘Quantity’,‘DispatchTimeMax’,‘Location’,‘ReturnsAcceptedOption’,
+‘ReturnsWithinOption’,‘RefundOption’,‘ShippingType’,
+‘ShippingService-1:Option’,‘ShippingService-1:Cost’,
+‘PaymentProfileName’,‘ShippingProfileName’,‘ReturnProfileName’
+];
+var rows = [headers.join(’,’)];
+cards.forEach(function(c) {
+var conditionID = c.isGraded ? ‘2750’ : ‘4000’;
+var row = [
+‘Draft’,‘261328’,c.title,conditionID,
+c.sport, c.isGraded ? ‘Yes’ : ‘No’, c.isGraded ? c.grade : ‘’, c.isGraded ? c.grader : ‘’, c.certNumber || ‘’,
+c.player, c.year, c.manufacturer, c.set, c.cardNumber, c.parallel, c.features, c.league, c.team, c.isAutograph ? ‘Yes’ : ‘No’,
+c.cardCondition, c.cardThickness, c.vintage ? ‘Yes’ : ‘No’, c.originalReprint, c.language, c.era, c.season, c.isMemorabilia ? ‘Yes’ : ‘No’,
+c.description, ‘FixedPrice’, ‘GTC’, c.suggestedPrice.toFixed(2), ‘1’, ‘1’, ‘1’, ‘United States’,
+‘ReturnsAccepted’, ‘Days_30’, ‘MoneyBack’, ‘Calculated’, ‘USPSFirstClass’, ‘’, ‘’, ‘’, ‘’
+].map(csvEscape);
+rows.push(row.join(’,’));
+});
+var csv = rows.join(’\r\n’) + ‘\r\n’;
+var blob = new Blob([csv], { type: ‘text/csv;charset=utf-8;’ });
+var url = URL.createObjectURL(blob);
+var a = document.createElement(‘a’);
+a.href = url;
+var today = new Date();
+var ds = today.getFullYear() + ‘-’ + String(today.getMonth()+1).padStart(2,‘0’) + ‘-’ + String(today.getDate()).padStart(2,‘0’);
+a.download = ‘ebay-cards-’ + ds + ‘.csv’;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
+showToast(‘CSV downloaded (’ + cards.length + ’ cards)’, ‘grn’);
+}
+
+function saveKey() {
+var input = document.getElementById(‘keyInput’);
+var k = input.value.trim();
+if (!k) { showToast(‘Paste a key first’, ‘red’); return; }
+if (!k.match(/^AIza[A-Za-z0-9_-]{20,}$/)) {
+if (!confirm(‘That does not look like a Gemini API key (should start with AIza). Save anyway?’)) return;
+}
+ls.setRaw(‘gemini_key’, k);
+updateNoKeyBanner();
+showToast(‘Key saved on this device’, ‘grn’);
+testKey();
+}
+
+async function testKey() {
+var el = document.getElementById(‘keyStatus’);
+var apiKey = ls.getRaw(‘gemini_key’);
+if (!apiKey) {
+el.className = ‘key-status bad’;
+el.textContent = ‘\u2715 No key saved yet’;
+return;
+}
+el.className = ‘key-status unknown’;
+el.textContent = ‘Testing API key…’;
+var t0 = Date.now();
+try {
+var r = await fetch(GEMINI_URL, {
+method: ‘POST’,
+headers: { ‘Content-Type’: ‘application/json’, ‘x-goog-api-key’: apiKey },
+body: JSON.stringify({
+contents: [{ parts: [{ text: ‘Reply with just OK and nothing else.’ }] }],
+generationConfig: { maxOutputTokens: 10, temperature: 0 }
+})
+});
+var text = await r.text();
+if (!r.ok) {
+el.className = ‘key-status bad’;
+el.textContent = ‘\u2715 Gemini rejected key (HTTP ’ + r.status + ‘). ’ + text.slice(0, 200);
+return;
+}
+var data = JSON.parse(text);
+var reply = ((((data.candidates || [])[0] || {}).content || {}).parts || []).map(function(p){return p.text||’’;}).join(’’).trim();
+el.className = ‘key-status ok’;
+el.textContent = ‘\u2713 API key works! (’ + (Date.now()-t0) + ‘ms, model said: “’ + reply + ‘”)’;
+} catch (e) {
+el.className = ‘key-status bad’;
+el.textContent = ’\u2715 Network error: ’ + (e.message || e);
+}
+}
+
+function safeOn(id, evt, fn) {
+try {
+var el = document.getElementById(id);
+if (el) el.addEventListener(evt, fn);
+else console.warn(‘Element not found:’, id);
+} catch(e) { console.error(’Error wiring ’ + id, e); }
+}
 
 function init() {
-  var today = new Date();
-  document.getElementById('todayDate').textContent = today.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-  renderParks();
-  renderStreak();
-  renderHistory();
-  wireButtons();
-  goTab('picks');
-  loadGames();
+try { updateCount(); } catch(e){ console.error(‘updateCount failed’, e); }
+try { updateNoKeyBanner(); } catch(e){ console.error(‘updateNoKeyBanner failed’, e); }
+try { setupUpload(); } catch(e){ console.error(‘setupUpload failed’, e); }
+safeOn(‘t-new’, ‘click’, function() { goTab(‘new’); });
+safeOn(‘t-list’, ‘click’, function() { goTab(‘list’); });
+safeOn(‘t-export’, ‘click’, function() { goTab(‘export’); });
+safeOn(‘t-settings’, ‘click’, function() { goTab(‘settings’); });
+safeOn(‘identifyBtn’, ‘click’, identifyCard);
+safeOn(‘exportBtn’, ‘click’, exportCSV);
+safeOn(‘clearBtn’, ‘click’, function() {
+if (!confirm(‘Delete ALL cards from your list? This cannot be undone.’)) return;
+cards = [];
+ls.set(‘cards’, cards);
+updateCount();
+renderList();
+var ec = document.getElementById(‘exportCount’);
+if (ec) ec.textContent = ‘0’;
+showToast(‘All cards cleared’);
+});
+safeOn(‘saveKeyBtn’, ‘click’, saveKey);
+safeOn(‘testKeyBtn’, ‘click’, testKey);
 }
 
-function wireButtons() {
-  document.getElementById('t-picks').addEventListener('click', function() { goTab('picks'); });
-  document.getElementById('t-parks').addEventListener('click', function() { goTab('parks'); });
-  document.getElementById('t-streak').addEventListener('click', function() { goTab('streak'); });
-  document.getElementById('t-guide').addEventListener('click', function() { goTab('guide'); });
-  document.getElementById('refreshBtn').addEventListener('click', loadGames);
-  document.getElementById('clrPick1').addEventListener('click', function() { clearPick(1); });
-  document.getElementById('clrPick2').addEventListener('click', function() { clearPick(2); });
-  document.getElementById('btnHit').addEventListener('click', function() { recordResult('hit'); });
-  document.getElementById('btnMiss').addEventListener('click', function() { recordResult('miss'); });
-  document.getElementById('btnReset').addEventListener('click', resetStreak);
-  document.getElementById('manPick1').addEventListener('click', function() { setManualPick(1); });
-  document.getElementById('manPick2').addEventListener('click', function() { setManualPick(2); });
-}
-
-function loadGames() {
-  document.getElementById('gameWrap').innerHTML = '<div class="loading"><div class="spin"></div><div class="load-txt">Fetching today\'s games...</div><div class="load-sub">Connecting to ESPN</div></div>';
-
-  var today = new Date();
-  var dateStr = today.getFullYear() + '' + String(today.getMonth()+1).padStart(2,'0') + String(today.getDate()).padStart(2,'0');
-  var url = 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=' + dateStr + '&limit=20';
-
-  fetch(url)
-    .then(function(r) {
-      if (!r.ok) throw new Error('ESPN returned ' + r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      var events = data.events || [];
-      if (!events.length) {
-        document.getElementById('gameWrap').innerHTML = '<div class="err-box"><div class="err-icon">&#x26BE;</div><div class="err-txt">No games today</div><div class="err-sub">Check back on a game day or tap Refresh</div></div>';
-        return;
-      }
-      renderGames(events);
-    })
-    .catch(function(err) {
-      document.getElementById('gameWrap').innerHTML = '<div class="err-box"><div class="err-icon">&#x26A0;&#xFE0F;</div><div class="err-txt">Could not load games</div><div class="err-sub">' + (err.message || 'Network error') + '<br>Tap Refresh to try again</div><button class="retry-btn" id="retryBtn">&#x21BB; Refresh</button></div>';
-      var b = document.getElementById('retryBtn');
-      if (b) b.addEventListener('click', loadGames);
-    });
-}
-
-function getERA(statistics) {
-  if (!statistics) return null;
-  for (var i = 0; i < statistics.length; i++) {
-    var s = statistics[i];
-    if (s.abbreviation === 'ERA' || s.name === 'ERA') return parseFloat(s.displayValue || s.value || 0);
-  }
-  return null;
-}
-
-function renderGames(events) {
-  var games = [];
-
-  events.forEach(function(ev) {
-    var comp = ev.competitions && ev.competitions[0];
-    if (!comp) return;
-
-    var awayC = null, homeC = null;
-    (comp.competitors || []).forEach(function(c) {
-      if (c.homeAway === 'away') awayC = c;
-      if (c.homeAway === 'home') homeC = c;
-    });
-    if (!awayC || !homeC) return;
-
-    var awayName = (awayC.team && awayC.team.displayName) || 'Away';
-    var homeName = (homeC.team && homeC.team.displayName) || 'Home';
-    var awayAbbr = (awayC.team && awayC.team.abbreviation) || '';
-    var homeAbbr = (homeC.team && homeC.team.abbreviation) || '';
-    var pf = getParkFactor(homeName);
-    var venue = (comp.venue && comp.venue.fullName) || '';
-
-    var awayPitcher = 'TBD', homePitcher = 'TBD';
-    var awayERA = null, homeERA = null;
-    var probables = comp.probables || [];
-    probables.forEach(function(pr) {
-      var nm = (pr.athlete && pr.athlete.displayName) || 'TBD';
-      var era = getERA(pr.statistics);
-      if (pr.homeAway === 'away') { awayPitcher = nm; awayERA = era; }
-      if (pr.homeAway === 'home') { homePitcher = nm; homeERA = era; }
-    });
-
-    var gameTime = '';
-    try { gameTime = new Date(ev.date).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'}); } catch(e) {}
-
-    // Score = hitter friendliness
-    // Higher ERA pitchers + better park = better BTS spot
-    var awayScore = ((awayERA || 4.0) / 4.0) * (pf / 100) * 50;
-    var homeScore = ((homeERA || 4.0) / 4.0) * (pf / 100) * 50;
-    var gameScore = Math.round((awayScore + homeScore) / 2);
-
-    var awayEraC = awayERA == null ? '' : awayERA >= 4.5 ? 'color:var(--grn)' : awayERA >= 3.5 ? 'color:var(--gold)' : 'color:var(--red)';
-    var homeEraC = homeERA == null ? '' : homeERA >= 4.5 ? 'color:var(--grn)' : homeERA >= 3.5 ? 'color:var(--gold)' : 'color:var(--red)';
-
-    // BTS tip
-    var tip = '';
-    var avgERA = ((awayERA || 4.0) + (homeERA || 4.0)) / 2;
-    if (pf >= 106 && avgERA >= 4.0) tip = '&#x1F525; Strong BTS game - hitter-friendly park + weak pitching';
-    else if (pf >= 103 && avgERA >= 3.75) tip = '&#x1F7E1; Good BTS spot - above average conditions';
-    else if (pf <= 94 || avgERA < 3.0) tip = '&#x1F976; Tough day - avoid unless you have a hot bat';
-    else tip = '&#x26AA; Average conditions - look for contact hitters';
-
-    games.push({
-      id: ev.id,
-      awayName: awayName, homeName: homeName,
-      awayAbbr: awayAbbr, homeAbbr: homeAbbr,
-      awayPitcher: awayPitcher, homePitcher: homePitcher,
-      awayERA: awayERA, homeERA: homeERA,
-      awayEraC: awayEraC, homeEraC: homeEraC,
-      pf: pf, venue: venue, gameTime: gameTime,
-      gameScore: gameScore, tip: tip,
-      status: (comp.status && comp.status.type && comp.status.type.description) || ''
-    });
-  });
-
-  // Sort by game score - best BTS games first
-  games.sort(function(a,b) { return b.gameScore - a.gameScore; });
-
-  var html = '';
-  if (!games.length) {
-    html = '<div class="err-box"><div class="err-icon">&#x26BE;</div><div class="err-txt">No game data available</div><div class="err-sub">Lineups and pitchers may not be posted yet. Try again closer to game time.</div></div>';
-  } else {
-    html = '<div class="ibox blu" style="margin-bottom:11px">Games ranked best to worst for BTS. Green ERA = weak pitcher = easier to get a hit.</div>';
-    games.forEach(function(g, i) {
-      var cls = i === 0 ? 'gcard hot' : i <= 2 ? 'gcard good' : 'gcard';
-      var scoreC = g.gameScore >= 55 ? 'ph' : g.gameScore >= 45 ? 'pm' : 'pl';
-      var awayEraDisp = g.awayERA != null ? g.awayERA.toFixed(2) : 'TBD';
-      var homeEraDisp = g.homeERA != null ? g.homeERA.toFixed(2) : 'TBD';
-      var pfC = g.pf >= 106 ? 'color:var(--grn)' : g.pf <= 94 ? 'color:var(--red)' : 'color:var(--fog)';
-
-      html += '<div class="' + cls + '">';
-      html += '<div class="ghdr"><div><div class="gteams">' + g.awayAbbr + ' @ ' + g.homeAbbr + '</div><div class="gtime">' + (g.gameTime || g.status) + (g.venue ? ' &middot; ' + g.venue : '') + '</div></div>';
-      html += '<div class="gscore-box"><div class="gscore ' + scoreC + '">' + g.gameScore + '</div><div class="gscore-l">BTS Score</div></div></div>';
-      html += '<div class="gbody">';
-      html += '<div class="gpitcher">';
-      html += '<div class="gpill away"><div class="gpill-lbl">' + g.awayAbbr + ' Pitcher</div><div class="gpill-name">' + g.awayPitcher + '</div><div class="gpill-era" style="' + g.awayEraC + '">ERA: ' + awayEraDisp + '</div></div>';
-      html += '<div class="gpill"><div class="gpill-lbl">' + g.homeAbbr + ' Pitcher</div><div class="gpill-name">' + g.homePitcher + '</div><div class="gpill-era" style="' + g.homeEraC + '">ERA: ' + homeEraDisp + '</div></div>';
-      html += '</div>';
-      html += '<div class="gstats">';
-      html += '<div class="gstat"><div class="gstat-v" style="' + pfC + '">' + g.pf + '</div><div class="gstat-l">Park Factor</div></div>';
-      html += '<div class="gstat"><div class="gstat-v" style="' + g.awayEraC + '">' + awayEraDisp + '</div><div class="gstat-l">Away ERA</div></div>';
-      html += '<div class="gstat"><div class="gstat-v" style="' + g.homeEraC + '">' + homeEraDisp + '</div><div class="gstat-l">Home ERA</div></div>';
-      html += '</div>';
-      html += '<div class="gtip">' + g.tip + '</div>';
-      html += '<div class="gbtn-row">';
-      html += '<div class="gbtn p1" data-game="' + g.id + '" data-team="' + g.awayName + '" data-num="1">&#x2B50; Pick ' + g.awayAbbr + ' batter (P1)</div>';
-      html += '<div class="gbtn p2" data-game="' + g.id + '" data-team="' + g.homeName + '" data-num="1">&#x2B50; Pick ' + g.homeAbbr + ' batter (P1)</div>';
-      html += '</div>';
-      html += '</div></div>';
-    });
-  }
-
-  document.getElementById('gameWrap').innerHTML = html;
-
-  // Wire pick buttons
-  var btns = document.querySelectorAll('.gbtn');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener('click', function() {
-      var team = this.getAttribute('data-team');
-      var num = parseInt(this.getAttribute('data-num') || '1');
-      picks[num-1] = {name: 'Pick from ' + team, prob: null, team: team};
-      ls.set('bts_picks', picks);
-      renderStreak();
-      showToast('Pick ' + num + ' set: ' + team + ' batter', 'grn');
-      goTab('streak');
-    });
-  }
-}
-
-function renderParks() {
-  var sorted = PARKS.slice().sort(function(a,b) { return b.hit - a.hit; });
-  document.getElementById('parkRows').innerHTML = sorted.map(function(p) {
-    var hc = p.hit>=107?'sg2':p.hit>=103?'sy':p.hit>=97?'sn':'sr';
-    var hrc = p.hr>=108?'sg2':p.hr>=103?'sy':p.hr>=97?'sn':'sr';
-    var rat = p.rating==='great'?'&#x1F7E2;':p.rating==='good'?'&#x1F7E1;':p.rating==='neutral'?'&#x26AA;':'&#x1F534;';
-    return '<div class="park-row"><div><div class="park-nm">' + p.name + '</div><div class="park-tm">' + p.team + '</div></div><div class="psc ' + hc + '">' + p.hit + '</div><div class="psc ' + hrc + '">' + p.hr + '</div><div style="text-align:center;font-size:14px">' + rat + '</div></div>';
-  }).join('');
-}
-
-function clearPick(num) { picks[num-1]=null; ls.set('bts_picks',picks); renderStreak(); }
-function setManualPick(num) {
-  var name = document.getElementById('manPickName').value.trim();
-  var team = document.getElementById('manPickTeam').value.trim();
-  if (!name) { showToast('Enter a player name',''); return; }
-  picks[num-1] = {name:name, prob:null, team:team||'--'};
-  ls.set('bts_picks',picks); renderStreak();
-  showToast('Pick ' + num + ': ' + name, 'grn');
-  document.getElementById('manPickName').value='';
-  document.getElementById('manPickTeam').value='';
-}
-function renderStreak() {
-  document.getElementById('streakNum').textContent = streak;
-  document.getElementById('remain').textContent = Math.max(0, 57-streak);
-  document.getElementById('saveLbl').textContent = (streak>=10&&streak<=15) ? '&#x1F6E1; Streak Saver Active!' : '';
-  var p1=picks[0], p2=picks[1];
-  document.getElementById('p1name').textContent = p1 ? p1.name : '-- No pick --';
-  document.getElementById('p1det').textContent = p1 ? (p1.team || '--') + (p1.prob ? ' - ' + p1.prob + '% hit prob' : '') : 'Go to Today\'s Games tab';
-  document.getElementById('p1prob').textContent = p1&&p1.prob ? p1.prob+'%' : '--';
-  document.getElementById('p2name').textContent = p2 ? p2.name : '-- Double down --';
-  document.getElementById('p2det').textContent = p2 ? (p2.team || '--') : 'Optional second pick';
-  document.getElementById('p2prob').textContent = p2&&p2.prob ? p2.prob+'%' : '--';
-}
-function recordResult(result) {
-  if (!picks[0]) { showToast('Select a pick first',''); return; }
-  var entry = {date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}), player:picks[0].name, player2:picks[1]&&picks[1].name, result:result, streakBefore:streak};
-  if (result==='hit') { streak += picks[1]?2:1; showToast('&#x1F525; Hit! Streak: '+streak,'grn'); }
-  else { streak=0; showToast('&#x274C; No hit. Streak reset.','red'); }
-  history.unshift(entry);
-  if (history.length>30) history=history.slice(0,30);
-  picks=[null,null];
-  ls.set('bts_streak',streak); ls.set('bts_history',history); ls.set('bts_picks',picks);
-  renderStreak(); renderHistory();
-}
-function resetStreak() { if (!confirm('Reset streak to 0?')) return; streak=0; ls.set('bts_streak',0); renderStreak(); showToast('Streak reset'); }
-function updateAccuracy() {
-  var total=history.length, hits=history.filter(function(h){return h.result==='hit';}).length, misses=total-hits;
-  var pct=total>0?Math.round((hits/total)*100):null;
-  document.getElementById('accTotal').textContent=total;
-  document.getElementById('accHits').textContent=hits;
-  document.getElementById('accMiss').textContent=misses;
-  document.getElementById('accPct').textContent=pct!==null?pct+'%':'--';
-  document.getElementById('accBar').style.width=(pct||0)+'%';
-  document.getElementById('accLabel').textContent=total===0?'Record results above to track accuracy':hits+' hits out of '+total+' picks ('+(pct||0)+'%)';
-}
-function renderHistory() {
-  updateAccuracy();
-  var el=document.getElementById('histList');
-  if (!history.length) { el.innerHTML='<div style="padding:13px;text-align:center;color:var(--fog);font-size:11px">No results yet</div>'; return; }
-  el.innerHTML=history.slice(0,20).map(function(h) {
-    return '<div class="hist-item"><div class="hist-dot '+(h.result==='hit'?'hit-dot':'miss-dot')+'"></div><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+h.player+(h.player2?' + '+h.player2:'')+'</div><div style="font-size:9px;color:var(--fog)">'+h.date+' &middot; Streak was '+h.streakBefore+'</div></div><div class="'+(h.result==='hit'?'hit-res':'miss-res')+'">'+(h.result==='hit'?'HIT':'MISS')+'</div></div>';
-  }).join('');
-}
-function goTab(n) {
-  ['picks','parks','streak','guide'].forEach(function(t) {
-    document.getElementById('s-'+t).className = 'screen'+(t===n?' on':'');
-    document.getElementById('t-'+t).className = 'tab'+(t===n?' on':'');
-  });
-}
-function showToast(msg, type) {
-  var el=document.getElementById('toast');
-  el.textContent=msg;
-  el.className='toast show'+(type==='grn'?' grn':type==='red'?' red':'');
-  clearTimeout(window._tt);
-  window._tt=setTimeout(function(){el.className='toast';},3500);
-}
-
+// Run init on DOMContentLoaded if not already loaded, else immediately
+if (document.readyState === ‘loading’) {
+document.addEventListener(‘DOMContentLoaded’, init);
+} else {
 init();
+}
 </script>
 
 </body>
